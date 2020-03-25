@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {useForm} from 'react-hook-form'
 import fire from '../../fire'
+import axios from 'axios'
 const db = fire.database()
 
 export default function NHIEForm(props) {
@@ -17,13 +18,19 @@ export default function NHIEForm(props) {
     setTimer(
       setTimeout(() => {
         setTimeUp(true)
-      }, 5000)
+      }, 8000)
     )
-    //currently set to 5 seconds for testing purpose
+    //currently set to 8 seconds for testing purpose
   }, [])
 
   const onSubmit = data => {
-    playerRef.update({response: data.response, responding: false})
+    const request = {
+      uid: props.userId,
+      response: data.response,
+      responding: false
+    }
+
+    axios.post(`/api/games/${code}`, request)
     //option 1:
     // history.push('new path?')
     //option 2:
