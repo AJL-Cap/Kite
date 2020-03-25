@@ -1,0 +1,49 @@
+{
+  "games": {
+    "1": {
+      "title": "never have i ever",
+      "rules": "blah blah play like this"
+    }
+  },
+  "players": {
+    "UID1": {
+      "nickname": "Lizzy",
+      "totalPoints": 2392,
+      "wins": 10,
+      "totalGamesPlayed": 11
+    },
+    "UID2": {
+      "nickname": "Ji",
+      "totalPoints": 5,
+      "wins": 1,
+      "totalGamesPlayed": 1
+    },
+    "UID3": {
+      "nickname": "Anna",
+      "totalPoints": 0,
+      "wins": 1,
+      "totalGamesPlayed": 1
+    }
+  },
+  "gameSessions": {
+    "GAME": {
+      "players": {
+        "UID1": {
+          "points": 0,
+          "response": "some thing i dont know",
+          "host": true
+        },
+        "UID2": {
+          "points": 100,
+          "response": "some thing i dont know"
+        },
+        "UID3": {
+          "points": 100,
+          "response": "some thing i dont know"
+        }
+      },
+      "gameId": 1,
+      "status": "finished"
+    }
+  }
+}
