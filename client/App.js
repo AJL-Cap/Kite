@@ -1,8 +1,7 @@
-import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import NavigationBar from "./NavigationBar";
-import Routes from "./Routes";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React from 'react'
+import {BrowserRouter as Router} from 'react-router-dom'
+import NavigationBar from './NavigationBar'
+import Routes from './Routes'
 
 export default function App() {
   return (
@@ -10,5 +9,5 @@ export default function App() {
       <NavigationBar />
       <Routes />
     </Router>
-  );
+  )
 }
