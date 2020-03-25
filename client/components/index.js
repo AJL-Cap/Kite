@@ -1,12 +1,23 @@
-import Home from "./Home";
-import Login from "./User/Login";
-import SignUp from "./User/SignUp";
-import Players from "./Players";
-import Profile from "./User/Profile";
-import GamePage from "./Game/GamePage";
-import WaitingRoom from "./Game/WaitingRoom";
-import NotFound from "./NotFound";
-import Loading from "./Loading";
-import NHIE from "./NHIE/NHIE";
+import Home from './Home'
+import Login from './User/Login'
+import SignUp from './User/SignUp'
+import Players from './Players'
+import Profile from './User/Profile'
+import GamePage from './Game/GamePage'
+import WaitingRoom from './Game/WaitingRoom'
+import NotFound from './NotFound'
+import Loading from './Loading'
+import NHIE from './NHIE/NHIE'
 
-export { Home, Login, SignUp, Players, Profile, GamePage, WaitingRoom, NotFound, Loading, NHIE }
+export {
+  Home,
+  Login,
+  SignUp,
+  Players,
+  Profile,
+  GamePage,
+  WaitingRoom,
+  NotFound,
+  Loading,
+  NHIE
+}

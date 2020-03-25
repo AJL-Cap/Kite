@@ -1,14 +1,14 @@
-import React from "react";
-import fire from "../fire";
-import { useList } from "react-firebase-hooks/database";
+import React from 'react'
+import fire from '../fire'
+import {useList} from 'react-firebase-hooks/database'
 
 export default function Players() {
-  const db = fire.database();
-  const playersRef = db.ref("players");
-  const [players, loading, error] = useList(playersRef);
+  const db = fire.database()
+  const playersRef = db.ref('players')
+  const [players, loading, error] = useList(playersRef)
 
-  if (loading) return "";
-  if (error) return <p>Error!</p>;
+  if (loading) return ''
+  if (error) return <p>Error!</p>
   return (
     <div>
       {players.map(player => (
@@ -18,5 +18,5 @@ export default function Players() {
         </div>
       ))}
     </div>
-  );
+  )
 }

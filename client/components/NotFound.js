@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 const NotFound = () => (
   <div className="m-5 text-center">
@@ -8,6 +8,6 @@ const NotFound = () => (
     <br />
     <h5>What you are looking for does not exist.</h5>
   </div>
-);
+)
 
-export default NotFound;
+export default NotFound

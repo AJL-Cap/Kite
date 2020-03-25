@@ -1,19 +1,21 @@
-import React, {useState} from "react";
-import { useForm } from "react-hook-form";
-import fire from "../../fire";
+import React, {useState} from 'react'
+import {useForm} from 'react-hook-form'
+import fire from '../../fire'
 
 export default function Login(props) {
-  const { register, handleSubmit } = useForm();
+  const {register, handleSubmit} = useForm()
 
   const [loginErr, setLoginErr] = useState(null)
 
   const onSubmit = data => {
-    fire.auth().signInWithEmailAndPassword(data.email, data.password)
-    .then(() => props.history.push("/"))
-    .catch(err => {
-      setLoginErr(err.message)
-      });
-  };
+    fire
+      .auth()
+      .signInWithEmailAndPassword(data.email, data.password)
+      .then(() => props.history.push('/'))
+      .catch(err => {
+        setLoginErr(err.message)
+      })
+  }
 
   if (loginErr) return <h1>{loginErr}</h1>
 
@@ -26,9 +28,9 @@ export default function Login(props) {
       <input
         type="password"
         name="password"
-        ref={register({ required: true, minLength: 6 })}
+        ref={register({required: true, minLength: 6})}
       />
       <input type="submit" />
     </form>
-  );
+  )
 }

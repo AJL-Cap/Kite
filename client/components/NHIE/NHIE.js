@@ -1,20 +1,20 @@
-import React from "react";
-import PlayerInfo from "./PlayerInfo";
-import NHIEForm from "./NHIEForm";
-import fire from "../../fire";
-import { useObjectVal } from "react-firebase-hooks/database";
+import React from 'react'
+import PlayerInfo from './PlayerInfo'
+import NHIEForm from './NHIEForm'
+import fire from '../../fire'
+import {useObjectVal} from 'react-firebase-hooks/database'
 import NotFound from '../NotFound'
 import ResponseDisplay from './ResponseDisplay'
 
-const db = fire.database();
+const db = fire.database()
 
 const NHIE = props => {
   const code = props.match.params.code
-  const [session, loading, error] = useObjectVal(db.ref("gameSessions/" + code));
-  if (loading) return "";
-  if (error) return "Error";
-  if (!session) return <NotFound />;
-  let players = Object.keys(session.players);
+  const [session, loading, error] = useObjectVal(db.ref('gameSessions/' + code))
+  if (loading) return ''
+  if (error) return 'Error'
+  if (!session) return <NotFound />
+  let players = Object.keys(session.players)
 
   return (
     <div>
@@ -29,11 +29,11 @@ const NHIE = props => {
               key={key}
               id={key}
             />
-          );
+          )
         })}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default NHIE;
+export default NHIE
