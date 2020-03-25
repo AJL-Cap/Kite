@@ -14,7 +14,12 @@ export default function NHIEForm(props) {
   const playerRef = db.ref(`gameSessions/${code}/players/${props.userId}`)
 
   useEffect(() => {
-    playerRef.update({responding: true})
+    const request = {
+      uid: props.userId,
+      response: '',
+      responding: true
+    }
+    axios.post(`/api/games/${code}`, request)
     setTimer(
       setTimeout(() => {
         setTimeUp(true)
