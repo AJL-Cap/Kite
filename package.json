@@ -90,7 +90,7 @@
     "mocha": "^6.1.4",
     "nodemon": "^1.18.3",
     "npm-merge-driver": "^2.3.5",
-    "prettier": "2.0.2",
+    "prettier": "1.11.1",
     "react-test-renderer": "^16.4.2",
     "simple-git": "^1.121.0",
     "supertest": "^4.0.2",

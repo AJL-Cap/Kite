@@ -1,35 +1,42 @@
-import React from 'react'
-import fire from '../../fire'
-import {useObjectVal} from 'react-firebase-hooks/database'
-import SessionPlayer from './SessionPlayers'
-import {Button} from 'react-bootstrap'
-import NotFound from '../NotFound'
+import React from "react";
+import fire from "../../fire";
+import { useObjectVal } from "react-firebase-hooks/database";
+import SessionPlayer from "./SessionPlayers";
+import { Button } from "react-bootstrap";
+import NotFound from "../NotFound";
+import axios from "axios";
 
-const db = fire.database()
+const db = fire.database();
 
 const WaitingRoom = props => {
   //getting that session info
-  const {code} = props.match.params
-  const gameSession = db.ref('gameSessions/' + code)
+  const { code } = props.match.params;
+  const gameSession = db.ref("gameSessions/" + code);
 
-  const [session, loading, error] = useObjectVal(gameSession)
-  if (loading) return ''
-  if (error) return 'Error'
-  if (!session) return <NotFound />
+  const [session, loading, error] = useObjectVal(gameSession);
+  if (loading) return "";
+  if (error) return "Error";
+  if (!session)
+    return (
+      <div>
+        <NotFound />
+        <button type="button" onClick={() => props.history.push("/games")}>
+          Back to lobby
+        </button>
+      </div>
+    );
 
-  //back to lobby button functionality if a user is trying to access a game they're not in.
   const handleClick = () => {
-    //updating that session status to playing
-    gameSession.update({status: 'playing'}, function(err) {
-      //error handling
-      if (err) console.log('error switching game to playing')
-      else console.log('success')
-      //still need send to the playing game component
-      props.history.push(`/games/${code}/${session.gameId}`)
-    })
-  }
+    try {
+      //updating that session status to playing
+      axios.post(`/api/games/${code}`, { status: "playing" });
+      props.history.push(`/games/${code}/${session.gameId}`);
+    } catch (err) {
+      console.log("error switching game to playing");
+    }
+  };
   //getting players from the session
-  let players = Object.keys(session.players)
+  let players = Object.keys(session.players);
   return (
     <>
       {players.includes(`${props.userId}`) ? (
@@ -59,7 +66,7 @@ const WaitingRoom = props => {
         <NotFound />
       )}
     </>
-  )
-}
+  );
+};
 
-export default WaitingRoom
+export default WaitingRoom;
