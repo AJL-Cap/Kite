@@ -16,6 +16,7 @@ const NHIE = props => {
   );
   const [ready, setReady] = useState(false);
 
+  //do we really need to change the game status to responding (vs playing)?
   // useEffect(() => {
   //   axios.post(`/api/games/${code}`, { status: "responding" });
   // }, []);
