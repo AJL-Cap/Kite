@@ -14,54 +14,44 @@ const NHIE = props => {
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
   );
-  const [ready, setReady] = useState(false);
 
-  // const responseRef = snapshot.ref.child('response')
-  // responseRef.on("value", responseSnap => {
-  //   console.log('response snapshot: ', responseSnap.val().UID1)
-  // })
-
-  //do we really need to change the game status to responding (vs playing)?
-  // useEffect(() => {
-  //   axios.post(`/api/games/${code}`, { status: "responding" });
-  // }, []);
-
-  //checking if every one has submitted response
-  // useEffect(
-  //   () => {
-  //     async function fetchReady() {
-  //       const { data } = await axios.get(`/api/games/${code}/response`);
-  //       console.log(data);
-  //       if (data.ready) {
-  //         setReady(true);
-  //       }
-  //     }
-  //     fetchReady();
-  //   },
-  //   [session]
-  // );
+  useEffect(() => {
+    axios.post(`/api/games/${code}`, { status: "responding" });
+  }, []);
 
   if (loading) return "";
   if (error) return "Error";
   if (!session) return <NotFound />;
   let players = Object.keys(session.players);
 
+  // let responses = [];
+  // let obj = {}
+  // db.ref("gameSessions/" + code + "/players").on("child_added", snapshot => {
+  //   db.ref(`players/${snapshot.key}/nickname`).once("value", name => {
+  //     snapshot.ref.child("response").on("value", res => {
+  //       obj[name.val()] = res.val()
+  //       console.log(res.val())
+  //       if (res.val()) responses.push(res.val())
+  //     })
+  //   })
+  //   console.log(obj)
+  //   console.log(responses.length, players.length)
+  //   if (responses.length === players.length) {
+  //     axios.post(`/api/games/${code}`, { status: "round" });
+  //   }
+  // });
+
   return (
     <div>
       <h1>Hello World from NHIE</h1>
-      <NHIEForm userId={props.userId} code={code} />
-      {/* {ready && <ResponseDisplay uid={props.userId} session={session} />} */}
-      <div className="row" id="playerDisplayPoints">
-        {players.map(key => {
-          return (
-            <PlayerInfo
-              points={session.players[key].points}
-              key={key}
-              id={key}
-            />
-          );
-        })}
-      </div>
+      {session.status === "responding" && (
+        <NHIEForm
+          uid={props.userId}
+          code={code}
+          session={session}
+          players={players}
+        />
+      )}
     </div>
   );
 };

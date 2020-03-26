@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import PostResponse from "./PostResponse";
+import { useHistory } from "react-router-dom";
 
-export default function NHIEForm({ userId, code }) {
+export default function NHIEForm(props) {
+  const { uid, code } = props;
   const [timeUp, setTimeUp] = useState(false);
   const [timer, setTimer] = useState(null);
   const [submitted, setSubmitted] = useState(false);
@@ -10,7 +13,7 @@ export default function NHIEForm({ userId, code }) {
 
   const route = `/api/games/${code}/response`;
   const request = {
-    uid: userId,
+    uid: uid,
     response: "",
     responding: false
   };
@@ -32,25 +35,36 @@ export default function NHIEForm({ userId, code }) {
 
   const onSubmit = data => {
     axios.post(route, { ...request, response: data.response });
-    //option 1:
-    // history.push('new path?')
+    let history = useHistory();
+    const location = {
+      pathname: "/test",
+      state: props
+    };
+    history.push(location);
     //option 2:
-    setSubmitted(true);
+    // setSubmitted(true);
     setTimer(clearTimeout(timer));
   };
 
-  if (timeUp) {
-    return (
-      <div>Uh oh, time is up! </div>
-      //render new component?
-    );
-  }
-  if (submitted) {
-    return (
-      <div>Your response has been submitted</div>
-      //render new component?
-    );
-  }
+  // if (timeUp) {
+  //   return (
+  //     <div>
+  //       <h2>Uh oh, time is up! </h2>
+  //       <div><PostResponse {...props} /></div>
+  //     </div>
+
+  //     //render new component?
+  //   );
+  // }
+  // if (submitted) {
+  //   return (
+  //     <div>
+  //       <h2>Your response has been submitted</h2>
+  //       <div><PostResponse {...props} /></div>
+  //     </div>
+  //     //render new component?
+  //   );
+  // }
 
   if (!timeUp || !submitted) {
     return (

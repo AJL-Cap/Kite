@@ -1,7 +1,7 @@
-import React from 'react'
-import fire from './fire'
-import {Route, Switch} from 'react-router-dom'
-import {useAuthState} from 'react-firebase-hooks/auth'
+import React from "react";
+import fire from "./fire";
+import { Route, Switch } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
 import {
   Home,
   Login,
@@ -12,25 +12,26 @@ import {
   WaitingRoom,
   NotFound,
   Loading,
-  NHIE
-} from './components'
+  NHIE,
+  PostResponse
+} from "./components";
 
 export default function Routes() {
-  const [user, initialising, error] = useAuthState(fire.auth())
+  const [user, initialising, error] = useAuthState(fire.auth());
 
   if (initialising) {
     return (
       <div>
         <Loading />
       </div>
-    )
+    );
   }
   if (error) {
     return (
       <div>
         <p>Error: {error}</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -60,6 +61,7 @@ export default function Routes() {
             path="/"
             render={props => <Home userId={user.uid} {...props} />}
           />
+          <Route exact path="/test" component={PostResponse} />
         </Switch>
       ) : (
         <Switch>
@@ -70,5 +72,5 @@ export default function Routes() {
       )}
       <Route component={NotFound} />
     </Switch>
-  )
+  );
 }
