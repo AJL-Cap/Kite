@@ -1,18 +1,15 @@
 import React, {useState, useEffect} from 'react'
 import {useForm} from 'react-hook-form'
-import fire from '../../fire'
 import axios from 'axios'
-const db = fire.database()
 
-export default function NHIEForm(props) {
-  const code = props.code
+export default function NHIEForm({code, userId}) {
   const [timeUp, setTimeUp] = useState(false)
   const [timer, setTimer] = useState(null)
   const [submitted, setSubmitted] = useState(false)
   const {register, handleSubmit, errors} = useForm()
 
   const request = {
-    uid: props.userId,
+    uid: userId,
     response: '',
     responding: false,
   }
