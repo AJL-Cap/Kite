@@ -20,7 +20,11 @@ export default function NHIEForm({ userId, code }) {
     setTimer(
       setTimeout(() => {
         setTimeUp(true);
-        axios.post(route, request);
+        axios.post(route, {
+          ...request,
+          response: "Nothing Submitted",
+          responding: false
+        });
       }, 8000)
     );
     //currently set to 8 seconds for testing purpose
