@@ -16,25 +16,43 @@ const NHIE = props => {
   );
   const [ready, setReady] = useState(false);
 
+  db.ref("gameSessions/" + code + "/players").on("child_added", snapshot => {
+    snapshot.ref.child("responding").on("value", res => {
+      console.log(res.val());
+      let arr = [];
+      arr.push(res.val());
+      if (arr.every(el => el === false)) {
+        console.log("ready");
+      } else {
+        console.log("not yet");
+      }
+    });
+
+    // const responseRef = snapshot.ref.child('response')
+    // responseRef.on("value", responseSnap => {
+    //   console.log('response snapshot: ', responseSnap.val().UID1)
+    // })
+  });
+
   //do we really need to change the game status to responding (vs playing)?
   // useEffect(() => {
   //   axios.post(`/api/games/${code}`, { status: "responding" });
   // }, []);
 
   //checking if every one has submitted response
-  useEffect(
-    () => {
-      async function fetchReady() {
-        const { data } = await axios.get(`/api/games/${code}/response`);
-        console.log(data);
-        if (data.ready) {
-          setReady(true);
-        }
-      }
-      fetchReady();
-    },
-    [session]
-  );
+  // useEffect(
+  //   () => {
+  //     async function fetchReady() {
+  //       const { data } = await axios.get(`/api/games/${code}/response`);
+  //       console.log(data);
+  //       if (data.ready) {
+  //         setReady(true);
+  //       }
+  //     }
+  //     fetchReady();
+  //   },
+  //   [session]
+  // );
 
   if (loading) return "";
   if (error) return "Error";
@@ -45,7 +63,7 @@ const NHIE = props => {
     <div>
       <h1>Hello World from NHIE</h1>
       <NHIEForm userId={props.userId} code={code} />
-      {ready && <ResponseDisplay uid={props.userId} session={session} />}
+      {/* {ready && <ResponseDisplay uid={props.userId} session={session} />} */}
       <div className="row" id="playerDisplayPoints">
         {players.map(key => {
           return (
