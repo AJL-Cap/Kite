@@ -11,31 +11,26 @@ export default function NHIEForm(props) {
   const [submitted, setSubmitted] = useState(false)
   const {register, handleSubmit, errors} = useForm()
 
-  const playerRef = db.ref(`gameSessions/${code}/players/${props.userId}`)
+  const request = {
+    uid: props.userId,
+    response: '',
+    responding: false,
+  }
 
   useEffect(() => {
-    const request = {
-      uid: props.userId,
-      response: '',
-      responding: true
-    }
-    axios.post(`/api/games/${code}`, request)
+    axios.post(`/api/games/${code}`, {...request, responding: true})
+
     setTimer(
       setTimeout(() => {
         setTimeUp(true)
+        axios.post(`/api/games/${code}`, request)
       }, 8000)
     )
     //currently set to 8 seconds for testing purpose
   }, [])
 
-  const onSubmit = data => {
-    const request = {
-      uid: props.userId,
-      response: data.response,
-      responding: false
-    }
-
-    axios.post(`/api/games/${code}`, request)
+  const onSubmit = (data) => {
+    axios.post(`/api/games/${code}`, {...request, response: data.response})
     //option 1:
     // history.push('new path?')
     //option 2:

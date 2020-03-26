@@ -3,7 +3,7 @@ const admin = require('firebase-admin')
 const db = admin.database()
 
 router.post('/:code', async (req, res, next) => {
-  const code = req.params.code
+  const {code} = req.params
   const {uid, response, responding} = req.body
   try {
     await db

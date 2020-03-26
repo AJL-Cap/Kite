@@ -8,9 +8,10 @@ import ResponseDisplay from './ResponseDisplay'
 
 const db = fire.database()
 
-const NHIE = props => {
+const NHIE = (props) => {
   const code = props.match.params.code
   const [session, loading, error] = useObjectVal(db.ref('gameSessions/' + code))
+
   if (loading) return ''
   if (error) return 'Error'
   if (!session) return <NotFound />
@@ -22,7 +23,7 @@ const NHIE = props => {
       <NHIEForm {...props} code={code} />
       {/* {session.status === 'playing' && <ResponseDisplay uid={props.userId} session={session} />} */}
       <div className="row" id="playerDisplayPoints">
-        {players.map(key => {
+        {players.map((key) => {
           return (
             <PlayerInfo
               points={session.players[key].points}
