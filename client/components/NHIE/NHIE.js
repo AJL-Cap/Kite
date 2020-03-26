@@ -16,23 +16,10 @@ const NHIE = props => {
   );
   const [ready, setReady] = useState(false);
 
-  db.ref("gameSessions/" + code + "/players").on("child_added", snapshot => {
-    snapshot.ref.child("responding").on("value", res => {
-      console.log(res.val());
-      let arr = [];
-      arr.push(res.val());
-      if (arr.every(el => el === false)) {
-        console.log("ready");
-      } else {
-        console.log("not yet");
-      }
-    });
-
-    // const responseRef = snapshot.ref.child('response')
-    // responseRef.on("value", responseSnap => {
-    //   console.log('response snapshot: ', responseSnap.val().UID1)
-    // })
-  });
+  // const responseRef = snapshot.ref.child('response')
+  // responseRef.on("value", responseSnap => {
+  //   console.log('response snapshot: ', responseSnap.val().UID1)
+  // })
 
   //do we really need to change the game status to responding (vs playing)?
   // useEffect(() => {
