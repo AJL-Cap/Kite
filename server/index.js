@@ -4,6 +4,9 @@ const morgan = require('morgan')
 const compression = require('compression')
 const PORT = process.env.PORT || 8080
 const app = express()
+const admin = require('firebase-admin')
+const serviceAccount = require('../admin.json')
+const {databaseURL} = require('../secrets')
 
 module.exports = app
 
@@ -54,6 +57,11 @@ const createApp = () => {
     res.status(err.status || 500).send(err.message || 'Internal server error.')
   })
 }
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: databaseURL
+})
 
 const startListening = () => {
   // start listening (and create a 'server' object representing our server)
