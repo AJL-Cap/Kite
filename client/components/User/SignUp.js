@@ -54,7 +54,7 @@ export default function SignUp(props) {
 
       <label htmlFor="password">Password</label>
       <input
-        type="text"
+        type="password"
         name="password"
         ref={register({required: true, minLength: 6})}
       />
