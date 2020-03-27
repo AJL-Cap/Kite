@@ -29,8 +29,7 @@ const WaitingRoom = props => {
   const handleClick = () => {
     try {
       //updating that session status to playing
-      axios.post(`/api/games/${code}`, { status: "responding" });
-      console.log("updated");
+      axios.post(`/api/games/${code}`, { status: "playing" });
     } catch (err) {
       console.log("error switching game to playing");
     }

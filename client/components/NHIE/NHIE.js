@@ -6,26 +6,29 @@ import { useObjectVal } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import ResponseDisplay from "./ResponseDisplay";
 import axios from "axios";
-import WaitingRoom from "../Game/WaitingRoom";
 
 const db = fire.database();
 
 const NHIE = props => {
-  const code = props.match.params.code;
+  const { code } = props;
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
   );
+
+  useEffect(() => {
+    axios.post(`/api/games/${code}`, { status: "responding" });
+  }, []);
+
   if (loading) return "";
   if (error) return "Error";
   if (!session) return <NotFound />;
-  console.log("session status", session.status);
+
   let players = Object.keys(session.players);
+  let responses = [];
 
   return (
     <div>
-      {session.status === "waiting" && (
-        <WaitingRoom code={code} userId={props.userId} />
-      )}
+      <h1>Hello World from NHIE</h1>
       {session.status === "responding" && (
         <NHIEForm userId={props.userId} code={code} />
       )}

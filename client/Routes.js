@@ -9,7 +9,7 @@ import {
   Players,
   Profile,
   GamePage,
-  WaitingRoom,
+  ActiveGame,
   NotFound,
   Loading,
   NHIE
@@ -38,8 +38,8 @@ export default function Routes() {
       {user ? (
         <Switch>
           <Route
-            path="/games/:code/1"
-            render={props => <NHIE userId={user.uid} {...props} />}
+            path="/games/:code"
+            render={props => <ActiveGame userId={user.uid} {...props} />}
           />
           <Route path="/players" component={Players} />
           <Route

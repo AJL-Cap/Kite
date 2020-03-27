@@ -46,7 +46,7 @@
       "gameId": 1,
       "status": "waiting",
       "round": {
-        "roundkey": {
+        "round1key": {
           "timeStarted": "",
           "activeResponseIndex": 0,
           "responses": {
