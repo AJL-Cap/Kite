@@ -15,7 +15,7 @@ const RoomCodeSubmit = props => {
         const newPlayerRef = db.ref(
           "gameSessions/" + formCode + "/players/" + uid
         ); // only if the session already exists, i can make a reference to the new player
-        newPlayerRef.set({ points: 0, nickname: nick }); // setting the new player using the ref
+        newPlayerRef.set({ nickname: nick }); // setting the new player using the ref
         history.push(`/games/${formCode}`); // redirecting to the game page
       }
     },

@@ -44,7 +44,22 @@
         }
       },
       "gameId": 1,
-      "status": "waiting"
+      "status": "waiting",
+      "round": {
+        "round1key": {
+          "timeStarted": "",
+          "activeResponseIndex": 0,
+          "responses": {
+            "UID1": {
+              "text": "I peed in a pool",
+              "confessors": {
+                "UID2": true,
+                "UID3": false
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

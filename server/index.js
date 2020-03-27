@@ -71,17 +71,12 @@ ref.on(
   "child_added",
   snapshot => {
     const { gameId, players, status } = snapshot.val();
+    snapshot.ref.child("players").on("value", playersSnap => {
+      console.log(playersSnap.val());
+    });
     if (gameId === "1") {
-      if (status === "responding") {
-        snapshot.ref.child("players").on("value", playersSnap => {
-          console.log(playersSnap.val());
-        });
-        // const timeout = setTimeout(() => {
-        //   snapshot.ref.child("players").off()
-        // }, 60000)
-        // clearTimeout(timeout)
-      } // else if (status == 'round') {
-
+      // if (status === "responding") {
+      // } // else if (status == 'round') {
       // }
     }
   },

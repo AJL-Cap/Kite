@@ -10,7 +10,7 @@ const db = fire.database();
 
 const WaitingRoom = props => {
   //getting that session info
-  const { code } = props.match.params;
+  const { code } = props;
   const gameSession = db.ref("gameSessions/" + code);
 
   const [session, loading, error] = useObjectVal(gameSession);
@@ -30,7 +30,6 @@ const WaitingRoom = props => {
     try {
       //updating that session status to playing
       axios.post(`/api/games/${code}`, { status: "playing" });
-      props.history.push(`/games/${code}/${session.gameId}`);
     } catch (err) {
       console.log("error switching game to playing");
     }

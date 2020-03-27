@@ -10,7 +10,7 @@ import axios from "axios";
 const db = fire.database();
 
 const NHIE = props => {
-  const code = props.match.params.code;
+  const { code } = props;
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
   );
@@ -23,22 +23,8 @@ const NHIE = props => {
   if (error) return "Error";
   if (!session) return <NotFound />;
 
-  //console.log("status", session.status);
-
   let players = Object.keys(session.players);
   let responses = [];
-  db.ref("gameSessions/" + code + "/players").on("child_added", snapshot => {
-    let responseRef = snapshot.ref.child("responding");
-    responseRef.on("value", responseSnap => {
-      if (responseSnap.val() === false) {
-        responses.push(responseSnap.val()); //this is the array on line
-      }
-      // console.log("response snapshot: ", responseSnap.val());
-    });
-    if (responses.length === players.length) {
-      axios.post(`/api/games/${code}`, { status: "round" });
-    }
-  });
 
   return (
     <div>
