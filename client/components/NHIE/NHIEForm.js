@@ -25,7 +25,7 @@ export default function NHIEForm({ userId, code }) {
           response: "Nothing Submitted",
           responding: false
         });
-      }, 8000)
+      }, 8000000)
     );
     //currently set to 8 seconds for testing purpose
   }, []);
