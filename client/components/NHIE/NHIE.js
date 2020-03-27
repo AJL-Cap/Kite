@@ -11,8 +11,7 @@ import { useLocation } from "react-router-dom";
 const db = fire.database();
 
 const NHIE = props => {
-  const code = props.match.params.code;
-
+  const { code } = props;
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
   );
@@ -22,6 +21,7 @@ const NHIE = props => {
   if (!session) return <NotFound />;
 
   let players = Object.keys(session.players);
+  let responses = [];
 
   return (
     <div>

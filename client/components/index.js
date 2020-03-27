@@ -8,7 +8,7 @@ import WaitingRoom from "./Game/WaitingRoom";
 import NotFound from "./NotFound";
 import Loading from "./Loading";
 import NHIE from "./NHIE/NHIE";
-import PostResponse from "./NHIE/PostResponse";
+import ActiveGame from "./Game/ActiveGame";
 
 export {
   Home,
@@ -21,5 +21,5 @@ export {
   NotFound,
   Loading,
   NHIE,
-  PostResponse
+  ActiveGame
 };
