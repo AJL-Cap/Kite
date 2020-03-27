@@ -20,7 +20,7 @@ const GameCard = props => {
       players: { [uid]: { host: true, nickname: nick } }
     });
     history.push({
-      pathname: `/games/${code}/${gameId}`,
+      pathname: `/games/${code}`,
       state: { host: true }
     });
   };

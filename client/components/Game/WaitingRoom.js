@@ -12,6 +12,7 @@ const db = fire.database();
 const WaitingRoom = props => {
   //getting that session info
   const { code } = props;
+  const location = useLocation();
   const gameSession = db.ref("gameSessions/" + code);
 
   const [session, loading, error] = useObjectVal(gameSession);
@@ -55,12 +56,14 @@ const WaitingRoom = props => {
                 <SessionPlayer player={player} key={player} />
               ))}
             </div>
-            {location.state.host && (
+            {location.state && location.state.host ? (
               <div className="row justify-content-center">
                 <Button variant="dark" onClick={handleClick}>
                   Start Game
                 </Button>
               </div>
+            ) : (
+              <div />
             )}
           </div>
         </div>

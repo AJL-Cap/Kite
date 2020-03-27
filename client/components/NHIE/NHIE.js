@@ -6,7 +6,6 @@ import { useObjectVal } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import ResponseDisplay from "./ResponseDisplay";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
 
 const db = fire.database();
 
@@ -15,6 +14,10 @@ const NHIE = props => {
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
   );
+
+  useEffect(() => {
+    axios.post(`/api/games/${code}`, { status: "responding" });
+  }, []);
 
   if (loading) return "";
   if (error) return "Error";
@@ -28,6 +31,22 @@ const NHIE = props => {
       <h1>Hello World from NHIE</h1>
       {session.status === "responding" && (
         <NHIEForm userId={props.userId} code={code} />
+      )}
+      {session.status === "round" && (
+        <div>
+          {/* <ResponseDisplay uid={props.userId} session={session} /> */}
+          <div className="row" id="playerDisplayPoints">
+            {players.map(key => {
+              return (
+                <PlayerInfo
+                  points={session.players[key].points}
+                  key={key}
+                  id={key}
+                />
+              );
+            })}
+          </div>
+        </div>
       )}
     </div>
   );

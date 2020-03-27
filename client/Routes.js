@@ -56,7 +56,6 @@ export default function Routes() {
             path="/"
             render={props => <Home userId={user.uid} {...props} />}
           />
-          <Route exact path="/test" component={PostResponse} />
         </Switch>
       ) : (
         <Switch>
