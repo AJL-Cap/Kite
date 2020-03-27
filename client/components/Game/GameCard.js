@@ -19,7 +19,10 @@ const GameCard = props => {
       status: "waiting",
       players: { [uid]: { host: true, points: 0, nickname: nick } }
     });
-    history.push(`/games/${code}`);
+    history.push({
+      pathname: `/games/${code}/1`,
+      state: { host: true }
+    });
   };
 
   return (
@@ -27,7 +30,7 @@ const GameCard = props => {
       <div className="card-body">
         <h2 className="card-title">title: {game.val().title}</h2>
         <p className="card-text">rules: {game.val().rules}</p>
-        <button className="btn btn-primary" onClick={handleClick}>
+        <button type="button" className="btn btn-primary" onClick={handleClick}>
           start new game
         </button>
       </div>

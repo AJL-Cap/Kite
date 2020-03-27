@@ -65,31 +65,6 @@ admin.initializeApp({
   databaseURL: databaseURL
 });
 
-const db = admin.database();
-const ref = db.ref("gameSessions");
-ref.on(
-  "child_added",
-  snapshot => {
-    const { gameId, players, status } = snapshot.val();
-    if (gameId === "1") {
-      if (status === "responding") {
-        snapshot.ref.child("players").on("value", playersSnap => {
-          console.log(playersSnap.val());
-        });
-        // const timeout = setTimeout(() => {
-        //   snapshot.ref.child("players").off()
-        // }, 60000)
-        // clearTimeout(timeout)
-      } // else if (status == 'round') {
-
-      // }
-    }
-  },
-  errorObject => {
-    console.log("The read failed: " + errorObject.code);
-  }
-);
-
 const startListening = () => {
   // start listening (and create a 'server' object representing our server)
   const server = app.listen(PORT, () =>
