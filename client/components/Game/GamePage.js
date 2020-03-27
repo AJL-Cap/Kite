@@ -1,6 +1,6 @@
 import React from "react";
 import fire from "../../fire";
-import { useList } from "react-firebase-hooks/database";
+import { useList, useObjectVal } from "react-firebase-hooks/database";
 import GameCard from "./GameCard";
 import RoomCodeForm from "./RoomCodeForm";
 import { Container, Row, Col } from "react-bootstrap";
@@ -11,9 +11,12 @@ const gamesRef = db.ref("games");
 const GamePage = props => {
   const { userId, history } = props;
   const [games, loading, error] = useList(gamesRef);
+  const [nick, loadNick, errNick] = useObjectVal(
+    db.ref("players/" + userId + "/nickname")
+  );
 
-  if (loading) return "";
-  if (error) return <p>Error</p>;
+  if (loading || loadNick) return "";
+  if (error || errNick) return <p>Error</p>;
 
   return (
     <div>
@@ -30,11 +33,12 @@ const GamePage = props => {
                 gameId={game.key}
                 uid={userId}
                 history={history}
+                nick={nick}
               />
             ))}
           </Col>
           <Col>
-            <RoomCodeForm uid={userId} history={history} />
+            <RoomCodeForm uid={userId} history={history} nick={nick} />
           </Col>
         </Row>
       </Container>

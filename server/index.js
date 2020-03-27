@@ -1,14 +1,14 @@
-const path = require('path')
-const express = require('express')
-const morgan = require('morgan')
-const compression = require('compression')
-const PORT = process.env.PORT || 8080
-const app = express()
-const admin = require('firebase-admin')
-const serviceAccount = require('../admin.json')
-const {databaseURL} = require('../secrets')
+const path = require("path");
+const express = require("express");
+const morgan = require("morgan");
+const compression = require("compression");
+const PORT = process.env.PORT || 8080;
+const app = express();
+const admin = require("firebase-admin");
+const serviceAccount = require("../admin.json");
+const { databaseURL } = require("../secrets");
 
-module.exports = app
+module.exports = app;
 
 /**
  * In your development environment, you can keep all of your
@@ -18,70 +18,95 @@ module.exports = app
  * keys as environment variables, so that they can still be read by the
  * Node process on process.env
  */
-if (process.env.NODE_ENV !== 'production') require('../secrets')
+if (process.env.NODE_ENV !== "production") require("../secrets");
 
 const createApp = () => {
   // logging middleware
-  app.use(morgan('dev'))
+  app.use(morgan("dev"));
 
   // body parsing middleware
-  app.use(express.json())
-  app.use(express.urlencoded({extended: true}))
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
   // compression middleware
-  app.use(compression())
+  app.use(compression());
 
-  app.use('/api', require('./api'))
+  app.use("/api", require("./api"));
 
   // static file-serving middleware
-  app.use(express.static(path.join(__dirname, '..', 'public')))
+  app.use(express.static(path.join(__dirname, "..", "public")));
 
   // any remaining requests with an extension (.js, .css, etc.) send 404
   app.use((req, res, next) => {
     if (path.extname(req.path).length) {
-      const err = new Error('Not found')
-      err.status = 404
-      next(err)
+      const err = new Error("Not found");
+      err.status = 404;
+      next(err);
     } else {
-      next()
+      next();
     }
-  })
+  });
 
   // sends index.html
-  app.use('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public/index.html'))
-  })
+  app.use("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "public/index.html"));
+  });
 
   // error handling endware
   app.use((err, req, res, next) => {
-    console.error(err)
-    console.error(err.stack)
-    res.status(err.status || 500).send(err.message || 'Internal server error.')
-  })
-}
+    console.error(err);
+    console.error(err.stack);
+    res.status(err.status || 500).send(err.message || "Internal server error.");
+  });
+};
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: databaseURL
-})
+});
 
 const startListening = () => {
   // start listening (and create a 'server' object representing our server)
   const server = app.listen(PORT, () =>
     console.log(`Mixing it up on port ${PORT}`)
-  )
-}
+  );
+};
+
+const db = admin.database();
+const ref = db.ref("gameSessions");
+ref.on(
+  "child_added",
+  snapshot => {
+    const { gameId, players, status } = snapshot.val();
+    if (gameId === "1") {
+      if (status === "responding") {
+        snapshot.ref.child("players").on("value", playersSnap => {
+          console.log(playersSnap.val());
+        });
+        const timeout = setTimeout(() => {
+          snapshot.ref.child("players").off();
+        }, 60000);
+        clearTimeout(timeout);
+      } // else if (status == 'round') {
+
+      // }
+    }
+  },
+  errorObject => {
+    console.log("The read failed: " + errorObject.code);
+  }
+);
 
 async function bootApp() {
-  await createApp()
-  await startListening()
+  await createApp();
+  await startListening();
 }
 // This evaluates as true when this file is run directly from the command line,
 // i.e. when we say 'node server/index.js' (or 'nodemon server/index.js', or 'nodemon server', etc)
 // It will evaluate false when this module is required by another module - for example,
 // if we wanted to require our app in a test spec
 if (require.main === module) {
-  bootApp()
+  bootApp();
 } else {
-  createApp()
+  createApp();
 }
