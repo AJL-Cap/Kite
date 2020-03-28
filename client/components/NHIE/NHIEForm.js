@@ -1,44 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-
 export default function NHIEForm({ userId, code }) {
   const [timeUp, setTimeUp] = useState(false);
   const [timer, setTimer] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const { register, handleSubmit, errors } = useForm();
-
   const route = `/api/games/${code}/response`;
   const request = {
     uid: userId,
-    response: "",
-    responding: false
+    response: ""
   };
-
   useEffect(() => {
-    axios.post(route, { ...request, responding: true });
-    setTimer(
-      setTimeout(() => {
-        setTimeUp(true);
-        axios.post(route, {
-          ...request,
-          response: "Nothing Submitted",
-          responding: false
-        });
-      }, 8000000)
-    );
+    axios.post(route, { ...request });
     //currently set to 8 seconds for testing purpose
   }, []);
-
   const onSubmit = data => {
     axios.post(route, { ...request, response: data.response });
     //option 1:
     // history.push('new path?')
     //option 2:
     setSubmitted(true);
-    setTimer(clearTimeout(timer));
   };
-
   if (timeUp) {
     return (
       <div>Uh oh, time is up! </div>
@@ -51,7 +34,6 @@ export default function NHIEForm({ userId, code }) {
       //render new component?
     );
   }
-
   if (!timeUp || !submitted) {
     return (
       <form onSubmit={handleSubmit(onSubmit)}>

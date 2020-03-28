@@ -15,25 +15,20 @@ const NHIE = props => {
     db.ref("gameSessions/" + code)
   );
 
-  useEffect(() => {
-    axios.post(`/api/games/${code}`, { status: "responding" });
-  }, []);
-
   if (loading) return "";
   if (error) return "Error";
   if (!session) return <NotFound />;
 
   let players = Object.keys(session.players);
-  let responses = [];
 
   return (
     <div>
-      <h1>Hello World from NHIE</h1>
       {session.status === "responding" && (
-        <NHIEForm userId={props.userId} code={code} />
+        <NHIEForm userId={props.userId} code={code} rounds={session.rounds} />
       )}
-      {session.status === "round" && (
+      {session.status === "confessing" && (
         <div>
+          <h1>Hi from confessing </h1>
           {/* <ResponseDisplay uid={props.userId} session={session} /> */}
           <div className="row" id="playerDisplayPoints">
             {players.map(key => {
@@ -48,6 +43,7 @@ const NHIE = props => {
           </div>
         </div>
       )}
+      {session.status === "finished" && <div> HI from finished </div>}
     </div>
   );
 };
