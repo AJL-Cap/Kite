@@ -72,7 +72,19 @@ const startListening = () => {
   );
 };
 
+//start of game controller
 const db = admin.database();
+function endRound(ref, updateRef, status) {
+  if (ref) {
+    ref.off();
+  }
+  db.ref(updateRef).set(status);
+}
+function endGame(deleteRef) {
+  //updating status to confessing
+  db.ref(deleteRef).remove();
+}
+
 db.ref("gameSessions").on("child_added", snapshot => {
   //each game session information
   const game = snapshot.val();
@@ -103,16 +115,11 @@ db.ref("gameSessions").on("child_added", snapshot => {
           responsesRef.on("value", roundResponsesSnapshot => {
             const responses = roundResponsesSnapshot.val();
             //end round function to be used with timeout and when all ppl have responded
-            function endRound() {
-              //no longer listening for responses
-              responsesRef.off();
-              //updating status to confessing
-              db.ref("gameSessions/" + snapshot.key + "/status").set(
-                "confessing"
-              );
-            }
+            let refToChange = "gameSessions/" + snapshot.key + "/status";
             //timeout for 6 seconds right now for testing but feel free to change it
-            const roundTimeout = setTimeout(endRound, 6000);
+            const roundTimeout = setTimeout(function() {
+              endRound(responsesRef, refToChange, "confessing");
+            }, 6000);
             // console.log("RESPONSES", responses);
             let userIds;
             if (responses) {
@@ -126,24 +133,24 @@ db.ref("gameSessions").on("child_added", snapshot => {
         }
       });
     } else if (status === "confessing") {
-      //end round
-      function endRound() {
-        //updating status to confessing
-        db.ref("gameSessions/" + snapshot.key + "/status").set("finished");
-      }
+      let refToChange = "gameSessions/" + snapshot.key + "/status";
       console.log("in confessing");
-      const roundTimeout = setTimeout(endRound, 6000);
+      //ending confessing round and updating to finished
+      const roundTimeout = setTimeout(function() {
+        endRound(undefined, refToChange, "finished");
+      }, 6000);
     } else if (status === "finished") {
-      function endRound() {
-        //no longer listening for responses
-        //updating status to confessing
-        db.ref("gameSessions/" + snapshot.key).remove();
-      }
       console.log("in finished");
-      const roundTimeout = setTimeout(endRound, 6000);
+      let refToDelete = "gameSessions/" + snapshot.key;
+      //ending finished and deleted the game session
+      const roundTimeout = setTimeout(function() {
+        endGame(refToDelete);
+      }, 6000);
     }
   });
 });
+
+//end of game controller
 
 async function bootApp() {
   await createApp();
