@@ -32,7 +32,7 @@ const ResponseDisplay = props => {
 
   return (
     <div>
-      helloworld
+      helloworld from ResponseDisplay
       {/* <div className="jumbotron text-center">
         <h2>Never has {turn.nickname} ever...</h2>
         <h1>{turn.response}</h1>

@@ -119,7 +119,7 @@ db.ref("gameSessions").on("child_added", snapshot => {
             //timeout for 6 seconds right now for testing but feel free to change it
             const roundTimeout = setTimeout(function() {
               endRound(responsesRef, refToChange, "confessing");
-            }, 6000);
+            }, 3000);
             // console.log("RESPONSES", responses);
             let userIds;
             if (responses) {
@@ -138,7 +138,7 @@ db.ref("gameSessions").on("child_added", snapshot => {
       //ending confessing round and updating to finished
       const roundTimeout = setTimeout(function() {
         endRound(undefined, refToChange, "finished");
-      }, 6000);
+      }, 3000);
     } else if (status === "finished") {
       console.log("in finished");
       let refToDelete = "gameSessions/" + snapshot.key;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import fire from "../../fire";
 import { useObjectVal } from "react-firebase-hooks/database";
 import SessionPlayer from "./SessionPlayers";
@@ -11,9 +11,21 @@ const db = fire.database();
 
 const WaitingRoom = props => {
   //getting that session info
-  const { code } = props;
+  const { code, userId } = props;
   const location = useLocation();
   const gameSession = db.ref("gameSessions/" + code);
+
+  const [host, setHost] = useState(false);
+  useEffect(() => {
+    db
+      .ref(`gameSessions/${code}/players/${userId}/host`)
+      .once("value")
+      .then(snapshot => {
+        if (snapshot.val()) {
+          setHost(true);
+        }
+      });
+  });
 
   const [session, loading, error] = useObjectVal(gameSession);
   if (loading) return "";
@@ -59,14 +71,12 @@ const WaitingRoom = props => {
                 <SessionPlayer player={player} key={player} />
               ))}
             </div>
-            {location.state && location.state.host ? (
+            {host && (
               <div className="row justify-content-center">
                 <Button variant="dark" onClick={handleClick}>
                   Start Game
                 </Button>
               </div>
-            ) : (
-              <div />
             )}
           </div>
         </div>
