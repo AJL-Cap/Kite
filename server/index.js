@@ -73,24 +73,63 @@ const startListening = () => {
 };
 
 const db = admin.database();
-const ref = db.ref("gameSessions");
-ref.on(
-  "child_added",
-  snapshot => {
-    const { gameId, players, status } = snapshot.val();
-    snapshot.ref.child("players").on("value", playersSnap => {
-      console.log(playersSnap.val());
-    });
-    if (gameId === "1") {
-      // if (status === "responding") {
-      // } // else if (status == 'round') {
-      // }
+db.ref("gameSessions").on("child_added", snapshot => {
+  //each game session information
+  const game = snapshot.val();
+  // console.log("GAME", game);
+  if (game.status === "final") return;
+  snapshot.ref.child("status").on("value", statusSnapshot => {
+    const status = statusSnapshot.val();
+    if (status === "responding") {
+      //getting the rounds object
+      snapshot.ref.child("rounds").on("value", roundsSnapshot => {
+        const rounds = roundsSnapshot.val();
+        //getting list of rounds values
+        if (rounds) {
+          const roundsList = Object.values(rounds);
+          //getting list of round keys
+          const roundsKeys = Object.keys(rounds);
+          //finding the last round values
+          const round = roundsList[roundsList.length - 1];
+          //finding the last round key
+          const roundKey = roundsKeys[roundsList.length - 1];
+          //getting the reference to responses in the last round
+          const responsesRef = snapshot.ref
+            .child("rounds")
+            .child(roundKey)
+            .child("responses");
+          //function to end the round and change the status to confessing.
+          //getting the responses
+          responsesRef.on("value", roundResponsesSnapshot => {
+            const responses = roundResponsesSnapshot.val();
+            //end round function to be used with timeout and when all ppl have responded
+            function endRound() {
+              //no longer listening for responses
+              responsesRef.off();
+              //updating status to confessing
+              db
+                .ref("gameSessions/" + snapshot.key + "/status")
+                .set("confessing");
+            }
+            //timeout for 6 seconds right now for testing but feel free to change it
+            const roundTimeout = setTimeout(endRound, 60000);
+            // console.log("RESPONSES", responses);
+            let userIds;
+            if (responses) {
+              userIds = Object.keys(responses);
+            }
+            // if (/*we have responses for every player in the game session*/) {
+            //   clearTimeout(roundTimeout);
+            //   endRound()
+            // }
+          });
+        }
+      });
+    } else if (status === "confessing") {
+      console.log("in confessing");
     }
-  },
-  errorObject => {
-    console.log("The read failed: " + errorObject.code);
-  }
-);
+  });
+});
 
 async function bootApp() {
   await createApp();

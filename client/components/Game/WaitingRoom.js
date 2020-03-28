@@ -1,21 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import fire from "../../fire";
 import { useObjectVal } from "react-firebase-hooks/database";
 import SessionPlayer from "./SessionPlayers";
 import { Button } from "react-bootstrap";
 import NotFound from "../NotFound";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
 
 const db = fire.database();
 
 const WaitingRoom = props => {
   //getting that session info
-  const { code } = props;
-  const location = useLocation();
+  const { code, userId, host } = props;
+  console.log(props);
   const gameSession = db.ref("gameSessions/" + code);
-
   const [session, loading, error] = useObjectVal(gameSession);
+
   if (loading) return "";
   if (error) return "Error";
   if (!session)
@@ -32,12 +31,14 @@ const WaitingRoom = props => {
     try {
       //updating that session status to playing
       axios.post(`/api/games/${code}`, { status: "playing" });
+      db.ref(`gameSessions/${code}/rounds`).push({ timeStarted: Date.now() });
     } catch (err) {
       console.log("error switching game to playing");
     }
   };
   //getting players from the session
   let players = Object.keys(session.players);
+  console.log(host);
   return (
     <>
       {players.includes(`${props.userId}`) ? (
@@ -56,14 +57,12 @@ const WaitingRoom = props => {
                 <SessionPlayer player={player} key={player} />
               ))}
             </div>
-            {location.state && location.state.host ? (
+            {host && (
               <div className="row justify-content-center">
                 <Button variant="dark" onClick={handleClick}>
                   Start Game
                 </Button>
               </div>
-            ) : (
-              <div />
             )}
           </div>
         </div>

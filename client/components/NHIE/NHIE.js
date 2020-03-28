@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PlayerInfo from "./PlayerInfo";
 import NHIEForm from "./NHIEForm";
 import fire from "../../fire";
-import { useObjectVal } from "react-firebase-hooks/database";
+import { useObjectVal, useList } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import ResponseDisplay from "./ResponseDisplay";
 import axios from "axios";
@@ -10,13 +10,26 @@ import axios from "axios";
 const db = fire.database();
 
 const NHIE = props => {
-  const { code } = props;
+  const { code, host } = props;
+  console.log("nhie host?", host);
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
   );
 
   useEffect(() => {
-    axios.post(`/api/games/${code}`, { status: "responding" });
+    if (host) {
+      //host changing game status to responding
+      axios.post(`/api/games/${code}`, { status: "responding" });
+      //host setting everyone's game points to 100
+      db
+        .ref(`gameSessions/${code}/players`)
+        .once("value")
+        .then(snapshot => {
+          snapshot.forEach(childSnap => {
+            childSnap.ref.update({ points: 100 });
+          });
+        });
+    }
   }, []);
 
   if (loading) return "";
