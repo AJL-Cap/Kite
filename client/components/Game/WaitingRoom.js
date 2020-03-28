@@ -11,23 +11,11 @@ const db = fire.database();
 
 const WaitingRoom = props => {
   //getting that session info
-  const { code, userId } = props;
-  const location = useLocation();
+  const { code, userId, host } = props;
+  console.log(props);
   const gameSession = db.ref("gameSessions/" + code);
-
-  const [host, setHost] = useState(false);
-  useEffect(() => {
-    db
-      .ref(`gameSessions/${code}/players/${userId}/host`)
-      .once("value")
-      .then(snapshot => {
-        if (snapshot.val()) {
-          setHost(true);
-        }
-      });
-  });
-
   const [session, loading, error] = useObjectVal(gameSession);
+
   if (loading) return "";
   if (error) return "Error";
   if (!session)
@@ -43,16 +31,15 @@ const WaitingRoom = props => {
   const handleClick = () => {
     try {
       //updating that session status to playing
-      axios.post(`/api/games/${code}`, { status: "responding" });
-      db.ref(`gameSessions/${code}/rounds`).push({
-        timeStarted: "time"
-      });
+      axios.post(`/api/games/${code}`, { status: "playing" });
+      db.ref(`gameSessions/${code}/rounds`).push({ timeStarted: Date.now() });
     } catch (err) {
       console.log("error switching game to playing");
     }
   };
   //getting players from the session
   let players = Object.keys(session.players);
+  console.log(host);
   return (
     <>
       {players.includes(`${props.userId}`) ? (
