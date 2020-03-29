@@ -8,7 +8,12 @@ import Timer from "./Timer";
 const db = fire.database();
 
 export default function NHIEForm(props) {
-  const { userId, code } = props;
+  const { userId, code, host } = props;
+  useEffect(() => {
+    if (host) {
+      db.ref(`gameSessions/${code}/rounds`).push({ timeStarted: Date.now() });
+    }
+  }, []);
   const [submitted, setSubmitted] = useState(false);
   const [rounds, loading, error] = useList(
     db.ref(`gameSessions/${code}/rounds`)

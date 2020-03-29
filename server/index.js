@@ -81,7 +81,6 @@ function endRound(ref, updateRef, status) {
   db.ref(updateRef).set(status);
 }
 function endGame(deleteRef) {
-  //updating status to confessing
   db.ref(deleteRef).remove();
 }
 
@@ -149,11 +148,34 @@ db.ref("gameSessions").on("child_added", snapshot => {
       });
     } else if (status === "confessing") {
       let refToChange = "gameSessions/" + snapshot.key + "/status";
+      console.log("refToChange:", refToChange);
       console.log("in confessing");
-      //ending confessing round and updating to finished
+
+      //checking if any player's point is 0
+      let isGameOver;
+      snapshot.ref
+        .child("players")
+        .once("value")
+        .then(playerSnapshot => {
+          isGameOver = Object.values(playerSnapshot.val()).find(
+            player => player.points <= 0
+          );
+        });
+      //checking gameover when confessing time is up
       const roundTimeout = setTimeout(function() {
-        endRound(undefined, refToChange, "finished");
+        if (isGameOver) {
+          //changing status to finished if game is over
+          endRound(undefined, refToChange, "finished");
+        } else {
+          //chaging status to responding if game is still on
+          endRound(undefined, refToChange, "responding");
+        }
       }, 30000);
+      //ending the game right away if at least one player reaches 0 points
+      if (isGameOver) {
+        clearTimeout(roundTimeout);
+        endRound(undefined, refToChange, "responding");
+      }
     } else if (status === "finished") {
       console.log("in finished");
       let refToDelete = "gameSessions/" + snapshot.key;
