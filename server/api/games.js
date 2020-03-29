@@ -17,11 +17,9 @@ router.post("/:code", async (req, res, next) => {
 //updating response for given user
 router.post("/:code/response", async (req, res, next) => {
   const { code } = req.params;
-  const { uid, response, responding } = req.body;
+  const { uid, response } = req.body;
   try {
-    await db
-      .ref(`gameSessions/${code}/players/${uid}`)
-      .update({ response, responding });
+    await db.ref(`gameSessions/${code}/players/${uid}`).update({ response });
     res.sendStatus(200);
   } catch (err) {
     console.log(err);

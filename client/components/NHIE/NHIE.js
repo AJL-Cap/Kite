@@ -2,21 +2,35 @@ import React, { useEffect, useState } from "react";
 import PlayerInfo from "./PlayerInfo";
 import NHIEForm from "./NHIEForm";
 import fire from "../../fire";
-import { useObjectVal } from "react-firebase-hooks/database";
+import { useObjectVal, useList } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import ResponseDisplay from "./ResponseDisplay";
 import axios from "axios";
+import EndGame from "./EndGame";
 
 const db = fire.database();
 
 const NHIE = props => {
-  const { code } = props;
+  const { code, host } = props;
+  console.log("nhie host?", host);
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
   );
 
   useEffect(() => {
-    axios.post(`/api/games/${code}`, { status: "responding" });
+    if (host) {
+      //host changing game status to responding
+      axios.post(`/api/games/${code}`, { status: "responding" });
+      //host setting everyone's game points to 100
+      db
+        .ref(`gameSessions/${code}/players`)
+        .once("value")
+        .then(snapshot => {
+          snapshot.forEach(childSnap => {
+            childSnap.ref.update({ points: 100 });
+          });
+        });
+    }
   }, []);
 
   if (loading) return "";
@@ -24,17 +38,16 @@ const NHIE = props => {
   if (!session) return <NotFound />;
 
   let players = Object.keys(session.players);
-  let responses = [];
 
   return (
     <div>
-      <h1>Hello World from NHIE</h1>
       {session.status === "responding" && (
-        <NHIEForm userId={props.userId} code={code} />
+        <NHIEForm userId={props.userId} code={code} rounds={session.rounds} />
       )}
-      {session.status === "round" && (
+      {session.status === "confessing" && (
         <div>
-          {/* <ResponseDisplay uid={props.userId} session={session} /> */}
+          <h1>Hi from confessing </h1>
+          <ResponseDisplay uid={props.userId} session={session} />
           <div className="row" id="playerDisplayPoints">
             {players.map(key => {
               return (
@@ -47,6 +60,9 @@ const NHIE = props => {
             })}
           </div>
         </div>
+      )}
+      {session.status === "finished" && (
+        <EndGame players={players} session={session} />
       )}
     </div>
   );

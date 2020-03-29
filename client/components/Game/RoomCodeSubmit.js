@@ -9,17 +9,15 @@ const RoomCodeSubmit = props => {
   const [session, loading, error] = useObject(
     db.ref("gameSessions/" + formCode)
   ); // finds game session with same code
+  console.log(session);
   useEffect(
     () => {
       if (session) {
         const newPlayerRef = db.ref(
           "gameSessions/" + formCode + "/players/" + uid
         ); // only if the session already exists, i can make a reference to the new player
-        newPlayerRef.set({ nickname: nick }); // setting the new player using the ref
-        history.push({
-          pathname: `/games/${formCode}`,
-          state: { host: false }
-        }); // redirecting to the game page
+        newPlayerRef.set({ nickname: nick, host: false, points: 0 }); // setting the new player using the ref
+        history.push(`/games/${formCode}`); // redirecting to the game page
       }
     },
     [history, session, uid]

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import fire from "../../fire";
 import { useObjectVal } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
@@ -10,6 +10,22 @@ const db = fire.database();
 
 const ActiveGame = props => {
   const { code } = props.match.params;
+  const { userId } = props;
+  const [host, setHost] = useState(false);
+
+  //checking if the current user is the host
+  useEffect(() => {
+    db
+      .ref(`gameSessions/${code}/players/${userId}/host`)
+      .once("value")
+      .then(snapshot => {
+        console.log("value: ", snapshot.val());
+        if (snapshot.val()) {
+          setHost(true);
+        }
+      });
+  }, []);
+
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
   );
@@ -18,10 +34,10 @@ const ActiveGame = props => {
   if (error) return "Error";
   if (!session) return <NotFound />;
   if (session.status === "waiting") {
-    return <WaitingRoom userId={props.userId} code={code} />;
+    return <WaitingRoom userId={props.userId} code={code} host={host} />;
   } else if (session.gameId === "1") {
-      return <NHIE userId={props.userId} code={code} />;
-    }
+    return <NHIE userId={props.userId} code={code} host={host} />;
+  }
   return <div />;
 };
 
