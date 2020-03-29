@@ -90,6 +90,14 @@ db.ref("gameSessions").on("child_added", snapshot => {
   snapshot.ref.child("status").on("value", statusSnapshot => {
     const status = statusSnapshot.val();
     if (status === "responding") {
+      //getting total # of players
+      let totalPlayers;
+      snapshot.ref
+        .child("players")
+        .once("value")
+        .then(playerSnapshot => {
+          totalPlayers = playerSnapshot.numChildren();
+        });
       //getting the rounds object
       snapshot.ref.child("rounds").on("value", roundsSnapshot => {
         const rounds = roundsSnapshot.val();
@@ -116,15 +124,22 @@ db.ref("gameSessions").on("child_added", snapshot => {
             //timeout for a certain amount of time then changing status to confessing
             const roundTimeout = setTimeout(function() {
               endRound(responsesRef, refToChange, "confessing");
-            }, 3000);
-            let userIds;
+            }, 15000);
+            //checking for submitted responses
             if (responses) {
-              userIds = Object.keys(responses);
+              let resArr = [];
+              Object.values(responses).forEach(resObj => {
+                if (resObj.text.length > 1) {
+                  resArr.push(resObj.text);
+                }
+              });
+              console.log(resArr);
+              //if we have responses for every player in the game session:
+              if (resArr.length === totalPlayers) {
+                clearTimeout(roundTimeout);
+                endRound(responsesRef, refToChange, "confessing");
+              }
             }
-            // if (/*we have responses for every player in the game session*/) {
-            //   clearTimeout(roundTimeout);
-            //   endRound()
-            // }
           });
         }
       });
