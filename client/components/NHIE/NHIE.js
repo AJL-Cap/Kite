@@ -21,6 +21,7 @@ const NHIE = props => {
     if (host) {
       //host changing game status to responding
       axios.post(`/api/games/${code}`, { status: "responding" });
+
       //host setting everyone's game points to 100
       db
         .ref(`gameSessions/${code}/players`)
@@ -42,7 +43,12 @@ const NHIE = props => {
   return (
     <div>
       {session.status === "responding" && (
-        <NHIEForm userId={props.userId} code={code} rounds={session.rounds} />
+        <NHIEForm
+          userId={props.userId}
+          code={code}
+          rounds={session.rounds}
+          host={host}
+        />
       )}
       {session.status === "confessing" && (
         <div>
