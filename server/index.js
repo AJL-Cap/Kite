@@ -84,108 +84,113 @@ function endGame(deleteRef) {
   db.ref(deleteRef).remove();
 }
 
-db.ref("gameSessions").on("child_added", snapshot => {
-  //each game session information
-  const game = snapshot.val();
-  // console.log("GAME", game);
-  if (game.status === "final") return;
-  snapshot.ref.child("status").on("value", statusSnapshot => {
-    const status = statusSnapshot.val();
-    if (status === "responding") {
-      //getting total # of players
-      let totalPlayers;
-      snapshot.ref
-        .child("players")
-        .once("value")
-        .then(playerSnapshot => {
-          totalPlayers = playerSnapshot.numChildren();
-        });
-      //getting the rounds object
-      snapshot.ref.child("rounds").on("value", roundsSnapshot => {
-        const rounds = roundsSnapshot.val();
-        //getting list of rounds values
-        if (rounds) {
-          const roundsList = Object.values(rounds);
-          //getting list of round keys
-          const roundsKeys = Object.keys(rounds);
-          //finding the last round values
-          const round = roundsList[roundsList.length - 1];
-          //finding the last round key
-          const roundKey = roundsKeys[roundsList.length - 1];
-          //getting the reference to responses in the last round
-          const responsesRef = snapshot.ref
-            .child("rounds")
-            .child(roundKey)
-            .child("responses");
-          //function to end the round and change the status to confessing.
-          //getting the responses
-          responsesRef.on("value", roundResponsesSnapshot => {
-            const responses = roundResponsesSnapshot.val();
-            //end round function to be used with timeout and when all ppl have responded
-            let refToChange = "gameSessions/" + snapshot.key + "/status";
-            //timeout for 6 seconds right now for testing but feel free to change it
-            const roundTimeout = setTimeout(function() {
-              endRound(responsesRef, refToChange, "confessing");
-            }, 60000);
-
-            //checking for submitted responses
-            if (responses) {
-              let resArr = [];
-              Object.values(responses).forEach(resObj => {
-                if (resObj.text.length > 1) {
-                  resArr.push(resObj.text);
-                }
-              });
-              console.log(resArr);
-              //if we have responses for every player in the game session:
-              if (resArr.length === totalPlayers) {
-                clearTimeout(roundTimeout);
-                endRound(responsesRef, refToChange, "confessing");
-              }
-            }
+db.ref("gameSessions").on(
+  "child_added",
+  snapshot => {
+    //each game session information
+    const game = snapshot.val();
+    // console.log("GAME", game);
+    if (game.status === "final") return;
+    snapshot.ref.child("status").on("value", statusSnapshot => {
+      const status = statusSnapshot.val();
+      if (status === "responding") {
+        //getting total # of players
+        let totalPlayers;
+        snapshot.ref
+          .child("players")
+          .once("value")
+          .then(playerSnapshot => {
+            totalPlayers = playerSnapshot.numChildren();
           });
-        }
-      });
-    } else if (status === "confessing") {
-      let refToChange = "gameSessions/" + snapshot.key + "/status";
-      console.log("refToChange:", refToChange);
-      console.log("in confessing");
+        //getting the rounds object
+        snapshot.ref.child("rounds").on("value", roundsSnapshot => {
+          const rounds = roundsSnapshot.val();
+          //getting list of rounds values
+          if (rounds) {
+            const roundsList = Object.values(rounds);
+            //getting list of round keys
+            const roundsKeys = Object.keys(rounds);
+            //finding the last round values
+            const round = roundsList[roundsList.length - 1];
+            //finding the last round key
+            const roundKey = roundsKeys[roundsList.length - 1];
+            //getting the reference to responses in the last round
+            const responsesRef = snapshot.ref
+              .child("rounds")
+              .child(roundKey)
+              .child("responses");
+            //function to end the round and change the status to confessing.
+            //getting the responses
+            responsesRef.on("value", roundResponsesSnapshot => {
+              const responses = roundResponsesSnapshot.val();
+              //end round function to be used with timeout and when all ppl have responded
+              let refToChange = "gameSessions/" + snapshot.key + "/status";
+              //timeout for 6 seconds right now for testing but feel free to change it
+              const roundTimeout = setTimeout(function() {
+                endRound(responsesRef, refToChange, "confessing");
+              }, 60000);
 
-      //checking if any player's point is 0
-      let isGameOver;
-      snapshot.ref
-        .child("players")
-        .once("value")
-        .then(playerSnapshot => {
-          isGameOver = Object.values(playerSnapshot.val()).find(
-            player => player.points <= 0
-          );
+              //checking for submitted responses
+              if (responses) {
+                let resArr = [];
+                Object.values(responses).forEach(resObj => {
+                  if (resObj.text.length > 1) {
+                    resArr.push(resObj.text);
+                  }
+                });
+                console.log(resArr);
+                //if we have responses for every player in the game session:
+                if (resArr.length === totalPlayers) {
+                  clearTimeout(roundTimeout);
+                  endRound(responsesRef, refToChange, "confessing");
+                }
+              }
+            });
+          }
         });
-      //checking gameover when confessing time is up
-      const roundTimeout = setTimeout(function() {
+      } else if (status === "confessing") {
+        let refToChange = "gameSessions/" + snapshot.key + "/status";
+        console.log("refToChange:", refToChange);
+        console.log("in confessing");
+
+        //checking if any player's point is 0
+        let isGameOver = false;
+        snapshot.ref
+          .child("players")
+          .orderByChild("points")
+          .on("value", playersSnap => {
+            const { points } = Object.values(playersSnap.val())[0];
+            if (points === 0) isGameOver = true;
+          });
+        //checking gameover when confessing time is up
+        const roundTimeout = setTimeout(function() {
+          if (isGameOver) {
+            //changing status to finished if game is over
+            endRound(undefined, refToChange, "finished");
+          } else {
+            //chaging status to responding if game is still on
+            endRound(undefined, refToChange, "responding");
+          }
+        }, 30000);
+        //ending the game right away if at least one player reaches 0 points
         if (isGameOver) {
-          //changing status to finished if game is over
+          clearTimeout(roundTimeout);
           endRound(undefined, refToChange, "finished");
-        } else {
-          //chaging status to responding if game is still on
-          endRound(undefined, refToChange, "responding");
         }
-      }, 30000);
-      //ending the game right away if at least one player reaches 0 points
-      if (isGameOver) {
-        clearTimeout(roundTimeout);
-        endRound(undefined, refToChange, "responding");
+      } else if (status === "finished") {
+        console.log("in finished");
+        let refToDelete = "gameSessions/" + snapshot.key;
+        //ending finished and deleted the game session
+        const roundTimeout = setTimeout(function() {
+          endGame(refToDelete);
+        }, 60000);
       }
-    } else if (status === "finished") {
-      console.log("in finished");
-      let refToDelete = "gameSessions/" + snapshot.key;
-      //ending finished and deleted the game session
-      const roundTimeout = setTimeout(function() {
-        endGame(refToDelete);
-      }, 60000);
-    }
-  });
-});
+    });
+  },
+  errorObject => {
+    console.log("The read failed: " + errorObject.code);
+  }
+);
 
 //end of game controller
 
