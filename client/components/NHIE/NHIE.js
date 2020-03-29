@@ -12,7 +12,7 @@ const db = fire.database();
 
 const NHIE = props => {
   const { code, host } = props;
-  console.log("nhie host?", host);
+  //console.log("nhie host?", host);
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
   );

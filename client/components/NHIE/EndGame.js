@@ -15,7 +15,7 @@ const EndGame = props => {
       winners.push(playerKey);
     }
   });
-  console.log("winners", winners, "losers", losers);
+  //console.log("winners", winners, "losers", losers);
   return (
     <div className="container">
       <div className="row">

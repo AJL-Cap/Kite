@@ -19,7 +19,7 @@ const ActiveGame = props => {
       .ref(`gameSessions/${code}/players/${userId}/host`)
       .once("value")
       .then(snapshot => {
-        console.log("value: ", snapshot.val());
+        //console.log("value: ", snapshot.val());
         if (snapshot.val()) {
           setHost(true);
         }

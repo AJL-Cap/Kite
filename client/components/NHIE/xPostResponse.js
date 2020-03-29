@@ -10,7 +10,7 @@ import axios from "axios";
 const db = fire.database();
 
 export default function PostResponse(props) {
-  console.log(props);
+  //console.log(props);
   const { uid, code, players, session } = props.state;
   const [round, setRound] = useState(false);
 
@@ -23,7 +23,7 @@ export default function PostResponse(props) {
           db.ref(`players/${snapshot.key}/nickname`).once("value", name => {
             snapshot.ref.child("response").on("value", res => {
               if (res.val()) {
-                console.log(res.val());
+                //console.log(res.val());
                 resObj[name.val()] = res.val();
               }
             });
@@ -37,7 +37,7 @@ export default function PostResponse(props) {
     [session]
   );
 
-  console.log("round", round);
+  //console.log("round", round);
   return (
     <div>
       {round && (

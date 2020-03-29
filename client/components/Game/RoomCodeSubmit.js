@@ -9,7 +9,7 @@ const RoomCodeSubmit = props => {
   const [session, loading, error] = useObject(
     db.ref("gameSessions/" + formCode)
   ); // finds game session with same code
-  console.log(session);
+  //console.log(session);
   useEffect(
     () => {
       if (session) {

@@ -12,7 +12,7 @@ const db = fire.database();
 const WaitingRoom = props => {
   //getting that session info
   const { code, userId, host } = props;
-  console.log(props);
+  //console.log(props);
   const gameSession = db.ref("gameSessions/" + code);
   const [session, loading, error] = useObjectVal(gameSession);
 
@@ -39,7 +39,7 @@ const WaitingRoom = props => {
   };
   //getting players from the session
   let players = Object.keys(session.players);
-  console.log(host);
+  //console.log(host);
   return (
     <>
       {players.includes(`${props.userId}`) ? (
