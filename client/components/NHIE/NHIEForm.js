@@ -8,11 +8,11 @@ const db = fire.database();
 
 export default function NHIEForm(props) {
   const { userId, code, host } = props;
-  useEffect(() => {
-    if (host) {
-      db.ref(`gameSessions/${code}/rounds`).push({ timeStarted: Date.now() });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (host) {
+  //     db.ref(`gameSessions/${code}/rounds`).push({ timeStarted: Date.now() });
+  //   }
+  // }, []);
   const [submitted, setSubmitted] = useState(false);
   const [rounds, loading, error] = useList(
     db.ref(`gameSessions/${code}/rounds`)
@@ -22,7 +22,7 @@ export default function NHIEForm(props) {
   );
   const { register, handleSubmit, errors } = useForm();
 
-  if (loading || loadNick) return <div>loading</div>;
+  if (loading || loadNick) return "";
   if (error || errNick) return <div>err</div>;
   //getting current round
   const curRound = rounds[rounds.length - 1];

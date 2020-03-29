@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const Timer = props => {
   const { round, time } = props;
+  console.log();
   const timeCurRoundStarted = round.val().timeStarted;
   const [timeLeft, setTimeLeft] = useState(time);
 

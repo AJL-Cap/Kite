@@ -14,7 +14,7 @@ const EndGame = props => {
       winners.push(playerKey);
     }
   });
-  console.log("winners", winners, "losers", losers);
+  //console.log("winners", winners, "losers", losers);
   return (
     <div className="container mt-3">
       <div className="row justify-content-between">

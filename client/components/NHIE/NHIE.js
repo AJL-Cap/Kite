@@ -38,7 +38,6 @@ const NHIE = props => {
   if (!session) return <NotFound />;
 
   let players = Object.keys(session.players);
-
   return (
     <div>
       {session.status === "responding" && (
@@ -52,7 +51,7 @@ const NHIE = props => {
       {session.status === "confessing" && (
         <div>
           <h1>Hi from confessing </h1>
-          <ResponseDisplay uid={props.userId} session={session} />
+          <ResponseDisplay uid={props.userId} session={session} code={code} />
           <div className="row" id="playerDisplayPoints">
             {players.map(key => {
               return (

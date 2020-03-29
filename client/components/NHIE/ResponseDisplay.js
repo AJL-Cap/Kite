@@ -1,45 +1,39 @@
-import React, { useState, useEffect } from "react";
-import { useObjectVal } from "react-firebase-hooks/database";
+import React from "react";
+import SingleResponseDisplay from "./SingleResponseDisplay";
+import Timer from "./Timer";
+import { useList, useObjectVal } from "react-firebase-hooks/database";
 import fire from "../../fire";
-import NotFound from "../NotFound";
-
 const db = fire.database();
 
 const ResponseDisplay = props => {
-  const { session, uid, resObj } = props;
-  // const [turn, setTurn] = useState({})
-  // const firstTurn = session[1].players[0] // just trying to get the first turn for now and refactor later
-  // const firstID = Object.keys(firstTurn[0])
-  // const [nickname, nicknameLoading, nicknameError] = useObjectVal(
-  //   db.ref('players/' + firstID + '/nickname')
-  // )
+  const { session, uid, code } = props;
+  const currentPoints = session.players[uid].points;
+  const [rounds, loading, error] = useList(
+    db.ref(`gameSessions/${code}/rounds`)
+  );
 
-  // useEffect(() => {
-  //   setTurn() // don't know how to handle turns yet, probably using fetch to do a cnc request in here somewhere?? i am so lost
-  // },[])
+  if (loading) return "";
+  if (error) return <div>err</div>;
 
-  // if (nicknameLoading) return ''
-  // if (nicknameError) return 'Error'
-  // if (!nickname) return <NotFound />
-
-  // setTurn({...firstTurn, nickname})
-
-  // const subtract20 = () => {
-  //   db
-  //     .ref('gameSessions/' + session[0] + '/players/' + uid + '/points')
-  //     .set(session[1].players[uid].points - 20)
-  // }
-
+  const curRound = rounds[rounds.length - 1];
+  const roundsArr = Object.values(session.rounds);
+  const recentRound = roundsArr[roundsArr.length - 1];
+  const responses = Object.entries(recentRound.responses);
+  //.filter(entry => entry[0] !== uid); // filter commented out for easier solo testing
+  // finding the most recent round, filtering the responses to exclude the one you sent in yourself
+  console.log("recentRound", recentRound);
   return (
     <div>
-      helloworld from ResponseDisplay
-      {/* <div className="jumbotron text-center">
-        <h2>Never has {turn.nickname} ever...</h2>
-        <h1>{turn.response}</h1>
-      </div>
-      <div>
-        <button onClick={subtract20}>I have</button>
-      </div> */}
+      <Timer round={curRound} time={60} />
+      {responses.map(response => (
+        <SingleResponseDisplay
+          key={response[0]}
+          response={response[1]}
+          uid={uid}
+          code={code}
+          currentPoints={currentPoints}
+        />
+      ))}
     </div>
   );
 };

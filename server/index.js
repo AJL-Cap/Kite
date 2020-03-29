@@ -90,6 +90,10 @@ db.ref("gameSessions").on("child_added", snapshot => {
   snapshot.ref.child("status").on("value", statusSnapshot => {
     const status = statusSnapshot.val();
     if (status === "responding") {
+      db.ref(`gameSessions/${snapshot.key}/rounds`).push({
+        timeStarted: Date.now()
+      });
+      console.log("in responding");
       //getting total # of players
       let totalPlayers;
       snapshot.ref
@@ -123,8 +127,9 @@ db.ref("gameSessions").on("child_added", snapshot => {
             let refToChange = "gameSessions/" + snapshot.key + "/status";
             //timeout for a certain amount of time then changing status to confessing
             const roundTimeout = setTimeout(function() {
+              snapshot.ref.child("rounds").off();
               endRound(responsesRef, refToChange, "confessing");
-            }, 15000);
+            }, 20000);
             //checking for submitted responses
             if (responses) {
               let resArr = [];
@@ -133,9 +138,10 @@ db.ref("gameSessions").on("child_added", snapshot => {
                   resArr.push(resObj.text);
                 }
               });
-              console.log(resArr);
+              console.log("resArr", resArr);
               //if we have responses for every player in the game session:
               if (resArr.length === totalPlayers) {
+                snapshot.ref.child("rounds").off();
                 clearTimeout(roundTimeout);
                 endRound(responsesRef, refToChange, "confessing");
               }
@@ -144,44 +150,45 @@ db.ref("gameSessions").on("child_added", snapshot => {
         }
       });
     } else if (status === "confessing") {
+      console.log("in confessing");
+      console.log("HELLOOOOO", snapshot.val().players);
       let refToChange = "gameSessions/" + snapshot.key + "/status";
       // console.log("refToChange:", refToChange);
-      console.log("in confessing");
-
-      //checking if any player's point is 0
-      const playerRef = snapshot.ref.child("players");
-      //checking if any player's point is 0
-      let isGameOver;
-      playerRef.on("value", playerSnapshot => {
-        console.log("playerSnapshot", playerSnapshot.val());
-        isGameOver = Object.values(playerSnapshot.val()).find(
-          player => player.points <= 0
-        );
-      });
-
-      console.log("isGameOver", Boolean(isGameOver));
+      let isGameOver = false;
+      let ref = snapshot.ref.child("players");
       //checking gameover when confessing time is up
       const roundTimeout = setTimeout(function() {
         if (isGameOver) {
+          console.log("isGameOver", Boolean(isGameOver));
           //changing status to finished if game is over
-          endRound(undefined, refToChange, "finished");
+          endRound(ref, refToChange, "finished");
         } else {
           //chaging status to responding if game is still on
-          endRound(undefined, refToChange, "responding");
+          endRound(ref, refToChange, "responding");
         }
-      }, 15000);
+      }, 8000);
+      //checking if any player's point is 0
+      // const playerRef = snapshot.ref.child("players");
+      //checking if any player's point is 0
+      snapshot.ref
+        .child("players")
+        .orderByChild("points")
+        .on("value", playersSnap => {
+          const { points } = Object.values(playersSnap.val())[0];
+          if (points <= 0) isGameOver = true;
+          if (isGameOver) {
+            clearTimeout(roundTimeout);
+            endRound(ref, refToChange, "finished");
+          }
+        });
       //ending the game right away if at least one player reaches 0 points
-      if (isGameOver) {
-        clearTimeout(roundTimeout);
-        endRound(undefined, refToChange, "responding");
-      }
     } else if (status === "finished") {
       console.log("in finished");
       let refToDelete = "gameSessions/" + snapshot.key;
       //ending finished in specified time and deleted the game session
       const roundTimeout = setTimeout(function() {
         endGame(refToDelete);
-      }, 30000);
+      }, 5000);
     }
   });
 });

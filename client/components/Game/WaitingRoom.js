@@ -36,7 +36,7 @@ const WaitingRoom = props => {
   };
   //getting players from the session
   let players = Object.keys(session.players);
-  // console.log(host);
+
   return (
     <>
       {players.includes(`${userId}`) ? (
