@@ -25,8 +25,12 @@ const SingleResponseDisplay = props => {
     <div className="jumbotron text-center">
       <h2>Never has {response.nickname} ever...</h2>
       <h1>{response.text}</h1>
-      <button onClick={() => handleClick(true)}>I have</button>
-      <button onClick={() => handleClick(false)}>I have NOT</button>
+      <button className="btn btn-danger" onClick={() => handleClick(true)}>
+        I have
+      </button>
+      <button className="btn btn-success" onClick={() => handleClick(false)}>
+        I have NOT
+      </button>
     </div>
   );
 };
