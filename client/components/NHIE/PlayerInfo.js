@@ -7,7 +7,6 @@ const db = fire.database();
 const playerRef = db.ref("players");
 
 const PlayerInfo = props => {
-  console.log(props);
   const [playerSnapshot, playerLoading, playerError] = useObjectVal(
     playerRef.child(props.id)
   );

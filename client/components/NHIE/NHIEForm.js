@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import fire from "../../fire";
 import { useList, useObjectVal } from "react-firebase-hooks/database";
 import Timer from "./Timer";
@@ -25,10 +24,12 @@ export default function NHIEForm(props) {
 
   const onSubmit = data => {
     //updating responses in the current round for each user
-    db.ref(`gameSessions/${code}/rounds/${curRound.key}/${userId}`).update({
-      nickname: nick,
-      text: data.response
-    });
+    db
+      .ref(`gameSessions/${code}/rounds/${curRound.key}/responses/${userId}`)
+      .update({
+        nickname: nick,
+        text: data.response
+      });
     setSubmitted(true);
   };
   if (submitted) {

@@ -11,8 +11,7 @@ import {
   GamePage,
   ActiveGame,
   NotFound,
-  Loading,
-  NHIE
+  Loading
 } from "./components";
 
 export default function Routes() {

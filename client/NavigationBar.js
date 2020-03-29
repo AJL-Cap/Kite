@@ -1,25 +1,25 @@
-import React from 'react'
-import fire from './fire'
-import {useAuthState} from 'react-firebase-hooks/auth'
-import {Nav, Navbar} from 'react-bootstrap'
+import React from "react";
+import fire from "./fire";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Nav, Navbar } from "react-bootstrap";
 
 export default function NavigationBar() {
-  const [user, initialising, error] = useAuthState(fire.auth())
+  const [user, initialising, error] = useAuthState(fire.auth());
 
   const signOut = () => {
-    fire.auth().signOut()
-  }
+    fire.auth().signOut();
+  };
 
   if (initialising || error) {
     return (
       <Navbar expand="lg">
         <Navbar.Brand href="/">Kite</Navbar.Brand>
       </Navbar>
-    )
+    );
   }
 
   return (
-    <Navbar expand="lg" style={{backgroundColor: '#ddd'}}>
+    <Navbar expand="lg" style={{ backgroundColor: "#ddd" }}>
       <Navbar.Brand href="/">Kite</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
@@ -37,7 +37,11 @@ export default function NavigationBar() {
             <Nav.Item>
               <Nav.Link href="/games">Games</Nav.Link>
             </Nav.Item>
-            <button className="btn btn-secondary" onClick={signOut}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={signOut}
+            >
               Sign out
             </button>
           </Nav>
@@ -56,5 +60,5 @@ export default function NavigationBar() {
         )}
       </Navbar.Collapse>
     </Navbar>
-  )
+  );
 }

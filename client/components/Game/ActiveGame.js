@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import fire from "../../fire";
 import { useObjectVal } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
-import axios from "axios";
 import WaitingRoom from "./WaitingRoom";
 import NHIE from "../NHIE/NHIE";
 
@@ -19,7 +18,6 @@ const ActiveGame = props => {
       .ref(`gameSessions/${code}/players/${userId}/host`)
       .once("value")
       .then(snapshot => {
-        console.log("value: ", snapshot.val());
         if (snapshot.val()) {
           setHost(true);
         }

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PlayerInfo from "./PlayerInfo";
 import NHIEForm from "./NHIEForm";
 import fire from "../../fire";
-import { useObjectVal, useList } from "react-firebase-hooks/database";
+import { useObjectVal } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import ResponseDisplay from "./ResponseDisplay";
 import axios from "axios";
@@ -12,7 +12,6 @@ const db = fire.database();
 
 const NHIE = props => {
   const { code, host } = props;
-  console.log("nhie host?", host);
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
   );
