@@ -70,15 +70,28 @@ const ref = db.ref("gameSessions");
 ref.on(
   "child_added",
   snapshot => {
-    const { gameId, players, status } = snapshot.val();
-    snapshot.ref.child("players").on("value", playersSnap => {
-      console.log(playersSnap.val());
+    snapshot.ref.child("status").on("value", statusSnap => {
+      if (statusSnap.val() === "finalized") {
+        // return??
+      } else if (statusSnap.val() === "waiting") {
+        // waiting stuff?? idk
+      } else if (statusSnap.val() === "responding") {
+        snapshot.child(rounds).on("child_added", roundsSnap => {
+          const rounds = Object.entries(roundsSnap.val());
+          if (rounds.length) {
+            const mostRecent = rounds[rounds.length - 1];
+            const [roundKey, round] = mostRecent;
+            roundsSnap.child(roundKey + "/responses").on("value", () => {});
+          }
+        });
+      } else if (statusSnap.val() === "confessing") {
+        // fuck if i know-- just gonna try to make some stuff up
+        const now = Date.now();
+        const roundEnd = now + 10000; // ten seconds to say you have or have not
+      } else {
+        // do something
+      }
     });
-    if (gameId === "1") {
-      // if (status === "responding") {
-      // } // else if (status == 'round') {
-      // }
-    }
   },
   errorObject => {
     console.log("The read failed: " + errorObject.code);
