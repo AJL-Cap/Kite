@@ -25,10 +25,12 @@ export default function NHIEForm(props) {
 
   const onSubmit = data => {
     //updating responses in the current round for each user
-    db.ref(`gameSessions/${code}/rounds/${curRound.key}/${userId}`).update({
-      nickname: nick,
-      text: data.response
-    });
+    db
+      .ref(`gameSessions/${code}/rounds/${curRound.key}/responses/${userId}`)
+      .update({
+        nickname: nick,
+        text: data.response
+      });
     setSubmitted(true);
   };
   if (submitted) {

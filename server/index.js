@@ -93,6 +93,14 @@ db.ref("gameSessions").on("child_added", snapshot => {
   snapshot.ref.child("status").on("value", statusSnapshot => {
     const status = statusSnapshot.val();
     if (status === "responding") {
+      //getting total # of players
+      let totalPlayers;
+      snapshot.ref
+        .child("players")
+        .once("value")
+        .then(playerSnapshot => {
+          totalPlayers = playerSnapshot.numChildren();
+        });
       //getting the rounds object
       snapshot.ref.child("rounds").on("value", roundsSnapshot => {
         const rounds = roundsSnapshot.val();
@@ -119,16 +127,23 @@ db.ref("gameSessions").on("child_added", snapshot => {
             //timeout for 6 seconds right now for testing but feel free to change it
             const roundTimeout = setTimeout(function() {
               endRound(responsesRef, refToChange, "confessing");
-            }, 3000);
-            // console.log("RESPONSES", responses);
-            let userIds;
+            }, 60000);
+
+            //checking for submitted responses
             if (responses) {
-              userIds = Object.keys(responses);
+              let resArr = [];
+              Object.values(responses).forEach(resObj => {
+                if (resObj.text.length > 1) {
+                  resArr.push(resObj.text);
+                }
+              });
+              console.log(resArr);
+              //if we have responses for every player in the game session:
+              if (resArr.length === totalPlayers) {
+                clearTimeout(roundTimeout);
+                endRound(responsesRef, refToChange, "confessing");
+              }
             }
-            // if (/*we have responses for every player in the game session*/) {
-            //   clearTimeout(roundTimeout);
-            //   endRound()
-            // }
           });
         }
       });
@@ -138,14 +153,14 @@ db.ref("gameSessions").on("child_added", snapshot => {
       //ending confessing round and updating to finished
       const roundTimeout = setTimeout(function() {
         endRound(undefined, refToChange, "finished");
-      }, 3000);
+      }, 30000);
     } else if (status === "finished") {
       console.log("in finished");
       let refToDelete = "gameSessions/" + snapshot.key;
       //ending finished and deleted the game session
       const roundTimeout = setTimeout(function() {
         endGame(refToDelete);
-      }, 6000);
+      }, 60000);
     }
   });
 });
