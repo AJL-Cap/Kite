@@ -30,7 +30,6 @@ const WaitingRoom = props => {
     try {
       //updating that session status to playing
       axios.post(`/api/games/${code}`, { status: "playing" });
-      db.ref(`gameSessions/${code}/rounds`).push({ timeStarted: Date.now() });
     } catch (err) {
       console.log("error switching game to playing");
     }

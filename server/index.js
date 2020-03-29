@@ -145,18 +145,43 @@ db.ref("gameSessions").on("child_added", snapshot => {
       });
     } else if (status === "confessing") {
       let refToChange = "gameSessions/" + snapshot.key + "/status";
+      // console.log("refToChange:", refToChange);
       console.log("in confessing");
-      //ending confessing round in specified time and updating to finished
+
+      //checking if any player's point is 0
+      const playerRef = snapshot.ref.child("players");
+      //checking if any player's point is 0
+      let isGameOver;
+      playerRef.on("value", playerSnapshot => {
+        console.log("playerSnapshot", playerSnapshot.val());
+        isGameOver = Object.values(playerSnapshot.val()).find(
+          player => player.points <= 0
+        );
+      });
+
+      console.log("isGameOver", Boolean(isGameOver));
+      //checking gameover when confessing time is up
       const roundTimeout = setTimeout(function() {
-        endRound(undefined, refToChange, "finished");
-      }, 3000);
+        if (isGameOver) {
+          //changing status to finished if game is over
+          endRound(undefined, refToChange, "finished");
+        } else {
+          //chaging status to responding if game is still on
+          endRound(undefined, refToChange, "responding");
+        }
+      }, 15000);
+      //ending the game right away if at least one player reaches 0 points
+      if (isGameOver) {
+        clearTimeout(roundTimeout);
+        endRound(undefined, refToChange, "responding");
+      }
     } else if (status === "finished") {
       console.log("in finished");
       let refToDelete = "gameSessions/" + snapshot.key;
       //ending finished in specified time and deleted the game session
       const roundTimeout = setTimeout(function() {
         endGame(refToDelete);
-      }, 10000);
+      }, 30000);
     }
   });
 });

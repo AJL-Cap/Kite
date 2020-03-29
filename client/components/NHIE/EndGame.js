@@ -14,7 +14,7 @@ const EndGame = props => {
       winners.push(playerKey);
     }
   });
-  //   console.log("winners", winners, "losers", losers);
+  console.log("winners", winners, "losers", losers);
   return (
     <div className="container mt-3">
       <div className="row justify-content-between">
@@ -33,6 +33,13 @@ const EndGame = props => {
         <div className="col-6">
           <div className="jumbotron text-center border border-dark">
             <h1>Losers</h1>
+            {losers.map(loser => (
+              <PlayerInfo
+                id={loser}
+                points={players[loser].points}
+                key={loser}
+              />
+            ))}
           </div>
         </div>
       </div>
