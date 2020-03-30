@@ -1,6 +1,7 @@
 import React from "react";
 import PlayerInfo from "./PlayerInfo";
 import { useObject } from "react-firebase-hooks/database";
+import UpdateFinalPoints from "./UpdateFinalPoints";
 
 const EndGame = props => {
   const { players } = props.session;
@@ -16,11 +17,11 @@ const EndGame = props => {
   const newTG = totalGamesPlayed + 1;
   let newWins = wins;
   if (player[1].points > 0) newWins += 1;
-  playerSnap.ref.update({
+  const updatePointsObj = {
     totalPoints: newTP,
     totalGamesPlayed: newTG,
     wins: newWins
-  });
+  };
 
   //need a new reference to players in that session for accurate points
   let winners = [];
@@ -62,6 +63,12 @@ const EndGame = props => {
           </div>
         </div>
       </div>
+      {playerSnap.ref && (
+        <UpdateFinalPoints
+          updatePointsObj={updatePointsObj}
+          ref={playerSnap.ref}
+        />
+      )}
     </div>
   );
 };
