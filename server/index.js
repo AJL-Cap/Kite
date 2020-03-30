@@ -102,6 +102,7 @@ db.ref("gameSessions").on("child_added", snapshot => {
         .then(playerSnapshot => {
           totalPlayers = playerSnapshot.numChildren();
         });
+
       //getting the rounds object
       snapshot.ref.child("rounds").on("value", roundsSnapshot => {
         const rounds = roundsSnapshot.val();
@@ -122,13 +123,30 @@ db.ref("gameSessions").on("child_added", snapshot => {
           //function to end the round and change the status to confessing.
           //getting the responses
           let responses;
+          let refToChange = "gameSessions/" + snapshot.key + "/status";
+          //timeout function
+          const roundTimeout = setTimeout(function() {
+            //if at the end of the round there are responses
+            if (responses) {
+              snapshot.ref.child("rounds").off();
+              //updating timeStarted for the front end timer
+              db.ref(`gameSessions/${snapshot.key}/rounds/${roundKey}`).update({
+                timeStarted: Date.now()
+              });
+              //updating to confessing
+              endRound(responsesRef, refToChange, "confessing");
+              //if no responses
+            } else {
+              responsesRef.off();
+              snapshot.ref.child("rounds").off();
+              //deleting that game session
+              let refToDelete = "gameSessions/" + snapshot.key;
+              endGame(refToDelete);
+            }
+          }, 30000);
+          //getting responses
           responsesRef.on("value", roundResponsesSnapshot => {
             responses = roundResponsesSnapshot.val();
-            console.log("RESPONSES NOT IN TIMEOUT", responses);
-            //end round function to be used with timeout and when all ppl have responded
-
-            //timeout for a certain amount of time then changing status to confessing
-
             //checking for submitted responses
             if (responses) {
               let resArr = [];
@@ -137,28 +155,20 @@ db.ref("gameSessions").on("child_added", snapshot => {
                   resArr.push(resObj.text);
                 }
               });
-              // console.log("resArr", resArr);
-              //if we have responses for every player in the game session:
-              // if (resArr.length === totalPlayers) {
-              //   snapshot.ref.child("rounds").off();
-              //   clearTimeout(roundTimeout);
-              //   endRound(responsesRef, refToChange, "confessing");
-              // }
+              // if we have responses for every player in the game session:
+              if (resArr.length === totalPlayers) {
+                snapshot.ref.child("rounds").off();
+                clearTimeout(roundTimeout);
+                //updating timeStarted for the front end timer
+                db
+                  .ref(`gameSessions/${snapshot.key}/rounds/${roundKey}`)
+                  .update({
+                    timeStarted: Date.now()
+                  });
+                endRound(responsesRef, refToChange, "confessing");
+              }
             }
           });
-          let refToChange = "gameSessions/" + snapshot.key + "/status";
-          const roundTimeout = setTimeout(function() {
-            if (responses) {
-              snapshot.ref.child("rounds").off();
-              db.ref(`gameSessions/${snapshot.key}/rounds/${roundKey}`).update({
-                timeStarted: Date.now()
-              });
-              endRound(responsesRef, refToChange, "confessing");
-            } else {
-              snapshot.ref.child("rounds").off();
-              endRound(responsesRef, refToChange, "finished");
-            }
-          }, 30000);
         }
       });
     } else if (status === "confessing") {
@@ -180,8 +190,6 @@ db.ref("gameSessions").on("child_added", snapshot => {
         }
       }, 30000);
       //checking if any player's point is 0
-      // const playerRef = snapshot.ref.child("players");
-      //checking if any player's point is 0
       snapshot.ref
         .child("players")
         .orderByChild("points")
@@ -190,10 +198,10 @@ db.ref("gameSessions").on("child_added", snapshot => {
           players.forEach(player => {
             if (parseInt(player.points) <= 0) isGameOver = true;
           });
-          // if (isGameOver) {
-          //   clearTimeout(roundTimeout);
-          //   endRound(ref, refToChange, "finished");
-          // }
+          if (isGameOver) {
+            clearTimeout(roundTimeout);
+            endRound(ref, refToChange, "finished");
+          }
         });
       //ending the game right away if at least one player reaches 0 points
     } else if (status === "finished") {
