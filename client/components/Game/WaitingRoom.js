@@ -56,6 +56,13 @@ const WaitingRoom = props => {
               </h2>
             </div>
           </div>
+          <div className="row">
+            <h3>
+              Rules: Everyone starts with five fingers and says a thing they've
+              never done. If you have done it, put one (virtual) finger/kite
+              down. The first person to run out of fingers loses.
+            </h3>
+          </div>
           <div>
             <div className="row">
               <h3 className="mx-auto">Players</h3>

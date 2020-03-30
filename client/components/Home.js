@@ -17,7 +17,7 @@ export default function Home({ userId }) {
       <p>near, far, wherever we are... </p>
       <h3>Welcome {player && player.nickname}!</h3>
       <div>
-        Host or join a game <NavLink to="/games"> 🎮</NavLink>
+        <NavLink to="/games"> Host or join a game! 🎮</NavLink>
       </div>
     </div>
   ) : (
