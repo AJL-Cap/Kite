@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import fire from "../../fire";
 import { useList, useObjectVal } from "react-firebase-hooks/database";
 import Timer from "./Timer";
+import NotFound from "../NotFound";
 
 const db = fire.database();
 
@@ -26,6 +27,7 @@ export default function NHIEForm(props) {
   if (error || errNick) return <div>err</div>;
   //getting current round
   const curRound = rounds[rounds.length - 1];
+  if (!curRound) return <NotFound />;
 
   const onSubmit = data => {
     //updating responses in the current round for each user
