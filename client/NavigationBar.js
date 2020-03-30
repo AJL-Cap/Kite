@@ -31,9 +31,9 @@ export default function NavigationBar() {
             <Nav.Item>
               <Nav.Link href="/profile">Profile</Nav.Link>
             </Nav.Item>
-            <Nav.Item>
+            {/* <Nav.Item>
               <Nav.Link href="/players">Players</Nav.Link>
-            </Nav.Item>
+            </Nav.Item> */}
             <Nav.Item>
               <Nav.Link href="/games">Games</Nav.Link>
             </Nav.Item>

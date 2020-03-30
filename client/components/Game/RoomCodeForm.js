@@ -8,7 +8,7 @@ const RoomCodeForm = props => {
   const [formCode, setFormCode] = useState("");
 
   const onSubmit = data => {
-    setFormCode(data.code);
+    setFormCode(data.code.toUpperCase());
   };
 
   return (
