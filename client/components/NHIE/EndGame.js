@@ -2,6 +2,8 @@ import React from "react";
 import PlayerInfo from "./PlayerInfo";
 import { useObject } from "react-firebase-hooks/database";
 import UpdateFinalPoints from "./UpdateFinalPoints";
+import fire from "../../fire";
+const db = fire.database();
 
 const EndGame = props => {
   const { players } = props.session;
@@ -16,7 +18,7 @@ const EndGame = props => {
   const newTP = totalPoints + players[uid].points;
   const newTG = totalGamesPlayed + 1;
   let newWins = wins;
-  if (player[1].points > 0) newWins += 1;
+  if (players[uid].points > 0) newWins += 1;
   const updatePointsObj = {
     totalPoints: newTP,
     totalGamesPlayed: newTG,
@@ -66,7 +68,7 @@ const EndGame = props => {
       {playerSnap.ref && (
         <UpdateFinalPoints
           updatePointsObj={updatePointsObj}
-          ref={playerSnap.ref}
+          playerSnapRef={playerSnap.ref}
         />
       )}
     </div>
