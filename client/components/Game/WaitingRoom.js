@@ -45,8 +45,16 @@ const WaitingRoom = props => {
             <div className="row">
               <h1>Waiting for more players!</h1>
             </div>
-            <h2
-            >{`Give your friends this code to invite them to your game: ${code}`}</h2>
+            <h2>
+              <strong>
+                Give your friends this code to invite them to your game:{" "}
+              </strong>
+            </h2>
+            <div className="alert alert-primary" role="alert">
+              <h2>
+                <strong>{code}</strong>
+              </h2>
+            </div>
           </div>
           <div>
             <div className="row">
