@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import fire from "../../fire";
 import { useObjectVal } from "react-firebase-hooks/database";
 import SessionPlayer from "./SessionPlayers";
 import { Button } from "react-bootstrap";
 import NotFound from "../NotFound";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
 
 const db = fire.database();
 
 const WaitingRoom = props => {
   //getting that session info
   const { code, userId, host } = props;
-  //console.log(props);
   const gameSession = db.ref("gameSessions/" + code);
   const [session, loading, error] = useObjectVal(gameSession);
 
@@ -38,10 +36,10 @@ const WaitingRoom = props => {
   };
   //getting players from the session
   let players = Object.keys(session.players);
-  //console.log(host);
+
   return (
     <>
-      {players.includes(`${props.userId}`) ? (
+      {players.includes(`${userId}`) ? (
         <div>
           <div className="row justify-content-center">
             <h1>Waiting for more players!</h1>

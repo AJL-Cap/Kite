@@ -19,7 +19,7 @@ const SingleResponseDisplay = props => {
       .set(currentPoints - 20);
   };
 
-  if (answered) return <div />;
+  if (answered) return <div> Your answer was submitted!</div>;
 
   return (
     <div className="jumbotron text-center">

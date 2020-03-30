@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const Timer = props => {
   const { round, time } = props;
+  console.log();
   const timeCurRoundStarted = round.val().timeStarted;
   const [timeLeft, setTimeLeft] = useState(time);
 
@@ -16,10 +17,12 @@ const Timer = props => {
       );
     }, 1000);
     //unsubscribing:
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
-  return <span>Remaining time: {timeLeft} </span>;
+  return <h1>Remaining time: {timeLeft} </h1>;
 };
 
 export default Timer;

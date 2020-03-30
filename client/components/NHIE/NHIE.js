@@ -12,7 +12,6 @@ const db = fire.database();
 
 const NHIE = props => {
   const { code, host } = props;
-  //console.log("nhie host?", host);
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
   );
@@ -51,7 +50,12 @@ const NHIE = props => {
       )}
       {session.status === "confessing" && (
         <div>
-          <ResponseDisplay uid={props.userId} session={session} code={code} />
+          <ResponseDisplay
+            uid={props.userId}
+            session={session}
+            code={code}
+            host={host}
+          />
           <div className="row" id="playerDisplayPoints">
             {players.map(key => {
               return (

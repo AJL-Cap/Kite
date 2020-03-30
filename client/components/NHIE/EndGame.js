@@ -1,5 +1,4 @@
 import React from "react";
-import session from "express-session";
 import PlayerInfo from "./PlayerInfo";
 
 const EndGame = props => {
@@ -17,10 +16,10 @@ const EndGame = props => {
   });
   //console.log("winners", winners, "losers", losers);
   return (
-    <div className="container">
-      <div className="row">
-        <div className="column">
-          <div className="jumbotron text-center">
+    <div className="container mt-3">
+      <div className="row justify-content-between">
+        <div className=" col-6">
+          <div className="jumbotron text-center border border-dark">
             <h1>Winners</h1>
             {winners.map(winner => (
               <PlayerInfo
@@ -31,9 +30,16 @@ const EndGame = props => {
             ))}
           </div>
         </div>
-        <div className="column">
-          <div className="jumbotron text-center">
+        <div className="col-6">
+          <div className="jumbotron text-center border border-dark">
             <h1>Losers</h1>
+            {losers.map(loser => (
+              <PlayerInfo
+                id={loser}
+                points={players[loser].points}
+                key={loser}
+              />
+            ))}
           </div>
         </div>
       </div>

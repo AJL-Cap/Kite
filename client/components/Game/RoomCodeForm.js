@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import RoomCodeSubmit from "./RoomCodeSubmit";
-import { useObjectVal } from "react-firebase-hooks/database";
 
 const RoomCodeForm = props => {
   const { uid, history, nick } = props;
@@ -9,7 +8,7 @@ const RoomCodeForm = props => {
   const [formCode, setFormCode] = useState("");
 
   const onSubmit = data => {
-    setFormCode(data.code);
+    setFormCode(data.code.toUpperCase());
   };
 
   return (
@@ -27,7 +26,7 @@ const RoomCodeForm = props => {
             <span className="alert-warning">incorrect room code</span>
           )}
           <br />
-          <button type="sumbit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary">
             join game
           </button>
           {formCode && (
