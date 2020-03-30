@@ -47,7 +47,7 @@ const WaitingRoom = props => {
             </div>
             <h2>
               <strong>
-                Give your friends this code to invite them to your game:{" "}
+                Give your friends this code to invite them to your game:
               </strong>
             </h2>
             <div className="alert alert-primary" role="alert">
