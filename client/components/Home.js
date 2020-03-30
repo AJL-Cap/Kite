@@ -15,7 +15,7 @@ export default function Home({ userId }) {
     <div className="m-4 text-center">
       <h1>🪁 Kite 🪁</h1>
       <p>near, far, wherever we are... </p>
-      <h3>Welcome {player && player.nickname}!</h3>
+      <h3>Welcome {player.nickname}!</h3>
       <div>
         <NavLink to="/games"> Host or join a game! 🎮</NavLink>
       </div>
