@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import fire from "../../fire";
+import axios from "axios";
+const {
+  CLOUDINARY_UPLOAD_URL,
+  CLOUDINARY_UPLOAD_PRESET
+} = require("../../../cloudinary");
 
 export default function SignUp(props) {
   const { register, handleSubmit, errors } = useForm();
@@ -10,11 +15,19 @@ export default function SignUp(props) {
   const [image, setImage] = useState(null);
 
   const handleImage = evt => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImage(reader.result);
-    };
-    reader.readAsDataURL(evt.target.files[0]);
+    const file = evt.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+    axios
+      .post(CLOUDINARY_UPLOAD_URL, formData)
+      .then(res => {
+        setImage(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   const onSubmit = data => {

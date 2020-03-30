@@ -24,7 +24,7 @@ const PlayerInfo = props => {
     <div className="m-3">
       <Card style={{ width: "12rem" }} bg="dark" text="light">
         {playerSnapshot.profilePic ? (
-          <Card.Img variant="top" src={playerSnapshot.profilePic} />
+          <Card.Img variant="top" src={playerSnapshot.profilePic.secure_url} />
         ) : (
           <Card.Img variant="top" src="" />
         )}
