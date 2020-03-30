@@ -1,15 +1,26 @@
 import React from "react";
 import PlayerInfo from "./PlayerInfo";
+import { useObject } from "react-firebase-hooks/database";
 
 const EndGame = props => {
-  let players = props.session.players;
-  // const { totalPoints, totalGamesPlayed, wins} = playerSnap.val()
-  // console.log("finishedPoints: ", player[1].points)
-  // const newTP = totalPoints + player[1].points
-  // const newTG = totalGamesPlayed + 1
-  // let newWins = wins
-  // if (player[1].points > 0) newWins += 1
-  // playerSnap.ref.update({totalPoints: newTP, totalGamesPlayed: newTG, wins: newWins})
+  const { players } = props.session;
+  const { uid } = props;
+  const [playerSnap, loading, error] = useObject(db.ref(`players/${uid}`));
+
+  if (loading) return "";
+  if (error) return "Error";
+
+  const { totalPoints, totalGamesPlayed, wins } = playerSnap.val();
+  console.log("finishedPoints: ", players[uid].points);
+  const newTP = totalPoints + players[uid].points;
+  const newTG = totalGamesPlayed + 1;
+  let newWins = wins;
+  if (player[1].points > 0) newWins += 1;
+  playerSnap.ref.update({
+    totalPoints: newTP,
+    totalGamesPlayed: newTG,
+    wins: newWins
+  });
 
   //need a new reference to players in that session for accurate points
   let winners = [];
