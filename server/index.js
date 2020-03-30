@@ -121,18 +121,14 @@ db.ref("gameSessions").on("child_added", snapshot => {
             .child("responses");
           //function to end the round and change the status to confessing.
           //getting the responses
+          let responses;
           responsesRef.on("value", roundResponsesSnapshot => {
-            const responses = roundResponsesSnapshot.val();
+            responses = roundResponsesSnapshot.val();
+            console.log("RESPONSES NOT IN TIMEOUT", responses);
             //end round function to be used with timeout and when all ppl have responded
-            let refToChange = "gameSessions/" + snapshot.key + "/status";
+
             //timeout for a certain amount of time then changing status to confessing
-            const roundTimeout = setTimeout(function() {
-              snapshot.ref.child("rounds").off();
-              db.ref(`gameSessions/${snapshot.key}/rounds/${roundKey}`).update({
-                timeStarted: Date.now()
-              });
-              endRound(responsesRef, refToChange, "confessing");
-            }, 30000);
+
             //checking for submitted responses
             if (responses) {
               let resArr = [];
@@ -150,6 +146,19 @@ db.ref("gameSessions").on("child_added", snapshot => {
               // }
             }
           });
+          let refToChange = "gameSessions/" + snapshot.key + "/status";
+          const roundTimeout = setTimeout(function() {
+            if (responses) {
+              snapshot.ref.child("rounds").off();
+              db.ref(`gameSessions/${snapshot.key}/rounds/${roundKey}`).update({
+                timeStarted: Date.now()
+              });
+              endRound(responsesRef, refToChange, "confessing");
+            } else {
+              snapshot.ref.child("rounds").off();
+              endRound(responsesRef, refToChange, "finished");
+            }
+          }, 30000);
         }
       });
     } else if (status === "confessing") {
@@ -169,7 +178,7 @@ db.ref("gameSessions").on("child_added", snapshot => {
           //chaging status to responding if game is still on
           endRound(ref, refToChange, "responding");
         }
-      }, 45000);
+      }, 30000);
       //checking if any player's point is 0
       // const playerRef = snapshot.ref.child("players");
       //checking if any player's point is 0
