@@ -10,12 +10,13 @@ const db = fire.database();
 
 const WaitingRoom = props => {
   //getting that session info
-  const { code, userId, host } = props;
+  const { code, userId, host, gameId } = props;
+  const [game, gameLoading, gameErr] = useObjectVal(db.ref(`games/${gameId}`));
   const gameSession = db.ref("gameSessions/" + code);
   const [session, loading, error] = useObjectVal(gameSession);
 
-  if (loading) return "";
-  if (error) return "Error";
+  if (loading || gameLoading) return "";
+  if (error || gameErr) return "Error";
   if (!session)
     return (
       <div>
@@ -57,11 +58,7 @@ const WaitingRoom = props => {
             </div>
           </div>
           <div className="row">
-            <h3>
-              Rules: Everyone starts with five fingers and says a thing they've
-              never done. If you have done it, put one (virtual) finger/kite
-              down. The first person to run out of fingers loses.
-            </h3>
+            <h3>Rules: {game.rules}</h3>
           </div>
           <div>
             <div className="row">
