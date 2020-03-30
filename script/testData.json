@@ -2,7 +2,8 @@
   "games": {
     "1": {
       "title": "never have i ever",
-      "rules": "blah blah play like this"
+      "rules":
+        "everyone starts with five fingers, and says a thing they've never done. if you have done it, put one (virtual) finger down. the first person to run out of fingers loses."
     }
   },
   "players": {
@@ -29,21 +30,36 @@
     "GAME": {
       "players": {
         "UID1": {
+          "nickname": "Lizzy",
           "points": 0,
-          "response": "some thing i dont know",
           "host": true
         },
         "UID2": {
-          "points": 100,
-          "response": "some thing i dont know"
+          "nickname": "Ji",
+          "points": 0
         },
         "UID3": {
-          "points": 100,
-          "response": "some thing i dont know"
+          "nickname": "Anna",
+          "points": 0
         }
       },
       "gameId": 1,
-      "status": "finished"
+      "status": "waiting",
+      "rounds": {
+        "round1key": {
+          "timeStarted": "",
+          "activeResponseIndex": 0,
+          "responses": {
+            "UID1": {
+              "text": "I peed in a pool",
+              "confessors": {
+                "UID2": true,
+                "UID3": false
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

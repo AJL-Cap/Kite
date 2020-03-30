@@ -1,7 +1,7 @@
-import React from 'react'
-import fire from './fire'
-import {Route, Switch} from 'react-router-dom'
-import {useAuthState} from 'react-firebase-hooks/auth'
+import React from "react";
+import fire from "./fire";
+import { Route, Switch } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
 import {
   Home,
   Login,
@@ -9,28 +9,27 @@ import {
   Players,
   Profile,
   GamePage,
-  WaitingRoom,
+  ActiveGame,
   NotFound,
-  Loading,
-  NHIE
-} from './components'
+  Loading
+} from "./components";
 
 export default function Routes() {
-  const [user, initialising, error] = useAuthState(fire.auth())
+  const [user, initialising, error] = useAuthState(fire.auth());
 
   if (initialising) {
     return (
       <div>
         <Loading />
       </div>
-    )
+    );
   }
   if (error) {
     return (
       <div>
         <p>Error: {error}</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -38,12 +37,8 @@ export default function Routes() {
       {user ? (
         <Switch>
           <Route
-            path="/games/:code/1"
-            render={props => <NHIE userId={user.uid} {...props} />}
-          />
-          <Route
             path="/games/:code"
-            render={props => <WaitingRoom userId={user.uid} {...props} />}
+            render={props => <ActiveGame userId={user.uid} {...props} />}
           />
           <Route path="/players" component={Players} />
           <Route
@@ -70,5 +65,5 @@ export default function Routes() {
       )}
       <Route component={NotFound} />
     </Switch>
-  )
+  );
 }

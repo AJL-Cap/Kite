@@ -1,39 +1,79 @@
-import React from 'react'
-import PlayerInfo from './PlayerInfo'
-import NHIEForm from './NHIEForm'
-import fire from '../../fire'
-import {useObjectVal} from 'react-firebase-hooks/database'
-import NotFound from '../NotFound'
-import ResponseDisplay from './ResponseDisplay'
+import React, { useEffect } from "react";
+import PlayerInfo from "./PlayerInfo";
+import NHIEForm from "./NHIEForm";
+import fire from "../../fire";
+import { useObjectVal } from "react-firebase-hooks/database";
+import NotFound from "../NotFound";
+import ResponseDisplay from "./ResponseDisplay";
+import axios from "axios";
+import EndGame from "./EndGame";
 
-const db = fire.database()
+const db = fire.database();
 
 const NHIE = props => {
-  const code = props.match.params.code
-  const [session, loading, error] = useObjectVal(db.ref('gameSessions/' + code))
-  if (loading) return ''
-  if (error) return 'Error'
-  if (!session) return <NotFound />
-  let players = Object.keys(session.players)
+  const { code, host } = props;
+  const [session, loading, error] = useObjectVal(
+    db.ref("gameSessions/" + code)
+  );
 
+  useEffect(() => {
+    if (host) {
+      //host changing game status to responding
+      axios.post(`/api/games/${code}`, { status: "responding" });
+
+      //host setting everyone's game points to 100
+      db
+        .ref(`gameSessions/${code}/players`)
+        .once("value")
+        .then(snapshot => {
+          snapshot.forEach(childSnap => {
+            childSnap.ref.update({ points: 100 });
+          });
+        });
+    }
+  }, []);
+
+  if (loading) return "";
+  if (error) return "Error";
+  if (!session) return <NotFound />;
+
+  let players = Object.keys(session.players);
   return (
     <div>
-      <h1>Hello World from NHIE</h1>
-      <NHIEForm {...props} code={code} />
-      {/* {session.status === 'playing' && <ResponseDisplay uid={props.userId} session={session} />} */}
-      <div className="row" id="playerDisplayPoints">
-        {players.map(key => {
-          return (
-            <PlayerInfo
-              points={session.players[key].points}
-              key={key}
-              id={key}
-            />
-          )
-        })}
-      </div>
+      {session.status === "responding" && (
+        <NHIEForm
+          userId={props.userId}
+          code={code}
+          rounds={session.rounds}
+          host={host}
+        />
+      )}
+      {session.status === "confessing" && (
+        <div>
+          <ResponseDisplay
+            uid={props.userId}
+            session={session}
+            code={code}
+            host={host}
+          />
+          <div className="row" id="playerDisplayPoints">
+            {players.map(key => {
+              return (
+                <PlayerInfo
+                  points={session.players[key].points}
+                  key={key}
+                  id={key}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
+      {session.status === "finished" && (
+        <EndGame players={players} session={session} />
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default NHIE
+export default NHIE;

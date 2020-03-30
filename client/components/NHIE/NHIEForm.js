@@ -1,63 +1,62 @@
-import React, {useState, useEffect} from 'react'
-import {useForm} from 'react-hook-form'
-import fire from '../../fire'
-const db = fire.database()
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import fire from "../../fire";
+import { useList, useObjectVal } from "react-firebase-hooks/database";
+import Timer from "./Timer";
+
+const db = fire.database();
 
 export default function NHIEForm(props) {
-  const code = props.code
-  const [timeUp, setTimeUp] = useState(false)
-  const [timer, setTimer] = useState(null)
-  const [submitted, setSubmitted] = useState(false)
-  const {register, handleSubmit, errors} = useForm()
+  const { userId, code, host } = props;
+  // useEffect(() => {
+  //   if (host) {
+  //     db.ref(`gameSessions/${code}/rounds`).push({ timeStarted: Date.now() });
+  //   }
+  // }, []);
+  const [submitted, setSubmitted] = useState(false);
+  const [rounds, loading, error] = useList(
+    db.ref(`gameSessions/${code}/rounds`)
+  );
+  const [nick, loadNick, errNick] = useObjectVal(
+    db.ref("players/" + userId + "/nickname")
+  );
+  const { register, handleSubmit, errors } = useForm();
 
-  const playerRef = db.ref(`gameSessions/${code}/players/${props.userId}`)
-
-  useEffect(() => {
-    playerRef.update({responding: true})
-    setTimer(
-      setTimeout(() => {
-        setTimeUp(true)
-      }, 5000)
-    )
-    //currently set to 5 seconds for testing purpose
-  }, [])
+  if (loading || loadNick) return "";
+  if (error || errNick) return <div>err</div>;
+  //getting current round
+  const curRound = rounds[rounds.length - 1];
 
   const onSubmit = data => {
-    playerRef.update({response: data.response, responding: false})
-    //option 1:
-    // history.push('new path?')
-    //option 2:
-    setSubmitted(true)
-    setTimer(clearTimeout(timer))
-  }
+    //updating responses in the current round for each user
+    db
+      .ref(`gameSessions/${code}/rounds/${curRound.key}/responses/${userId}`)
+      .update({
+        nickname: nick,
+        text: data.response
+      });
+    setSubmitted(true);
+  };
 
-  if (timeUp) {
-    return (
-      <div>Uh oh, time is up! </div>
-      //render new component?
-    )
-  }
-  if (submitted) {
-    return (
-      <div>Your response has been submitted</div>
-      //render new component?
-    )
-  }
-
-  if (!timeUp || !submitted) {
-    return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <h1>Submit your response for this round</h1>
-        <label htmlFor="response">Never have I ever...</label>
-        <input
-          type="text"
-          name="response"
-          placeholder="ex: peed in a pool"
-          ref={register({required: true})}
-        />
-        {errors.response && <p>You must enter a response!</p>}
-        <input type="submit" />
-      </form>
-    )
-  }
+  return (
+    <div>
+      <Timer round={curRound} time={30} />
+      {submitted ? (
+        <div>Your response has been submitted</div>
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <h1>Submit your response for this round</h1>
+          <label htmlFor="response">Never have I ever...</label>
+          <input
+            type="text"
+            name="response"
+            placeholder="ex: peed in a pool"
+            ref={register({ required: true })}
+          />
+          {errors.response && <p>You must enter a response!</p>}
+          <input type="submit" />
+        </form>
+      )}
+    </div>
+  );
 }
