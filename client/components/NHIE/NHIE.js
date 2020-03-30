@@ -50,7 +50,12 @@ const NHIE = props => {
       )}
       {session.status === "confessing" && (
         <div>
-          <ResponseDisplay uid={props.userId} session={session} code={code} />
+          <ResponseDisplay
+            uid={props.userId}
+            session={session}
+            code={code}
+            host={host}
+          />
           <div className="row" id="playerDisplayPoints">
             {players.map(key => {
               return (

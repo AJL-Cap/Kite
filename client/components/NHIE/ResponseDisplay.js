@@ -18,13 +18,15 @@ const ResponseDisplay = props => {
   const curRound = rounds[rounds.length - 1];
   const roundsArr = Object.values(session.rounds);
   const recentRound = roundsArr[roundsArr.length - 1];
-  const responses = Object.entries(recentRound.responses);
-  //.filter(entry => entry[0] !== uid); // filter commented out for easier solo testing
+  const responses = Object.entries(recentRound.responses).filter(
+    entry => entry[0] !== uid
+  ); // filter commented out for easier solo testing
+
   // finding the most recent round, filtering the responses to exclude the one you sent in yourself
-  console.log("recentRound", recentRound);
+  // console.log("recentRound", recentRound);
   return (
     <div>
-      <Timer round={curRound} time={45} />
+      <Timer round={curRound} time={30} />
       {responses.map(response => (
         <SingleResponseDisplay
           key={response[0]}

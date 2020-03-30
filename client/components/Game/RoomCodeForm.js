@@ -26,7 +26,7 @@ const RoomCodeForm = props => {
             <span className="alert-warning">incorrect room code</span>
           )}
           <br />
-          <button type="button" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary">
             join game
           </button>
           {formCode && (

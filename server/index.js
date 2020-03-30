@@ -141,7 +141,7 @@ db.ref("gameSessions").on("child_added", snapshot => {
                   resArr.push(resObj.text);
                 }
               });
-              console.log("resArr", resArr);
+              // console.log("resArr", resArr);
               //if we have responses for every player in the game session:
               // if (resArr.length === totalPlayers) {
               //   snapshot.ref.child("rounds").off();
@@ -162,7 +162,7 @@ db.ref("gameSessions").on("child_added", snapshot => {
       //checking gameover when confessing time is up
       const roundTimeout = setTimeout(function() {
         if (isGameOver) {
-          console.log("isGameOver", Boolean(isGameOver));
+          // console.log("isGameOver", Boolean(isGameOver));
           //changing status to finished if game is over
           endRound(ref, refToChange, "finished");
         } else {
@@ -177,8 +177,10 @@ db.ref("gameSessions").on("child_added", snapshot => {
         .child("players")
         .orderByChild("points")
         .on("value", playersSnap => {
-          const { points } = Object.values(playersSnap.val())[0];
-          if (points <= 0) isGameOver = true;
+          const players = Object.values(playersSnap.val());
+          players.forEach(player => {
+            if (parseInt(player.points) <= 0) isGameOver = true;
+          });
           // if (isGameOver) {
           //   clearTimeout(roundTimeout);
           //   endRound(ref, refToChange, "finished");
