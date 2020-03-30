@@ -37,27 +37,31 @@ export default function NHIEForm(props) {
       });
     setSubmitted(true);
   };
-  if (submitted) {
-    return (
-      <div>Your response has been submitted</div>
-      //render new component?
-    );
-  }
+  // if (submitted) {
+  //   return (
+  //     <div>Your response has been submitted</div>
+  //     //render new component?
+  //   );
+  // }
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <Timer round={curRound} time={60} />
-      </div>
-      <h1>Submit your response for this round</h1>
-      <label htmlFor="response">Never have I ever...</label>
-      <input
-        type="text"
-        name="response"
-        placeholder="ex: peed in a pool"
-        ref={register({ required: true })}
-      />
-      {errors.response && <p>You must enter a response!</p>}
-      <input type="submit" />
-    </form>
+    <div>
+      <Timer round={curRound} time={30} />
+      {submitted ? (
+        <div>Your response has been submitted</div>
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <h1>Submit your response for this round</h1>
+          <label htmlFor="response">Never have I ever...</label>
+          <input
+            type="text"
+            name="response"
+            placeholder="ex: peed in a pool"
+            ref={register({ required: true })}
+          />
+          {errors.response && <p>You must enter a response!</p>}
+          <input type="submit" />
+        </form>
+      )}
+    </div>
   );
 }

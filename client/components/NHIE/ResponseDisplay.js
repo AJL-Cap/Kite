@@ -24,7 +24,7 @@ const ResponseDisplay = props => {
   console.log("recentRound", recentRound);
   return (
     <div>
-      <Timer round={curRound} time={60} />
+      <Timer round={curRound} time={45} />
       {responses.map(response => (
         <SingleResponseDisplay
           key={response[0]}
