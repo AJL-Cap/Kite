@@ -18,6 +18,7 @@ const PlayerInfo = props => {
     for (let i = 0; i < props.points / 20; i++) {
       points.push("🪁");
     }
+    console.log("inside kites: ", props.points);
     return points;
   };
   return (

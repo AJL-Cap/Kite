@@ -124,7 +124,7 @@ db.ref("gameSessions").on("child_added", snapshot => {
           let responses;
           responsesRef.on("value", roundResponsesSnapshot => {
             responses = roundResponsesSnapshot.val();
-            console.log("RESPONSES NOT IN TIMEOUT", responses);
+            //console.log("RESPONSES NOT IN TIMEOUT", responses);
             //end round function to be used with timeout and when all ppl have responded
 
             //timeout for a certain amount of time then changing status to confessing

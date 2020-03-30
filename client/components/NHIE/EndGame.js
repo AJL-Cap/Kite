@@ -3,6 +3,14 @@ import PlayerInfo from "./PlayerInfo";
 
 const EndGame = props => {
   let players = props.session.players;
+  // const { totalPoints, totalGamesPlayed, wins} = playerSnap.val()
+  // console.log("finishedPoints: ", player[1].points)
+  // const newTP = totalPoints + player[1].points
+  // const newTG = totalGamesPlayed + 1
+  // let newWins = wins
+  // if (player[1].points > 0) newWins += 1
+  // playerSnap.ref.update({totalPoints: newTP, totalGamesPlayed: newTG, wins: newWins})
+
   //need a new reference to players in that session for accurate points
   let winners = [];
   let losers = [];
