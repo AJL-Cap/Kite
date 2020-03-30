@@ -40,14 +40,15 @@ const WaitingRoom = props => {
   return (
     <>
       {players.includes(`${userId}`) ? (
-        <div>
+        <div className="container">
           <div className="row justify-content-center">
-            <h1>Waiting for more players!</h1>
-            <br />
+            <div className="row">
+              <h1>Waiting for more players!</h1>
+            </div>
             <h2
             >{`Give your friends this code to invite them to your game: ${code}`}</h2>
           </div>
-          <div className="container">
+          <div>
             <div className="row">
               <h3 className="mx-auto">Players</h3>
             </div>
