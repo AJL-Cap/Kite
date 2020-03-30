@@ -43,6 +43,7 @@ const WaitingRoom = props => {
         <div>
           <div className="row justify-content-center">
             <h1>Waiting for more players!</h1>
+            <br />
             <h2
             >{`Give your friends this code to invite them to your game: ${code}`}</h2>
           </div>
