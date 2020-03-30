@@ -32,7 +32,14 @@ const ActiveGame = props => {
   if (error) return "Error";
   if (!session) return <NotFound />;
   if (session.status === "waiting") {
-    return <WaitingRoom userId={props.userId} code={code} host={host} />;
+    return (
+      <WaitingRoom
+        userId={props.userId}
+        code={code}
+        host={host}
+        gameId={session.gameId}
+      />
+    );
   } else if (session.gameId === "1") {
     return <NHIE userId={props.userId} code={code} host={host} />;
   }
