@@ -37,12 +37,7 @@ export default function NHIEForm(props) {
       });
     setSubmitted(true);
   };
-  // if (submitted) {
-  //   return (
-  //     <div>Your response has been submitted</div>
-  //     //render new component?
-  //   );
-  // }
+
   return (
     <div>
       <Timer round={curRound} time={30} />
