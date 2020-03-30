@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SingleResponseDisplay from "./SingleResponseDisplay";
 import Timer from "./Timer";
 import { useList, useObjectVal } from "react-firebase-hooks/database";
@@ -18,6 +18,7 @@ const ResponseDisplay = props => {
   const curRound = rounds[rounds.length - 1];
   const roundsArr = Object.values(session.rounds);
   const recentRound = roundsArr[roundsArr.length - 1];
+
   const responses = Object.entries(recentRound.responses).filter(
     entry => entry[0] !== uid
   ); // filter commented out for easier solo testing
