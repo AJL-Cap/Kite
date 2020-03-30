@@ -19,10 +19,9 @@ const ResponseDisplay = props => {
   const roundsArr = Object.values(session.rounds);
   const recentRound = roundsArr[roundsArr.length - 1];
 
-  const responses = Object.entries(recentRound.responses);
-  // .filter(
-  //   entry => entry[0] !== uid
-  // );
+  const responses = Object.entries(recentRound.responses).filter(
+    entry => entry[0] !== uid
+  );
   // filter commented out for easier solo testing
 
   // finding the most recent round, filtering the responses to exclude the one you sent in yourself
