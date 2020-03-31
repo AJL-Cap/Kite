@@ -200,10 +200,10 @@ db.ref("gameSessions").on("child_added", snapshot => {
           players.forEach(player => {
             if (parseInt(player.points) <= 0) isGameOver = true;
           });
-          if (isGameOver) {
-            clearTimeout(roundTimeout);
-            endRound(ref, refToChange, "finished");
-          }
+          // if (isGameOver) {
+          //   clearTimeout(roundTimeout);
+          //   endRound(ref, refToChange, "finished");
+          // }
         });
       //ending the game right away if at least one player reaches 0 points
     } else if (status === "finished") {

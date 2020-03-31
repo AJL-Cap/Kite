@@ -5,10 +5,12 @@ import SessionPlayer from "./SessionPlayers";
 import { Button } from "react-bootstrap";
 import NotFound from "../NotFound";
 import axios from "axios";
+import { useHistory } from "react-router";
 
 const db = fire.database();
 
 const WaitingRoom = props => {
+  let history = useHistory();
   //getting that session info
   const { code, userId, host, gameId } = props;
   const [game, gameLoading, gameErr] = useObjectVal(db.ref(`games/${gameId}`));
@@ -35,6 +37,10 @@ const WaitingRoom = props => {
       console.log("error switching game to playing");
     }
   };
+  const cancelGame = () => {
+    history.push("/games");
+    gameSession.remove();
+  };
   //getting players from the session
   let players = Object.keys(session.players);
 
@@ -42,17 +48,20 @@ const WaitingRoom = props => {
     <>
       {players.includes(`${userId}`) ? (
         <div className="container">
-          <div className="row justify-content-center">
-            <div className="row">
+          <div>
+            <div className="row justify-content-between">
               <h1>Waiting for more players!</h1>
+              <Button variant="danger" onClick={cancelGame}>
+                Cancel Game
+              </Button>
             </div>
-            <h2>
-              <strong>
-                Give your friends this code to invite them to your game:{" "}
-              </strong>
-            </h2>
-            <div className="alert alert-primary" role="alert">
+            <div className="row justify-content-center mt-3 mb-3">
               <h2>
+                <strong>
+                  Give your friends this code to invite them to your game:{" "}
+                </strong>
+              </h2>
+              <h2 className="alert alert-primary" role="alert">
                 <strong>{code}</strong>
               </h2>
             </div>
@@ -62,7 +71,9 @@ const WaitingRoom = props => {
           </div>
           <div>
             <div className="row">
-              <h3 className="mx-auto">Players</h3>
+              <h3 className="mx-auto">
+                <u>Players</u>
+              </h3>
             </div>
             <div className="row">
               {players.map(player => (
