@@ -11,12 +11,20 @@ const SingleResponseDisplay = props => {
   console.log("responseID: ", responseID);
 
   const handleClick = iHave => {
-    if (iHave) subtract20();
-    db
-      .ref(
-        `gameSessions/${code}/rounds/${roundID}/responses/${responseID}/confessors/${uid}`
-      )
-      .set(true);
+    if (iHave) {
+      subtract20();
+      db
+        .ref(
+          `gameSessions/${code}/rounds/${roundID}/responses/${responseID}/confessors/${uid}`
+        )
+        .set(true);
+    } else {
+      db
+        .ref(
+          `gameSessions/${code}/rounds/${roundID}/responses/${responseID}/confessors/${uid}`
+        )
+        .set(false);
+    }
     setAnswered(true);
   };
 
@@ -26,18 +34,25 @@ const SingleResponseDisplay = props => {
       .set(currentPoints - 20);
   };
 
-  if (answered) return <div> Your answer was submitted!</div>;
-
   return (
     <div className="jumbotron text-center">
       <h2>Never has {response.nickname} ever...</h2>
       <h1>{response.text}</h1>
-      <button className="btn btn-danger" onClick={() => handleClick(true)}>
-        I have
-      </button>
-      <button className="btn btn-success" onClick={() => handleClick(false)}>
-        I have NOT
-      </button>
+      {answered ? (
+        <div />
+      ) : (
+        <div>
+          <button className="btn btn-danger" onClick={() => handleClick(true)}>
+            I have
+          </button>
+          <button
+            className="btn btn-success"
+            onClick={() => handleClick(false)}
+          >
+            I have NOT
+          </button>
+        </div>
+      )}
     </div>
   );
 };
