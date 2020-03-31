@@ -30,6 +30,26 @@
       "totalGamesPlayed": 1
     }
   },
+  "messageGameMessages": {
+    "GAME": {
+      "messages": {
+        "messageID- generated from push": {
+          "UID": "UID1",
+          "content": "hi"
+        }
+      }
+    }
+  },
+  "lobbyMessages": {
+    "GAME": {
+      "messages": {
+        "messageID- generated from push": {
+          "UID": "UID1",
+          "content": "hi"
+        }
+      }
+    }
+  },
   "gameSessions": {
     "GAME": {
       "players": {
@@ -49,24 +69,10 @@
       "turn": "UID1",
       "points": 120,
       "targetWord": "CHEESE",
-      "displayedWord": "_H____",
-      "wordObj": {
-        "C": {
-          "index": "0"
-        },
-        "H": {
-          "index": "1"
-        },
-        "E": {
-          "index": "2,3,5"
-        },
-        "S": {
-          "index": "4"
-        }
-      },
       "letterBank": {
-        "A": true,
-        "B": true
+        "A": "UID1",
+        "B": "UID2",
+        "C": "UID3"
       }
     }
   }
