@@ -51,9 +51,11 @@ const WaitingRoom = props => {
           <div>
             <div className="row justify-content-between">
               <h1>Waiting for more players!</h1>
-              <Button variant="danger" onClick={cancelGame}>
-                Cancel Game
-              </Button>
+              {host && (
+                <Button variant="danger" onClick={cancelGame}>
+                  Cancel Game
+                </Button>
+              )}
             </div>
             <div className="row justify-content-center mt-3 mb-3">
               <h2>
