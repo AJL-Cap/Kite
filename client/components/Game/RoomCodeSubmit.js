@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import fire from "../../fire";
 import { useObject } from "react-firebase-hooks/database";
-
 const db = fire.database();
-
 const RoomCodeSubmit = props => {
   const { uid, history, formCode, nick } = props;
   const [session, loading, error] = useObject(
     db.ref("gameSessions/" + formCode)
   ); // finds game session with same code
-
   useEffect(
     () => {
       if (session && session.val()) {
@@ -22,11 +19,9 @@ const RoomCodeSubmit = props => {
     },
     [history, session, uid]
   );
-
   if (loading) return "";
   if (error || !session || !session.val())
     return <div className="alert-danger">error: incorrect code</div>;
   return "";
 };
-
 export default RoomCodeSubmit;

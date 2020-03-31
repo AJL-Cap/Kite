@@ -25,7 +25,7 @@ export default function Profile({ userId }) {
             Winning percentage: {player.wins / player.totalGamesPlayed * 100}%
           </div>
         )}
-        <img src={player.profilePic.secure_url} alt="" />
+        {player.profilePic && <img src={player.profilePic.secure_url} alt="" />}
       </div>
     );
   }

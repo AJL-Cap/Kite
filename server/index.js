@@ -89,19 +89,19 @@ db.ref("gameSessions").on("child_added", snapshot => {
   //getting the status for each session
   snapshot.ref.child("status").on("value", statusSnapshot => {
     const status = statusSnapshot.val();
+    //getting total # of players
+    let totalPlayers;
+    snapshot.ref
+      .child("players")
+      .once("value")
+      .then(playerSnapshot => {
+        totalPlayers = playerSnapshot.numChildren();
+      });
     if (status === "responding") {
       db.ref(`gameSessions/${snapshot.key}/rounds`).push({
         timeStarted: Date.now()
       });
       console.log("in responding");
-      //getting total # of players
-      let totalPlayers;
-      snapshot.ref
-        .child("players")
-        .once("value")
-        .then(playerSnapshot => {
-          totalPlayers = playerSnapshot.numChildren();
-        });
 
       //getting the rounds object limited to the last round
       snapshot.ref
@@ -200,10 +200,46 @@ db.ref("gameSessions").on("child_added", snapshot => {
           players.forEach(player => {
             if (parseInt(player.points) <= 0) isGameOver = true;
           });
-          // if (isGameOver) {
-          //   clearTimeout(roundTimeout);
-          //   endRound(ref, refToChange, "finished");
-          // }
+        });
+
+      snapshot.ref
+        .child("rounds")
+        .limitToLast(1)
+        .on("value", roundSnapshot => {
+          const rounds = roundSnapshot.val();
+          //getting list of rounds values
+          if (rounds) {
+            //getting key in array form
+            const roundsKeys = Object.keys(rounds);
+            //getting the key out of the array
+            const roundKey = roundsKeys[0];
+            //getting the reference to responses in the round
+            const responsesRef = snapshot.ref
+              .child("rounds")
+              .child(roundKey)
+              .child("responses");
+            //function to end the round and change the status to confessing.
+            //getting the responses
+            let responses;
+            responsesRef.on("value", roundResponsesSnapshot => {
+              responses = roundResponsesSnapshot.val();
+              console.log("RESPONSES IN CONFESSING", responses);
+              //checking for submitted responses
+
+              // if we have responses for every player in the game session:
+              // if (resArr.length === totalPlayers) {
+              //   snapshot.ref.child("rounds").off();
+              //   clearTimeout(roundTimeout);
+              //   //updating timeStarted for the front end timer
+              //   db.ref(
+              //     `gameSessions/${snapshot.key}/rounds/${roundKey}`
+              //   ).update({
+              //     timeStarted: Date.now()
+              //   });
+              //   endRound(responsesRef, refToChange, "confessing");
+              // }
+            });
+          }
         });
       //ending the game right away if at least one player reaches 0 points
     } else if (status === "finished") {
