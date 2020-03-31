@@ -70,7 +70,7 @@ const NHIE = props => {
         </div>
       )}
       {session.status === "finished" && (
-        <EndGame players={players} session={session} />
+        <EndGame players={players} session={session} uid={props.userId} />
       )}
     </div>
   );

@@ -5,11 +5,18 @@ import fire from "../../fire";
 const db = fire.database();
 
 const SingleResponseDisplay = props => {
-  const { response, uid, code, currentPoints } = props;
+  const { response, uid, code, currentPoints, roundID, responseID } = props;
   const [answered, setAnswered] = useState(false);
+
+  console.log("responseID: ", responseID);
 
   const handleClick = iHave => {
     if (iHave) subtract20();
+    db
+      .ref(
+        `gameSessions/${code}/rounds/${roundID}/responses/${responseID}/confessors/${uid}`
+      )
+      .set(true);
     setAnswered(true);
   };
 

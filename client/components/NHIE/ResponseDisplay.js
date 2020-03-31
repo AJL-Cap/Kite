@@ -16,12 +16,13 @@ const ResponseDisplay = props => {
   if (error) return <div>err</div>;
 
   const curRound = rounds[rounds.length - 1];
-  const roundsArr = Object.values(session.rounds);
+  const roundsArr = Object.entries(session.rounds);
   const recentRound = roundsArr[roundsArr.length - 1];
-
-  const responses = Object.entries(recentRound.responses).filter(
-    entry => entry[0] !== uid
-  );
+  const roundID = recentRound[0];
+  const responses = Object.entries(recentRound[1].responses);
+  // .filter(
+  //   entry => entry[0] !== uid
+  // );
   // filter commented out for easier solo testing
 
   // finding the most recent round, filtering the responses to exclude the one you sent in yourself
@@ -35,7 +36,9 @@ const ResponseDisplay = props => {
           response={response[1]}
           uid={uid}
           code={code}
+          responseID={response[0]}
           currentPoints={currentPoints}
+          roundID={roundID}
         />
       ))}
     </div>
