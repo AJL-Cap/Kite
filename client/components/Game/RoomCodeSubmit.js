@@ -27,6 +27,7 @@ const RoomCodeSubmit = props => {
   if (loading) return "";
   if (error || noCode)
     return <div className="alert-danger">error: incorrect code</div>;
+  return "";
 };
 
 export default RoomCodeSubmit;
