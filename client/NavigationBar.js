@@ -2,12 +2,15 @@ import React from "react";
 import fire from "./fire";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Nav, Navbar } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 
 export default function NavigationBar() {
   const [user, initialising, error] = useAuthState(fire.auth());
+  const history = useHistory();
 
   const signOut = () => {
     fire.auth().signOut();
+    history.push("/");
   };
 
   if (initialising || error) {
