@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import fire from "../../fire";
 import { useObject } from "react-firebase-hooks/database";
 
 const db = fire.database();
-
 const RoomCodeSubmit = props => {
   const { uid, history, formCode, nick } = props;
   const [session, loading, error] = useObject(
@@ -28,5 +27,4 @@ const RoomCodeSubmit = props => {
     return <div className="alert-danger">error: incorrect code</div>;
   return "";
 };
-
 export default RoomCodeSubmit;

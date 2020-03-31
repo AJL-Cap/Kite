@@ -9,6 +9,7 @@ import { useHistory } from "react-router";
 
 const db = fire.database();
 
+// eslint-disable-next-line complexity
 const WaitingRoom = props => {
   let history = useHistory();
   //getting that session info
