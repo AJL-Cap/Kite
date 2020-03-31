@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import fire from "../../fire";
 import { useObject } from "react-firebase-hooks/database";
-import Alert from "react-bootstrap/Alert";
 
 const db = fire.database();
 
@@ -14,7 +13,7 @@ const RoomCodeSubmit = props => {
 
   useEffect(
     () => {
-      if (session) {
+      if (session && session.val()) {
         const newPlayerRef = db.ref(
           "gameSessions/" + formCode + "/players/" + uid
         ); // only if the session already exists, i can make a reference to the new player
@@ -25,9 +24,9 @@ const RoomCodeSubmit = props => {
     [history, session, uid]
   );
 
-  if (noCode) return <Alert variant="danger">This code does not exist</Alert>;
   if (loading) return "";
-  if (error) return <div className="alert-warning">incorrect room code</div>;
+  if (error || noCode)
+    return <div className="alert-danger">error: incorrect code</div>;
 };
 
 export default RoomCodeSubmit;
