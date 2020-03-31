@@ -23,12 +23,8 @@ const RoomCodeForm = props => {
           />
           <br />
           {errors.code && (
-            <span className="alert-warning">incorrect room code</span>
+            <span className="alert-warning">code must be 4 letters long</span>
           )}
-          <br />
-          <button type="submit" className="btn btn-primary">
-            join game
-          </button>
           {formCode && (
             <RoomCodeSubmit
               formCode={formCode}
@@ -37,6 +33,10 @@ const RoomCodeForm = props => {
               history={history}
             />
           )}
+          <br />
+          <button type="submit" className="btn btn-primary">
+            join game
+          </button>
         </form>
       </div>
     </div>

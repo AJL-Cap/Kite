@@ -3,15 +3,15 @@ import fire from "../../fire";
 import { useObject } from "react-firebase-hooks/database";
 
 const db = fire.database();
-
 const RoomCodeSubmit = props => {
   const { uid, history, formCode, nick } = props;
   const [session, loading, error] = useObject(
     db.ref("gameSessions/" + formCode)
   ); // finds game session with same code
+
   useEffect(
     () => {
-      if (session) {
+      if (session && session.val()) {
         const newPlayerRef = db.ref(
           "gameSessions/" + formCode + "/players/" + uid
         ); // only if the session already exists, i can make a reference to the new player
@@ -23,8 +23,8 @@ const RoomCodeSubmit = props => {
   );
 
   if (loading) return "";
-  if (error) return <div className="alert-warning">incorrect room code</div>;
-  return <></>;
+  if (error || !session || !session.val())
+    return <div className="alert-danger">error: incorrect code</div>;
+  return "";
 };
-
 export default RoomCodeSubmit;

@@ -4,6 +4,10 @@
       "title": "never have i ever",
       "rules":
         "everyone starts with five fingers, and says a thing they've never done. if you have done it, put one (virtual) finger down. the first person to run out of fingers loses."
+    },
+    "2": {
+      "title": "rope dude",
+      "rules": "it's hangman actually"
     }
   },
   "players": {
@@ -31,34 +35,38 @@
       "players": {
         "UID1": {
           "nickname": "Lizzy",
-          "points": 0,
           "host": true
         },
         "UID2": {
-          "nickname": "Ji",
-          "points": 0
+          "nickname": "Ji"
         },
         "UID3": {
-          "nickname": "Anna",
-          "points": 0
+          "nickname": "Anna"
         }
       },
-      "gameId": 1,
+      "gameId": "2",
       "status": "waiting",
-      "rounds": {
-        "round1key": {
-          "timeStarted": "",
-          "activeResponseIndex": 0,
-          "responses": {
-            "UID1": {
-              "text": "I peed in a pool",
-              "confessors": {
-                "UID2": true,
-                "UID3": false
-              }
-            }
-          }
+      "turn": "UID1",
+      "points": 120,
+      "targetWord": "CHEESE",
+      "displayedWord": "_H____",
+      "wordObj": {
+        "C": {
+          "index": "0"
+        },
+        "H": {
+          "index": "1"
+        },
+        "E": {
+          "index": "2,3,5"
+        },
+        "S": {
+          "index": "4"
         }
+      },
+      "letterBank": {
+        "A": true,
+        "B": true
       }
     }
   }

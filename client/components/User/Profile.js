@@ -1,17 +1,17 @@
-import React from 'react'
-import {useObjectVal} from 'react-firebase-hooks/database'
-import fire from '../../fire'
+import React from "react";
+import { useObjectVal } from "react-firebase-hooks/database";
+import fire from "../../fire";
 
-export default function Profile({userId}) {
-  const playerRef = fire.database().ref(`players/${userId}`)
+export default function Profile({ userId }) {
+  const playerRef = fire.database().ref(`players/${userId}`);
 
-  const [player, loading, err] = useObjectVal(playerRef)
+  const [player, loading, err] = useObjectVal(playerRef);
 
   if (loading) {
-    return ''
+    return "";
   }
   if (err) {
-    return <div>error!</div>
+    return <div>error!</div>;
   }
   if (player) {
     return (
@@ -25,8 +25,8 @@ export default function Profile({userId}) {
             Winning percentage: {player.wins / player.totalGamesPlayed * 100}%
           </div>
         )}
-        <img src={player.profilePic} alt="" />
+        {player.profilePic && <img src={player.profilePic.secure_url} alt="" />}
       </div>
-    )
+    );
   }
 }
