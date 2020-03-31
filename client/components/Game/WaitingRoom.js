@@ -80,12 +80,14 @@ const WaitingRoom = props => {
                 <SessionPlayer player={player} key={player} />
               ))}
             </div>
-            {host && (
+            {host && players.length > 1 ? (
               <div className="row justify-content-center">
                 <Button variant="dark" onClick={handleClick}>
                   Start Game
                 </Button>
               </div>
+            ) : (
+              <div />
             )}
           </div>
         </div>
