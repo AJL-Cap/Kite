@@ -14,7 +14,16 @@ export default function Login(props) {
       .signInWithPopup(provider)
       .then(result => {
         console.log(result);
-        props.history.push("/form");
+        fire
+          .database()
+          .ref(`players/${result.user.uid}`)
+          .once("value")
+          .then(snapshot => {
+            if (snapshot.val()) props.history.push("/");
+            else
+              //if user has actually not signed up before:
+              props.history.push("/form");
+          });
       })
       .catch(err => {
         setLoginErr(err.message);
@@ -46,8 +55,9 @@ export default function Login(props) {
         />
         <input type="submit" />
       </form>
+      <h2>Or log in with: </h2>
       <button type="button" onClick={handleClick}>
-        Log in with gmail
+        Log in with Gmail
       </button>
     </div>
   );
