@@ -87,7 +87,7 @@ function endGame(deleteRef) {
   db.ref(deleteRef).remove();
 }
 
-function newRound(roundSnapshot, totalPlayers, sessionSnap) {
+function roundNHIE(roundSnapshot, totalPlayers, sessionSnap) {
   const rounds = roundSnapshot.val();
   //getting list of rounds values
   if (rounds) {
@@ -155,7 +155,7 @@ function respondingNHIE(sessionSnap) {
     });
   //getting the rounds object limited to the last round
   sessionSnap.ref.child("rounds").on("child_added", roundSnapshot => {
-    newRound(roundSnapshot, totalPlayers, sessionSnap);
+    roundNHIE(roundSnapshot, totalPlayers, sessionSnap);
   });
 }
 
