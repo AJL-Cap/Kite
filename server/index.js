@@ -201,7 +201,7 @@ function finished(sessionSnap) {
 }
 
 // this is the controller specifically for NHIE
-function checkStatusNHIE(statusSnap, sessionSnap) {
+function switchStatusNHIE(statusSnap, sessionSnap) {
   const status = statusSnap.val();
   if (status === "responding") {
     respondingNHIE(sessionSnap);
@@ -218,7 +218,7 @@ function newGameSession(sessionSnap) {
   // swtich on snapshot.val().gameID
   if (sessionSnap.val().gameId === "1") {
     sessionSnap.ref.child("status").on("value", statusSnap => {
-      checkStatusNHIE(statusSnap, sessionSnap);
+      switchStatusNHIE(statusSnap, sessionSnap);
     });
   }
 }
