@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import fire from "../../fire";
 import { remainingLetters } from "./util";
 import { useForm } from "react-hook-form";
+import Timer from "../Game/Timer";
 
 const db = fire.database();
 
@@ -10,10 +11,6 @@ const GuessLetter = props => {
   const [displayLetters, setDisplayLetters] = useState("");
   const regex = new RegExp("[" + displayLetters + "]", "i");
   const { register, handleSubmit, errors } = useForm();
-
-  useEffect(() => {
-    //probably timer thing? might need to add turns in db to keep track of timestamp
-  }, []);
 
   useEffect(
     () => {
@@ -33,14 +30,17 @@ const GuessLetter = props => {
       .ref(`gameSessions/${code}/letterBank/${data.guessLetter.toUpperCase()}`)
       .set(userId);
 
-    //updating turn status from guessing to guessed
+    //updating turn to next player (hardcoded for now)
     db.ref(`gameSessions/${code}`).update({
-      turnStatus: "guessed"
+      turn: "UID2"
     });
   };
 
   return (
     <div>
+      <h2>
+        Time: <Timer roundTime={session.turnTimeStarted} time={30} />
+      </h2>
       Remaining letters:
       {displayLetters
         .split("")

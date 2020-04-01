@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import SingleResponseDisplay from "./SingleResponseDisplay";
-import Timer from "./Timer";
+import Timer from "../Game/Timer";
 import { useList, useObjectVal } from "react-firebase-hooks/database";
 import fire from "../../fire";
 const db = fire.database();
@@ -25,7 +25,7 @@ const ResponseDisplay = props => {
   // console.log("recentRound", recentRound);
   return (
     <div>
-      <Timer round={curRound} time={30} />
+      <Timer roundTime={curRound.val().timeStarted} time={30} />
       {responses.map(response => (
         <SingleResponseDisplay
           key={response[0]}

@@ -26,8 +26,8 @@ const RopeDude = props => {
       //setting current turn to host for testing purpose!
       db.ref(`gameSessions/${code}`).update({
         turn: userId,
-        turnTimeStarted: Date.now(),
-        turnStatus: "guessing"
+        turnTimeStarted: Date.now()
+        // turnStatus: "guessing"
       });
     }
   }, []);
