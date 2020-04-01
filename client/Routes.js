@@ -11,7 +11,8 @@ import {
   GamePage,
   ActiveGame,
   NotFound,
-  Loading
+  Loading,
+  Form
 } from "./components";
 
 export default function Routes() {
@@ -49,6 +50,11 @@ export default function Routes() {
             exact
             path="/games"
             render={props => <GamePage userId={user.uid} {...props} />}
+          />
+          <Route
+            exact
+            path="/form"
+            render={props => <Form userId={user.uid} {...props} />}
           />
           <Route
             exact

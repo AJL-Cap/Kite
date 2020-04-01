@@ -7,8 +7,10 @@ const {
   CLOUDINARY_UPLOAD_PRESET
 } = require("../../../cloudinary");
 
-export default function SignUp(props) {
-  const [signupErr, setSignupErr] = useState(null);
+const db = fire.database();
+
+export default function Form(props) {
+  const { userId } = props;
   const [image, setImage] = useState(null);
   const { register, handleSubmit, errors } = useForm();
 
@@ -29,48 +31,19 @@ export default function SignUp(props) {
   };
 
   const onSubmit = data => {
-    fire
-      .auth()
-      .createUserWithEmailAndPassword(data.email, data.password)
-      .then(promise => {
-        fire
-          .database()
-          .ref(`players/${promise.user.uid}`)
-          .set({
-            nickname: data.nickname,
-            totalGamesPlayed: 0,
-            totalPoints: 0,
-            wins: 0,
-            profilePic: image
-          });
-        props.history.push("/");
-      })
-      .catch(err => {
-        setSignupErr(err.message);
-      });
+    db.ref(`players/${userId}`).set({
+      nickname: data.nickname,
+      totalGamesPlayed: 0,
+      totalPoints: 0,
+      wins: 0,
+      profilePic: image
+    });
+    props.history.push("/");
   };
-
-  if (signupErr) return <h1>{signupErr}</h1>;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Sign Up</h1>
-      <label htmlFor="email">Email</label>
-      <input
-        type="text"
-        name="email"
-        ref={register({ required: true, pattern: /^\S+@\S+$/i })}
-      />
-      {errors.email && <p>This field is required</p>}
-
-      <label htmlFor="password">Password</label>
-      <input
-        type="password"
-        name="password"
-        ref={register({ required: true, minLength: 6 })}
-      />
-      {errors.password && <p>Must be at least 6 characters long</p>}
-
+      <h2>Complete your profile</h2>
       <label htmlFor="nickname">Nickname</label>
       <input
         type="text"
