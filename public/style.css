@@ -1,21 +1,33 @@
-body {
+/* body {
   font-family: sans-serif;
-}
+} */
 
-a {
+/* a {
   text-decoration: none;
-}
+} */
 
 label {
   display: block;
 }
 
-nav a {
-  display: inline-block;
-  margin: 1em;
+input {
+  margin-bottom: 10px;
 }
 
-form div {
+.formMain {
+  margin-bottom: 20px;
+}
+
+/* nav a {
+  display: inline-block;
+  margin: 1em;
+} */
+
+/* form div {
   margin: 1em;
   display: inline-block;
+} */
+
+.auth {
+  color: #77535e;
 }

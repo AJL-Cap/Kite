@@ -42,21 +42,30 @@ export default function Login(props) {
 
   if (loginErr) return <h1>{loginErr}</h1>;
   return (
-    <div>
+    <div className="m-3">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h1>Log In</h1>
-        <label htmlFor="email">Email</label>
-        <input type="email" name="email" ref={register} />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          ref={register({ required: true, minLength: 6 })}
-        />
+        <h1 className="formMain">Log In</h1>
+        <label htmlFor="email">
+          Email <input type="email" name="email" ref={register} />
+        </label>
+        <label htmlFor="password">
+          Password{" "}
+          <input
+            type="password"
+            name="password"
+            ref={register({ required: true, minLength: 6 })}
+          />
+        </label>
         <input type="submit" />
       </form>
-      <h2>Or log in with: </h2>
+      <hr />
+      <h2 className="formMain">Or log in with: </h2>
       <button type="button" onClick={handleClick}>
+        <img
+          src="https://cdn4.iconfinder.com/data/icons/free-colorful-icons/360/gmail.png"
+          height="42"
+          width="42"
+        />{" "}
         Log in with Gmail
       </button>
     </div>
