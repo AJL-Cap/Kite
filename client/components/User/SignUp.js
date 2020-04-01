@@ -68,46 +68,60 @@ export default function SignUp(props) {
   if (signupErr) return <h1>{signupErr}</h1>;
 
   return (
-    <div>
+    <div className="m-3">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h1>Sign Up</h1>
-        <label htmlFor="email">Email</label>
-        <input
-          type="text"
-          name="email"
-          ref={register({ required: true, pattern: /^\S+@\S+$/i })}
-        />
+        <h1 className="formMain">Sign Up</h1>
+        <label htmlFor="email">
+          Email{" "}
+          <input
+            type="text"
+            name="email"
+            ref={register({ required: true, pattern: /^\S+@\S+$/i })}
+          />
+        </label>
         {errors.email && <p>This field is required</p>}
 
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          ref={register({ required: true, minLength: 6 })}
-        />
+        <label htmlFor="password">
+          Password{" "}
+          <input
+            type="password"
+            name="password"
+            ref={register({ required: true, minLength: 6 })}
+          />
+        </label>
         {errors.password && <p>Must be at least 6 characters long</p>}
 
-        <label htmlFor="nickname">Nickname</label>
-        <input
-          type="text"
-          placeholder="Ex: Game lover"
-          name="nickname"
-          ref={register({ required: true, minLength: 2 })}
-        />
+        <label htmlFor="nickname">
+          Nickname{" "}
+          <input
+            type="text"
+            placeholder="Ex: Game lover"
+            name="nickname"
+            ref={register({ required: true, minLength: 2 })}
+          />
+        </label>
         {errors.nickname && <p>Must be at least 2 characters long</p>}
 
-        <label htmlFor="profilePic">Profile Picture</label>
-        <input
-          type="file"
-          placeholder="upload a picture"
-          name="profilePic"
-          ref={register}
-          onChange={handleImage}
-        />
+        <label htmlFor="profilePic">
+          Profile Picture{" "}
+          <input
+            type="file"
+            placeholder="upload a picture"
+            name="profilePic"
+            ref={register}
+            onChange={handleImage}
+          />
+        </label>
         <input type="submit" />
       </form>
-      <h2>Or sign up with: </h2>
+      <hr />
+      <h2 className="formMain">Or sign up with: </h2>
       <button type="button" onClick={handleClick}>
+        <img
+          src="https://cdn4.iconfinder.com/data/icons/free-colorful-icons/360/gmail.png"
+          height="42"
+          width="42"
+        />{" "}
         Log in with Gmail
       </button>
     </div>

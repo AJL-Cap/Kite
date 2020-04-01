@@ -42,26 +42,34 @@ export default function Form(props) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h2>Complete your profile</h2>
-      <label htmlFor="nickname">Nickname</label>
-      <input
-        type="text"
-        placeholder="Ex: Game lover"
-        name="nickname"
-        ref={register({ required: true, minLength: 2 })}
-      />
-      {errors.nickname && <p>Must be at least 2 characters long</p>}
+    <div className="m-3">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h2 style={{ marginBottom: "20px" }}>Complete your profile</h2>
+        <label style={{ display: "block" }} htmlFor="nickname">
+          Nickname{" "}
+          <input
+            style={{ marginBottom: "10px" }}
+            type="text"
+            placeholder="Ex: Game lover"
+            name="nickname"
+            ref={register({ required: true, minLength: 2 })}
+          />
+        </label>
+        {errors.nickname && <p>Must be at least 2 characters long</p>}
 
-      <label htmlFor="profilePic">Profile Picture</label>
-      <input
-        type="file"
-        placeholder="upload a picture"
-        name="profilePic"
-        ref={register}
-        onChange={handleImage}
-      />
-      <input type="submit" />
-    </form>
+        <label style={{ display: "block" }} htmlFor="profilePic">
+          Profile Picture{" "}
+          <input
+            style={{ marginBottom: "10px" }}
+            type="file"
+            placeholder="upload a picture"
+            name="profilePic"
+            ref={register}
+            onChange={handleImage}
+          />
+        </label>
+        <input type="submit" />
+      </form>
+    </div>
   );
 }

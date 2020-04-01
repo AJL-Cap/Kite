@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
 import fire from "../../fire";
 import firebase from "firebase";
 const provider = new firebase.auth.GoogleAuthProvider();
