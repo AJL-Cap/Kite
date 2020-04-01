@@ -73,144 +73,202 @@ const startListening = () => {
 };
 
 //start of game controller
+
 const db = admin.database();
+
 function endRound(ref, updateRef, status) {
   if (ref) {
     ref.off();
   }
   db.ref(updateRef).set(status);
 }
+
 function endGame(deleteRef) {
   db.ref(deleteRef).remove();
 }
 
-//getting each game session information;
-db.ref("gameSessions").on("child_added", snapshot => {
-  //getting the status for each session
-  // swtich on snapshot.val().gameID
-  if (snapshot.val().gameId === "1") {
-    snapshot.ref.child("status").on("value", statusSnapshot => {
-      const status = statusSnapshot.val();
-      if (status === "responding") {
-        db.ref(`gameSessions/${snapshot.key}/rounds`).push({
-          timeStarted: Date.now()
-        });
-        console.log("in responding");
-        //getting total # of players
-        let totalPlayers;
-        snapshot.ref
-          .child("players")
-          .once("value")
-          .then(playerSnapshot => {
-            totalPlayers = playerSnapshot.numChildren();
-          });
+function responsesTimeout(
+  sessionSnap,
+  refToChange,
+  responsesRef,
+  roundSnapshot
+) {
+  //if at the end of the round there are responses
+  if (responses) {
+    sessionSnap.ref.child("rounds").off();
+    //updating timeStarted for the front end timer
+    roundSnapshot.ref.update({
+      timeStarted: Date.now()
+    });
+    //updating to confessing
+    endRound(responsesRef, refToChange, "confessing");
+    //if no responses
+  } else {
+    responsesRef.off();
+    sessionSnap.ref.child("rounds").off();
+    //deleting that game session
+    let refToDelete = "gameSessions/" + sessionSnap.key;
+    endGame(refToDelete);
+  }
+}
 
-        //getting the rounds object limited to the last round
-        snapshot.ref.child("rounds").on("child_added", roundSnapshot => {
-          const rounds = roundSnapshot.val();
-          //getting list of rounds values
-          if (rounds) {
-            const responsesRef = roundSnapshot.ref.child("responses");
-            //function to end the round and change the status to confessing.
-            //getting the responses
-            let responses;
-            let refToChange = "gameSessions/" + snapshot.key + "/status";
-            //timeout function
-            const roundTimeout = setTimeout(function() {
-              //if at the end of the round there are responses
-              if (responses) {
-                snapshot.ref.child("rounds").off();
-                //updating timeStarted for the front end timer
-                roundSnapshot.ref.update({
-                  timeStarted: Date.now()
-                });
-                //updating to confessing
-                endRound(responsesRef, refToChange, "confessing");
-                //if no responses
-              } else {
-                responsesRef.off();
-                snapshot.ref.child("rounds").off();
-                //deleting that game session
-                let refToDelete = "gameSessions/" + snapshot.key;
-                endGame(refToDelete);
-              }
-            }, 30000);
-            //getting responses
-            responsesRef.on("value", roundResponsesSnapshot => {
-              responses = roundResponsesSnapshot.val();
-              //checking for submitted responses
-              if (responses) {
-                let resArr = [];
-                Object.values(responses).forEach(resObj => {
-                  if (resObj.text.length > 1) {
-                    resArr.push(resObj.text);
-                  }
-                });
-                // if we have responses for every player in the game session:
-                if (resArr.length === totalPlayers) {
-                  snapshot.ref.child("rounds").off();
-                  clearTimeout(roundTimeout);
-                  //updating timeStarted for the front end timer
-                  roundSnapshot.ref.update({
-                    timeStarted: Date.now()
-                  });
-                  endRound(responsesRef, refToChange, "confessing");
-                }
-              }
-            });
-          }
-        });
-      } else if (status === "confessing") {
-        console.log("in confessing");
-        // console.log("HELLOOOOO", snapshot.val().players);
-        let refToChange = "gameSessions/" + snapshot.key + "/status";
-        // console.log("refToChange:", refToChange);
-        let isGameOver = false;
-        let ref = snapshot.ref.child("players");
-        //checking gameover when confessing time is up
-        const roundTimeout = setTimeout(function() {
-          if (isGameOver) {
-            // console.log("isGameOver", Boolean(isGameOver));
-            //changing status to finished if game is over
-            endRound(ref, refToChange, "finished");
-          } else {
-            //chaging status to responding if game is still on
-            endRound(ref, refToChange, "responding");
-          }
-        }, 30000);
-        //checking if any player's point is 0
-        snapshot.ref
-          .child("players")
-          .orderByChild("points")
-          .on("value", playersSnap => {
-            if (typeof playersSnap.val() === "object") {
-              const players = Object.values(playersSnap.val());
-              players.forEach(player => {
-                if (parseInt(player.points) <= 0) isGameOver = true;
-              });
-            } else {
-              console.log(
-                "if playersSnap.val() isn't an object what is it??? ",
-                playersSnap.val()
-              );
-            }
-            // if (isGameOver) {
-            //   clearTimeout(roundTimeout);
-            //   endRound(ref, refToChange, "finished");
-            // }
-          });
-        //ending the game right away if at least one player reaches 0 points
-      } else if (status === "finished") {
-        console.log("in finished");
-        let refToDelete = "gameSessions/" + snapshot.key;
-        //ending finished in specified time and deleted the game session
-        const roundTimeout = setTimeout(function() {
-          endGame(refToDelete);
-        }, 20000);
+function checkForTimerClear(
+  roundResponsesSnapshot,
+  sessionSnap,
+  responsesRef,
+  refToChange,
+  roundTimeout,
+  totalPlayers
+) {
+  responses = roundResponsesSnapshot.val();
+  //checking for submitted responses
+  if (responses) {
+    let resArr = [];
+    Object.values(responses).forEach(resObj => {
+      if (resObj.text.length > 1) {
+        resArr.push(resObj.text);
       }
     });
+    // if we have responses for every player in the game session:
+    if (resArr.length === totalPlayers) {
+      sessionSnap.ref.child("rounds").off();
+      clearTimeout(roundTimeout);
+      //updating timeStarted for the front end timer
+      roundSnapshot.ref.update({
+        timeStarted: Date.now()
+      });
+      endRound(responsesRef, refToChange, "confessing");
+    }
   }
-});
+}
+
+function newRound(roundSnapshot, totalPlayers, sessionSnap) {
+  const rounds = roundSnapshot.val();
+  //getting list of rounds values
+  if (rounds) {
+    const responsesRef = roundSnapshot.ref.child("responses");
+    //function to end the round and change the status to confessing.
+    let responses = {};
+    let refToChange = "gameSessions/" + sessionSnap.key + "/status";
+    //timeout function
+    const roundTimeout = setTimeout(() => {
+      responsesTimeout(sessionSnap, refToChange, responsesRef, roundSnapshot);
+    }, 30000);
+    //getting responses
+    responsesRef.on("value", roundResponsesSnapshot => {
+      checkForTimerClear(
+        roundResponsesSnapshot,
+        sessionSnap,
+        responsesRef,
+        refToChange,
+        roundTimeout,
+        totalPlayers
+      );
+    });
+  }
+}
+
+function respondingNHIE(sessionSnap) {
+  db.ref(`gameSessions/${sessionSnap.key}/rounds`).push({
+    timeStarted: Date.now()
+  });
+  console.log("in responding");
+  //getting total # of players
+  let totalPlayers;
+  sessionSnap.ref
+    .child("players")
+    .once("value")
+    .then(playerSnapshot => {
+      totalPlayers = playerSnapshot.numChildren();
+    });
+  //getting the rounds object limited to the last round
+  sessionSnap.ref.child("rounds").on("child_added", roundSnapshot => {
+    newRound(roundSnapshot, totalPlayers, sessionSnap);
+  });
+}
+
+function confessTimeout(isGameOver, ref, refToChange) {
+  if (isGameOver) {
+    //changing status to finished if game is over
+    endRound(ref, refToChange, "finished");
+  } else {
+    //chaging status to responding if game is still on
+    endRound(ref, refToChange, "responding");
+  }
+}
+
+function checkForZeroPoints(playersSnap, isGameOver) {
+  if (playersSnap.val() !== null && playersSnap.val() !== undefined) {
+    const players = Object.values(playersSnap.val());
+    players.forEach(player => {
+      if (parseInt(player.points) <= 0) {
+        isGameOver = true;
+      }
+    });
+  } else {
+    console.log(
+      "if playersSnap.val() isn't an object what is it??? ",
+      playersSnap.val()
+    );
+  }
+}
+
+// need to pass a bunch of things down to checkForZeroPoints and confessTimeout
+function confessingNHIE(sessionSnap) {
+  console.log("in confessing");
+  // console.log("HELLOOOOO", snapshot.val().players);
+  let refToChange = "gameSessions/" + sessionSnap.key + "/status";
+  // console.log("refToChange:", refToChange);
+  let isGameOver = false;
+  let ref = sessionSnap.ref.child("players");
+  //checking gameover when confessing time is up
+  setTimeout(() => {
+    confessTimeout(isGameOver, ref, refToChange);
+  }, 30000);
+  //checking if any player's point is 0
+  sessionSnap.ref
+    .child("players")
+    .orderByChild("points")
+    .on("value", playersSnap => {
+      checkForZeroPoints(playersSnap, isGameOver);
+    });
+  //ending the game right away if at least one player reaches 0 points
+}
+
+// reusable in other games
+function finished(sessionSnap) {
+  console.log("in finished");
+  let refToDelete = "gameSessions/" + sessionSnap.key;
+  //ending finished in specified time and deleted the game session
+  setTimeout(function() {
+    endGame(refToDelete);
+  }, 20000);
+}
+
+// this is the controller specifically for NHIE
+function checkStatusNHIE(statusSnap, sessionSnap) {
+  const status = statusSnap.val();
+  if (status === "responding") {
+    respondingNHIE(sessionSnap);
+  } else if (status === "confessing") {
+    confessingNHIE(sessionSnap);
+  } else if (status === "finished") {
+    finished(sessionSnap);
+  }
+}
+
+// this is the first function the session child added hits- directs based on gameID- maybe change to switch case
+function newGameSession(sessionSnap) {
+  //getting the status for each session
+  // swtich on snapshot.val().gameID
+  if (sessionSnap.val().gameId === "1") {
+    sessionSnap.ref.child("status").on("value", statusSnap => {
+      checkStatusNHIE(statusSnap, sessionSnap);
+    });
+  }
+}
+
+db.ref("gameSessions").on("child_added", newGameSession);
 
 //end of game controller
 
