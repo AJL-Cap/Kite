@@ -4,42 +4,31 @@ import fire from "../../fire";
 import { useObjectVal, useList } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import PlayerInfo from "./PlayerInfo";
-import { generateTargetWord } from "./util";
 import DisplayWord from "./DisplayWord";
 import GuessLetter from "./GuessLetter";
 import LetterBank from "./LetterBank";
 
 const db = fire.database();
 
-// eslint-disable-next-line complexity
 const RopeDude = props => {
   const { code, host, userId } = props;
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
   );
 
-  // useEffect(() => {
-  //   if (host) setTarget(generateTargetWord());
-  // }, []);
-
   useEffect(() => {
     if (host) {
+      //host setting session total points to 120
       db.ref(`gameSessions/${code}`).update({
         points: 120
       });
 
-      //setting current turn to host for testing purpose!
+      //setting current turn to host for testing purpose! (I assume admin backend would take care of the turn?)
       db.ref(`gameSessions/${code}`).update({
         turn: userId,
         turnTimeStarted: Date.now()
       });
     }
-    // //once target state has been updated:
-    // db.ref(`gameSessions/${code}`).update({
-    //   points: 120,
-    //   targetWord: target
-    // });
-    //setting current turn to host for testing purpose!
   }, []);
 
   if (loading) return "";

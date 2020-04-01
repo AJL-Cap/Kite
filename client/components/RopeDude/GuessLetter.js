@@ -8,7 +8,9 @@ const db = fire.database();
 
 const GuessLetter = props => {
   const { code, session, userId } = props;
+  const targetWord = session.targetWord;
   const [displayLetters, setDisplayLetters] = useState("");
+  //this is for pattern validation in form:
   const regex = new RegExp("[" + displayLetters + "]", "i");
   const { register, handleSubmit, errors } = useForm();
 
@@ -18,6 +20,7 @@ const GuessLetter = props => {
       if (session.letterBank) {
         letterBank = Object.keys(session.letterBank);
       }
+      //getting all alphabets that have not been guessed
       setDisplayLetters(remainingLetters(letterBank));
     },
     [session.letterBank]
@@ -29,6 +32,11 @@ const GuessLetter = props => {
     db
       .ref(`gameSessions/${code}/letterBank/${data.guessLetter.toUpperCase()}`)
       .set(userId);
+
+    //when wrong guess is submitted, deduct 20 points
+    if (!targetWord.includes(data.guessLetter)) {
+      db.ref(`gameSessions/${code}`).update({ points: session.points - 20 });
+    }
 
     //updating turn to next player (hardcoded for now)
     // db.ref(`gameSessions/${code}`).update({

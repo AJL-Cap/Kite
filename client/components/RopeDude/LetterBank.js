@@ -14,6 +14,7 @@ const LetterBank = props => {
   if (loading) return "";
   if (error) return <div>err</div>;
 
+  //filtering out guesses that's been made that are not part of the target word
   const wrongGuesses = letterBank.filter(
     letter => !targetWord.includes(letter)
   );
