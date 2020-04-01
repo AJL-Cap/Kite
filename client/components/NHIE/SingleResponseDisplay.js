@@ -28,9 +28,11 @@ const SingleResponseDisplay = props => {
   };
 
   const subtract20 = () => {
-    db
-      .ref(`gameSessions/${code}/players/${uid}/points`)
-      .set(currentPoints - 20);
+    if (currentPoints > 0) {
+      db
+        .ref(`gameSessions/${code}/players/${uid}/points`)
+        .set(currentPoints - 20);
+    }
   };
 
   let confessorsArr = [];
