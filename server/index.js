@@ -95,12 +95,12 @@ function roundNHIE(roundSnapshot, totalPlayers, sessionSnap) {
     //function to end the round and change the status to confessing.
     //getting the responses
     let responses;
-    let refToChange = "gameSessions/" + snapshot.key + "/status";
+    let refToChange = "gameSessions/" + sessionSnap.key + "/status";
     //timeout function
     const roundTimeout = setTimeout(function() {
       //if at the end of the round there are responses
       if (responses) {
-        snapshot.ref.child("rounds").off();
+        sessionSnap.ref.child("rounds").off();
         //updating timeStarted for the front end timer
         roundSnapshot.ref.update({
           timeStarted: Date.now()
@@ -110,9 +110,9 @@ function roundNHIE(roundSnapshot, totalPlayers, sessionSnap) {
         //if no responses
       } else {
         responsesRef.off();
-        snapshot.ref.child("rounds").off();
+        sessionSnap.ref.child("rounds").off();
         //deleting that game session
-        let refToDelete = "gameSessions/" + snapshot.key;
+        let refToDelete = "gameSessions/" + sessionSnap.key;
         endGame(refToDelete);
       }
     }, 30000);
@@ -129,7 +129,7 @@ function roundNHIE(roundSnapshot, totalPlayers, sessionSnap) {
         });
         // if we have responses for every player in the game session:
         if (resArr.length === totalPlayers) {
-          snapshot.ref.child("rounds").off();
+          sessionSnap.ref.child("rounds").off();
           clearTimeout(roundTimeout);
           //updating timeStarted for the front end timer
           roundSnapshot.ref.update({
