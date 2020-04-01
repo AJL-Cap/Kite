@@ -7,6 +7,7 @@ import PlayerInfo from "./PlayerInfo";
 import { generateTargetWord } from "./util";
 import DisplayWord from "./DisplayWord";
 import GuessLetter from "./GuessLetter";
+import LetterBank from "./LetterBank";
 
 const db = fire.database();
 
@@ -17,19 +18,28 @@ const RopeDude = props => {
     db.ref("gameSessions/" + code)
   );
 
+  // useEffect(() => {
+  //   if (host) setTarget(generateTargetWord());
+  // }, []);
+
   useEffect(() => {
     if (host) {
       db.ref(`gameSessions/${code}`).update({
-        points: 120,
-        targetWord: generateTargetWord()
+        points: 120
       });
+
       //setting current turn to host for testing purpose!
       db.ref(`gameSessions/${code}`).update({
         turn: userId,
         turnTimeStarted: Date.now()
-        // turnStatus: "guessing"
       });
     }
+    // //once target state has been updated:
+    // db.ref(`gameSessions/${code}`).update({
+    //   points: 120,
+    //   targetWord: target
+    // });
+    //setting current turn to host for testing purpose!
   }, []);
 
   if (loading) return "";
@@ -43,6 +53,7 @@ const RopeDude = props => {
       {session.status === "playing" && (
         <div>
           <DisplayWord code={code} session={session} />
+          <LetterBank code={code} session={session} />
           <div className="row" id="playerDisplayPoints">
             {players.map(key => {
               return <PlayerInfo key={key} id={key} />;
@@ -54,8 +65,8 @@ const RopeDude = props => {
         <GuessLetter userId={userId} code={code} session={session} />
       )}
       {/* {session.status === "finished" && (
-        <EndGame players={players} session={session} uid={props.userId} />
-      )} */}
+          <EndGame players={players} session={session} uid={props.userId} />
+        )} */}
     </div>
   );
 };

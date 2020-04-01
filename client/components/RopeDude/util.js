@@ -19,7 +19,7 @@ export const generateWordObj = word => {
   return wordObj;
 };
 
-//CHEESE:
+//generateWordObj("cheese")
 // { C: [ 0 ],
 //   H: [ 1 ],
 //   E: [ 2, 3, 5 ],
@@ -41,6 +41,9 @@ export const displayIt = (letterBankArr, target) => {
   return displayed;
 };
 
+//displayIt(["E"], cheese))
+// "##EE#E"
+
 export const remainingLetters = letterBankArr => {
   let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -52,3 +55,6 @@ export const remainingLetters = letterBankArr => {
   });
   return alphabet;
 };
+
+//remainingLetters(["E"])
+//"ABCDFGHIJKLMNOPQRSTUVWXYZ"

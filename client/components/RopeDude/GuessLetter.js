@@ -31,17 +31,15 @@ const GuessLetter = props => {
       .set(userId);
 
     //updating turn to next player (hardcoded for now)
-    db.ref(`gameSessions/${code}`).update({
-      turn: "UID2"
-    });
+    // db.ref(`gameSessions/${code}`).update({
+    //   turn: "UID2"
+    // });
   };
 
   return (
     <div>
-      <h2>
-        Time: <Timer roundTime={session.turnTimeStarted} time={30} />
-      </h2>
-      Remaining letters:
+      <Timer roundTime={session.turnTimeStarted} time={30} />
+      Choose from the following letters:
       {displayLetters
         .split("")
         .map(el => " " + el + " ")
