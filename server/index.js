@@ -182,8 +182,8 @@ db.ref("gameSessions").on("child_added", snapshot => {
         .child("players")
         .orderByChild("points")
         .on("value", playersSnap => {
-          if (typeof playersSnap.val() === "object") {
-            const players = Object.values(playersSnap.val());
+          if (playersSnap.val()) {
+            const players = Object.values(playersSnap.val()); //still getting the weird error here
             players.forEach(player => {
               if (parseInt(player.points) <= 0) isGameOver = true;
             });
