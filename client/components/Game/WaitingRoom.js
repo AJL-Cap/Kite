@@ -6,6 +6,7 @@ import { Button } from "react-bootstrap";
 import NotFound from "../NotFound";
 import axios from "axios";
 import { useHistory } from "react-router";
+import Chat from "./Chat";
 
 const db = fire.database();
 
@@ -84,7 +85,7 @@ const WaitingRoom = props => {
               ))}
             </div>
             {host && players.length > 0 ? (
-              <div className="row justify-content-center">
+              <div className="row justify-content-center mb-4">
                 <Button variant="dark" onClick={handleClick}>
                   Start Game
                 </Button>
@@ -92,6 +93,9 @@ const WaitingRoom = props => {
             ) : (
               <div />
             )}
+          </div>
+          <div className="row">
+            <Chat code={code} userId={userId} players={players} />
           </div>
         </div>
       ) : (

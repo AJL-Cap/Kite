@@ -3,6 +3,7 @@ import PlayerInfo from "./PlayerInfo";
 import { useObject } from "react-firebase-hooks/database";
 import UpdateFinalPoints from "./UpdateFinalPoints";
 import fire from "../../fire";
+import Chat from "../Game/Chat";
 const db = fire.database();
 
 const EndGame = props => {
@@ -14,7 +15,6 @@ const EndGame = props => {
   if (error) return "Error";
 
   const { totalPoints, totalGamesPlayed, wins } = playerSnap.val();
-  console.log("finishedPoints: ", players[uid].points);
   const newTP = totalPoints + players[uid].points;
   const newTG = totalGamesPlayed + 1;
   let newWins = wins;
@@ -71,6 +71,7 @@ const EndGame = props => {
           playerSnapRef={playerSnap.ref}
         />
       )}
+      <Chat code={props.code} userId={uid} players={players} />
     </div>
   );
 };
