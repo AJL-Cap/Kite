@@ -93,12 +93,14 @@ function roundNHIE(roundSnapshot, totalPlayers, sessionSnap) {
   if (rounds) {
     const responsesRef = roundSnapshot.ref.child("responses");
     //function to end the round and change the status to confessing.
-    let responses = {};
-    let refToChange = "gameSessions/" + sessionSnap.key + "/status";
+    //getting the responses
+    let responses;
+    let refToChange = "gameSessions/" + snapshot.key + "/status";
     //timeout function
-    const roundTimeout = setTimeout(() => {
+    const roundTimeout = setTimeout(function() {
+      //if at the end of the round there are responses
       if (responses) {
-        sessionSnap.ref.child("rounds").off();
+        snapshot.ref.child("rounds").off();
         //updating timeStarted for the front end timer
         roundSnapshot.ref.update({
           timeStarted: Date.now()
@@ -108,9 +110,9 @@ function roundNHIE(roundSnapshot, totalPlayers, sessionSnap) {
         //if no responses
       } else {
         responsesRef.off();
-        sessionSnap.ref.child("rounds").off();
+        snapshot.ref.child("rounds").off();
         //deleting that game session
-        let refToDelete = "gameSessions/" + sessionSnap.key;
+        let refToDelete = "gameSessions/" + snapshot.key;
         endGame(refToDelete);
       }
     }, 30000);
@@ -127,7 +129,7 @@ function roundNHIE(roundSnapshot, totalPlayers, sessionSnap) {
         });
         // if we have responses for every player in the game session:
         if (resArr.length === totalPlayers) {
-          sessionSnap.ref.child("rounds").off();
+          snapshot.ref.child("rounds").off();
           clearTimeout(roundTimeout);
           //updating timeStarted for the front end timer
           roundSnapshot.ref.update({
@@ -192,7 +194,7 @@ function confessingNHIE(sessionSnap) {
       } else {
         console.log(
           "if playersSnap.val() isn't an object what is it??? ",
-          playersSnap.val()
+          playersSnap.val() // this is null. typeof null is object.
         );
       }
     });
