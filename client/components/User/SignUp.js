@@ -70,8 +70,8 @@ export default function SignUp(props) {
   return (
     <div className="m-3">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h1 style={{ marginBottom: "20px" }}>Sign Up</h1>
-        <label style={{ display: "block" }} htmlFor="email">
+        <h1 className="formMain">Sign Up</h1>
+        <label htmlFor="email">
           Email{" "}
           <input
             type="text"
@@ -81,10 +81,9 @@ export default function SignUp(props) {
         </label>
         {errors.email && <p>This field is required</p>}
 
-        <label style={{ display: "block" }} htmlFor="password">
+        <label htmlFor="password">
           Password{" "}
           <input
-            style={{ marginBottom: "10px" }}
             type="password"
             name="password"
             ref={register({ required: true, minLength: 6 })}
@@ -92,10 +91,9 @@ export default function SignUp(props) {
         </label>
         {errors.password && <p>Must be at least 6 characters long</p>}
 
-        <label style={{ display: "block" }} htmlFor="nickname">
+        <label htmlFor="nickname">
           Nickname{" "}
           <input
-            style={{ marginBottom: "10px" }}
             type="text"
             placeholder="Ex: Game lover"
             name="nickname"
@@ -104,10 +102,9 @@ export default function SignUp(props) {
         </label>
         {errors.nickname && <p>Must be at least 2 characters long</p>}
 
-        <label style={{ display: "block" }} htmlFor="profilePic">
+        <label htmlFor="profilePic">
           Profile Picture{" "}
           <input
-            style={{ marginBottom: "10px" }}
             type="file"
             placeholder="upload a picture"
             name="profilePic"
@@ -118,7 +115,7 @@ export default function SignUp(props) {
         <input type="submit" />
       </form>
       <hr />
-      <h2 style={{ marginBottom: "20px" }}>Or sign up with: </h2>
+      <h2 className="formMain">Or sign up with: </h2>
       <button type="button" onClick={handleClick}>
         <img
           src="https://cdn4.iconfinder.com/data/icons/free-colorful-icons/360/gmail.png"

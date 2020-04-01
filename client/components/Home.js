@@ -13,13 +13,20 @@ export default function Home({ userId }) {
   if (error) return <p>Error!</p>;
 
   return player ? (
-    <Main className="m-4 text-center">
-      <h1>Kite</h1>
-      <p>near, far, wherever we are... </p>
-      <h3>Welcome {player.nickname}!</h3>
-      <div>
-        <NavLink to="/games"> Host or join a game! 🎮</NavLink>
-      </div>
+    <Main>
+      <Text>
+        <Title>Kite</Title>
+        <Paragraph>near, far, wherever we are... 🪁</Paragraph>
+        <br />
+        <h3>Welcome {player.nickname}!</h3>
+        <br />
+        <Intro>
+          <NavLink className="auth" to="/games">
+            {" "}
+            Host or join a game! 🎮
+          </NavLink>
+        </Intro>
+      </Text>
     </Main>
   ) : (
     <Main>
@@ -63,13 +70,13 @@ const Text = styled.div`
 
 const Title = styled.div`
   font-family: Arnoldboecklin;
-  font-size: 80px;
+  font-size: 70px;
   color: #ffa4a4;
 `;
 
 const Paragraph = styled.div`
   font-family: Brushstroke;
-  font-size: 50px;
+  font-size: 40px;
   background: rgba(200, 200, 200, 0.15);
 `;
 
