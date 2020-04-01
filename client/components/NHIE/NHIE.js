@@ -41,12 +41,25 @@ const NHIE = props => {
   return (
     <div>
       {session.status === "responding" && (
-        <NHIEForm
-          userId={props.userId}
-          code={code}
-          rounds={session.rounds}
-          host={host}
-        />
+        <div>
+          <NHIEForm
+            userId={props.userId}
+            code={code}
+            rounds={session.rounds}
+            host={host}
+          />
+          <div className="row" id="playerDisplayPoints">
+            {players.map(key => {
+              return (
+                <PlayerInfo
+                  points={session.players[key].points}
+                  key={key}
+                  id={key}
+                />
+              );
+            })}
+          </div>
+        </div>
       )}
       {session.status === "confessing" && (
         <div>

@@ -83,7 +83,7 @@ const WaitingRoom = props => {
                 <SessionPlayer player={player} key={player} />
               ))}
             </div>
-            {host && players.length > 1 ? (
+            {host && players.length > 0 ? (
               <div className="row justify-content-center">
                 <Button variant="dark" onClick={handleClick}>
                   Start Game
