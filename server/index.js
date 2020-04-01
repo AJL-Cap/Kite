@@ -93,12 +93,10 @@ function roundNHIE(roundSnapshot, totalPlayers, sessionSnap) {
   if (rounds) {
     const responsesRef = roundSnapshot.ref.child("responses");
     //function to end the round and change the status to confessing.
-    //getting the responses
     let responses;
     let refToChange = "gameSessions/" + sessionSnap.key + "/status";
     //timeout function
-    const roundTimeout = setTimeout(function() {
-      //if at the end of the round there are responses
+    const roundTimeout = setTimeout(() => {
       if (responses) {
         sessionSnap.ref.child("rounds").off();
         //updating timeStarted for the front end timer
@@ -194,7 +192,7 @@ function confessingNHIE(sessionSnap) {
       } else {
         console.log(
           "if playersSnap.val() isn't an object what is it??? ",
-          playersSnap.val() // this is null. typeof null is object.
+          playersSnap.val()
         );
       }
     });
