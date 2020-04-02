@@ -24,7 +24,7 @@ const DisplayWord = props => {
 
   return (
     <div className="text-center">
-      <h2>{display}</h2>
+      <h1>{display}</h1>
     </div>
   );
 };

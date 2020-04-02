@@ -1,7 +1,60 @@
+const wordBank = [
+  "poison",
+  "refuse",
+  "tiptoe",
+  "prison",
+  "facade",
+  "appeal",
+  "coffin",
+  "behead",
+  "insert",
+  "reverse",
+  "trolley",
+  "science",
+  "abridge",
+  "garbage",
+  "undress",
+  "storage",
+  "officer",
+  "hostage",
+  "laborer",
+  "industry",
+  "daughter",
+  "civilian",
+  "offender",
+  "function",
+  "necklace",
+  "occasion",
+  "recovery",
+  "sandwich",
+  "mountain",
+  "authorise",
+  "disappear",
+  "qualified",
+  "apparatus",
+  "chocolate",
+  "executive",
+  "horoscope",
+  "detective",
+  "landscape",
+  "disappoint",
+  "reasonable",
+  "attractive",
+  "population",
+  "pedestrian",
+  "competence",
+  "regulation",
+  "exaggerate",
+  "motorcycle",
+  "permission",
+  "restaurant",
+  "attractive"
+];
+
 export const generateTargetWord = () => {
   const words = ["Fullstack", "Chicago", "Cheese", "Popcorn"];
   const targetWord = words[Math.floor(Math.random() * words.length - 1)];
-  return targetWord;
+  return targetWord.toUpperCase();
 };
 
 export const generateWordObj = word => {

@@ -17,9 +17,11 @@ export default function Profile({ userId }) {
     return (
       <div>
         <div className="jumbotron text-center alert-dark">
-          <h1>Welcome to Your Profile {player.nickname}</h1>
+          <h1>
+            <strong>Welcome to Your Profile {player.nickname}</strong>
+          </h1>
         </div>
-        <div className="col mb-4">
+        <div className="col mb-4 align-self-center">
           <div
             className="card bg-light text-dark text-center"
             style={{ width: "35rem" }}

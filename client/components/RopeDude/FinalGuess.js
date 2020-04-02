@@ -16,7 +16,7 @@ const FinalGuess = () => {
           placeholder="Are you sure?..."
           ref={register({ required: true })}
         />
-        <Button variant="danger" type="submit">
+        <Button className="alert-danger" type="submit">
           Submit Final Guess
         </Button>
       </form>

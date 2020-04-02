@@ -47,29 +47,52 @@ const RopeDude = props => {
   };
 
   return (
-    <div className="m-4">
+    <div className="container-xl mx-5">
       {session.status === "playing" && (
-        <div>
-          <DisplayWord code={code} session={session} />
-          <LetterBank code={code} session={session} />
-          <HangMan code={code} session={session} />
-          <div className="row" id="playerDisplayPoints">
-            {players.map(key => {
-              return <PlayerInfo key={key} id={key} />;
-            })}
+        <div className="row">
+          <div className="col" id="playerDisplayPoints">
+            <div
+              className="jumbotron text-center justify-content-center"
+              id="jumboPlayers"
+              style={{ width: "16rem" }}
+            >
+              <h2>
+                <strong>Players: </strong>
+              </h2>
+              {players.map(key => {
+                return <PlayerInfo key={key} id={key} code={code} />;
+              })}
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="jumbotron text-center">
+              <DisplayWord code={code} session={session} />
+            </div>
+            <LetterBank code={code} session={session} />
+            <HangMan code={code} session={session} />
+            <br />
+            <div className="row">
+              {session.turn === userId && (
+                <div className="card" style={{ width: "50rem" }}>
+                  <div className="card-body">
+                    <h5 className="card-title">Submit a guess!</h5>
+                    <div className="card-subtitle mb-2 text-muted" />
+                    <GuessLetter
+                      userId={userId}
+                      code={code}
+                      session={session}
+                    />
+                    <Button className="alert-danger" onClick={handleClick}>
+                      Final Guess
+                    </Button>
+                    {finalGuess && <FinalGuess />}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
-      {session.turn === userId && (
-        <GuessLetter userId={userId} code={code} session={session} />
-      )}
-      <Button variant="danger" onClick={handleClick}>
-        Final Guess
-      </Button>
-      {finalGuess && <FinalGuess />}
-      {/* {session.status === "finished" && (
-          <EndGame players={players} session={session} uid={props.userId} />
-        )} */}
     </div>
   );
 };
