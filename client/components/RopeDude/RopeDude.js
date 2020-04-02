@@ -7,6 +7,7 @@ import PlayerInfo from "./PlayerInfo";
 import DisplayWord from "./DisplayWord";
 import GuessLetter from "./GuessLetter";
 import LetterBank from "./LetterBank";
+import HangMan from "./HangMan";
 
 const db = fire.database();
 
@@ -43,6 +44,7 @@ const RopeDude = props => {
         <div>
           <DisplayWord code={code} session={session} />
           <LetterBank code={code} session={session} />
+          <HangMan code={code} session={session} />
           <div className="row" id="playerDisplayPoints">
             {players.map(key => {
               return <PlayerInfo key={key} id={key} />;
