@@ -35,11 +35,7 @@ git checkout -b deploy
 
 ## ADD: firebase credentials & admin credentials script
 
-# webpack will run in "production mode"
-webpack -p
-
 # "force" add the otherwise gitignored build files
-git add -f public/bundle.js public/bundle.js.map
 
 # create a commit, even if nothing changed
 git commit --allow-empty -m 'Deploying'

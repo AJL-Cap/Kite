@@ -7,6 +7,7 @@ const app = express();
 const admin = require("firebase-admin");
 const serviceAccount = require("../admin.json");
 const { databaseURL } = require("../secrets");
+const Bundler = require("parcel-bundler");
 
 module.exports = app;
 
@@ -30,6 +31,14 @@ const createApp = () => {
 
   // compression middleware
   app.use(compression());
+
+  // parcel middleware
+  const entryFile = path.join(__dirname, "..", "client", "index.html");
+  console.log(entryFile);
+  const bundler = new Bundler(entryFile, {
+    outDir: "./dist"
+  });
+  app.use(bundler.middleware());
 
   app.use("/api", require("./api"));
 
@@ -60,10 +69,10 @@ const createApp = () => {
   });
 };
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: databaseURL
-});
+//admin.initializeApp({
+//  credential: admin.credential.cert(serviceAccount),
+//  databaseURL: databaseURL
+//});
 
 const startListening = () => {
   // start listening (and create a 'server' object representing our server)
