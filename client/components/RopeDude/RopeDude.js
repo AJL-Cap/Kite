@@ -23,15 +23,7 @@ const RopeDude = props => {
   useEffect(() => {
     if (host) {
       //host setting session total points to 120
-      db.ref(`gameSessions/${code}`).update({
-        points: 120
-      });
-
-      //setting current turn to host for testing purpose! (I assume admin backend would take care of the turn?)
-      db.ref(`gameSessions/${code}`).update({
-        turn: userId,
-        turnTimeStarted: Date.now()
-      });
+      db.ref(`gameSessions/${code}/points`).set(120);
     }
   }, []);
 

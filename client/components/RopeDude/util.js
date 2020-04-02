@@ -1,7 +1,7 @@
 export const generateTargetWord = () => {
   const words = ["Fullstack", "Chicago", "Cheese", "Popcorn"];
   const targetWord = words[Math.floor(Math.random() * words.length - 1)];
-  return targetWord;
+  return targetWord.toUpperCase();
 };
 
 export const generateWordObj = word => {
@@ -9,11 +9,11 @@ export const generateWordObj = word => {
   word
     .toUpperCase()
     .split("")
-    .forEach((letter, idk) => {
+    .forEach((letter, idx) => {
       if (wordObj[letter]) {
-        wordObj[letter].push(idk);
+        wordObj[letter].push(idx);
       } else {
-        wordObj[letter] = [idk];
+        wordObj[letter] = [idx];
       }
     });
   return wordObj;

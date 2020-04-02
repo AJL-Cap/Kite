@@ -56,8 +56,7 @@
       "players": {
         "UID1": {
           "nickname": "Lizzy",
-          "host": true,
-          "guessing": true
+          "host": true
         },
         "UID2": {
           "nickname": "Ji"

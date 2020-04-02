@@ -218,23 +218,47 @@ function switchStatusNHIE(statusSnap, sessionSnap) {
   }
 }
 
-function playingRopeDude(snapshot) {
-  const players = db.ref(`gameSessions/${snapshot.key}/players`).orderByKey();
+function playingRD(snapshot) {
+  const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
 
-  // const x= Object.entries(players.key)
-  console.log("players:", players);
+  sessionRef
+    .child("players")
+    .orderByKey()
+    .on("value", playerSnapshot => {
+      console.log("playerRef on value triggered");
+      const players = Object.keys(playerSnapshot.val());
+      let turnCounter = 0;
+      //setting turn to first player in array
+      sessionRef.update({
+        turn: players[0],
+        turnTimeStarted: Date.now()
+      });
+      //when a new letter is submitted, change turn to next player:
+      sessionRef.child("letterBank").on("child_added", letterSnapshot => {
+        console.log("letter added?:", letterSnapshot.key);
+        turnCounter += 1;
+        //modulo ensures we loop the player array repeatedly
+        let currentPlayerIdx = turnCounter % players.length;
+        sessionRef.update({
+          turn: players[currentPlayerIdx],
+          turnTimeStarted: Date.now()
+        });
+      });
+    });
 }
 
-function switchStatusRopeDude(statusSnap, sessionSnap) {
+// this is the controller specifically for ropedude
+function switchStatusRD(statusSnap, sessionSnap) {
   const status = statusSnap.val();
+  console.log(status);
   if (status === "playing") {
-    playingRopeDude(sessionSnap);
+    playingRD(sessionSnap);
   } else if (status === "finished") {
     finished(sessionSnap);
   }
 }
 
-// this is the first function the session child added hits- directs based on gameID- maybe change to switch case
+// this is the first function the session child added hits- directs based on gameID
 function newGameSession(sessionSnap) {
   //getting the status for each session
   // swtich on snapshot.val().gameID
@@ -242,10 +266,9 @@ function newGameSession(sessionSnap) {
     sessionSnap.ref.child("status").on("value", statusSnap => {
       switchStatusNHIE(statusSnap, sessionSnap);
     });
-  }
-  if (sessionSnap.val().gameId === "2") {
+  } else if (sessionSnap.val().gameId === "2") {
     sessionSnap.ref.child("status").on("value", statusSnap => {
-      switchStatusRopeDude(statusSnap, sessionSnap);
+      switchStatusRD(statusSnap, sessionSnap);
     });
   }
 }

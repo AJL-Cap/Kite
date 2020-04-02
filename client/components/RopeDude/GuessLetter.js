@@ -34,7 +34,7 @@ const GuessLetter = props => {
       .set(userId);
 
     //when wrong guess is submitted, deduct 20 points
-    if (!targetWord.includes(data.guessLetter)) {
+    if (!targetWord.includes(data.guessLetter.toUpperCase())) {
       db.ref(`gameSessions/${code}`).update({ points: session.points - 20 });
     }
 

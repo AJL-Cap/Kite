@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import fire from "../../fire";
-import { useObjectVal } from "react-firebase-hooks/database";
+//import { useObjectVal } from "react-firebase-hooks/database";
 import { displayIt } from "./util";
+import styled from "styled-components";
 
-const db = fire.database();
+//const db = fire.database();
 
 const DisplayWord = props => {
   const { code, session } = props;
-  const [display, setDisplay] = useState("");
+  const [display, setDisplay] = useState([]);
 
   useEffect(
     () => {
@@ -17,16 +18,28 @@ const DisplayWord = props => {
       }
       const targetWord = session.targetWord;
       const displayed = displayIt(letterBankArr, targetWord);
-      setDisplay(displayed);
+      setDisplay(displayed.split(""));
     },
     [session.letterBank]
   );
 
   return (
-    <div className="text-center">
-      <h2>{display}</h2>
+    <div className="container">
+      <div className="row">
+        {display.map((char, idx) => (
+          <Letter key={idx}>
+            <div className="alert alert-info col">{char}</div>
+          </Letter>
+        ))}
+      </div>
     </div>
   );
 };
 
 export default DisplayWord;
+
+const Letter = styled.div`
+  width: 60px;
+  height: 60px;
+  padding: 2px;
+`;
