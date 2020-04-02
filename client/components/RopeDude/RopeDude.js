@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import fire from "../../fire";
@@ -11,7 +10,6 @@ import LetterBank from "./LetterBank";
 import HangMan from "./HangMan";
 import { Button } from "react-bootstrap";
 import FinalGuess from "./FinalGuess";
-import EndGame from "./EndGame";
 
 const db = fire.database();
 
@@ -25,14 +23,16 @@ const RopeDude = props => {
   useEffect(() => {
     if (host) {
       //host setting session total points to 120
-      db.ref(`gameSessions/${code}/points`).set(120);
+      db.ref(`gameSessions/${code}`).update({
+        points: 120
+      });
     }
   }, []);
 
   if (loading) return "";
   if (error) return "Error";
   if (!session) return <NotFound />;
-  console.log("rope dude session: ", session);
+
   let players = Object.keys(session.players);
 
   const handleClick = () => {
@@ -85,15 +85,6 @@ const RopeDude = props => {
               )}
             </div>
           </div>
-          {session.turn === userId && (
-            <div>
-              <GuessLetter userId={userId} code={code} session={session} />
-              <Button variant="danger" onClick={handleClick}>
-                Final Guess
-              </Button>
-              {finalGuess && <FinalGuess session={session} code={code} />}
-            </div>
-          )}
         </div>
       )}
     </div>
