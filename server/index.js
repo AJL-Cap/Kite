@@ -114,6 +114,7 @@ function respondingNHIE(snapshot) {
       //timeout function
       const roundTimeout = setTimeout(function() {
         //if at the end of the round there are responses
+        console.log("RESPONSES", responses);
         if (responses) {
           snapshot.ref.child("rounds").off();
           //updating timeStarted for the front end timer

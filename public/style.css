@@ -5,7 +5,12 @@
 /* a {
   text-decoration: none;
 } */
-
+body {
+  font-family: "American Typewriter";
+  background: linear-gradient(rgb(250, 250, 250), rgb(208, 235, 236)) no-repeat
+    center fixed;
+  background-size: cover;
+}
 label {
   display: block;
 }

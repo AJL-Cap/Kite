@@ -61,10 +61,13 @@ const WaitingRoom = props => {
       {players.includes(`${userId}`) ? (
         <div className="container">
           <div>
-            <div className="row justify-content-between">
+            <div className="row justify-content-center mt-3">
               <h1>Waiting for more players!</h1>
               {host && (
-                <Button variant="danger" onClick={cancelGame}>
+                <Button
+                  className="btn alert-danger border border-danger"
+                  onClick={cancelGame}
+                >
                   Cancel Game
                 </Button>
               )}
@@ -72,10 +75,12 @@ const WaitingRoom = props => {
             <div className="row justify-content-center mt-3 mb-3">
               <h2>
                 <strong>
-                  Give your friends this code to invite them to your game:{" "}
+                  Give your friends this code to invite them to your game:
                 </strong>
               </h2>
-              <h2 className="alert alert-primary" role="alert">
+            </div>
+            <div className="row justify-content-center mt-3 mb-3">
+              <h2 className="alert alert-secondary" role="alert">
                 <strong>{code}</strong>
               </h2>
             </div>
@@ -96,7 +101,10 @@ const WaitingRoom = props => {
             </div>
             {host && players.length > 0 ? (
               <div className="row justify-content-center mb-4">
-                <Button variant="dark" onClick={handleClick}>
+                <Button
+                  className="btn alert-light border border-dark"
+                  onClick={handleClick}
+                >
                   Start Game
                 </Button>
               </div>

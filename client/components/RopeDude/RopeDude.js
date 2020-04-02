@@ -8,11 +8,14 @@ import DisplayWord from "./DisplayWord";
 import GuessLetter from "./GuessLetter";
 import LetterBank from "./LetterBank";
 import HangMan from "./HangMan";
+import { Button } from "react-bootstrap";
+import FinalGuess from "./FinalGuess";
 
 const db = fire.database();
 
 const RopeDude = props => {
   const { code, host, userId } = props;
+  const [finalGuess, setFinalGuess] = useState(false);
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
   );
@@ -38,6 +41,11 @@ const RopeDude = props => {
 
   let players = Object.keys(session.players);
 
+  const handleClick = () => {
+    console.log("clicked");
+    setFinalGuess(!finalGuess);
+  };
+
   return (
     <div className="m-4">
       {session.status === "playing" && (
@@ -55,6 +63,10 @@ const RopeDude = props => {
       {session.turn === userId && (
         <GuessLetter userId={userId} code={code} session={session} />
       )}
+      <Button variant="danger" onClick={handleClick}>
+        Final Guess
+      </Button>
+      {finalGuess && <FinalGuess />}
       {/* {session.status === "finished" && (
           <EndGame players={players} session={session} uid={props.userId} />
         )} */}

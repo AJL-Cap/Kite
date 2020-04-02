@@ -1,5 +1,4 @@
-const axios = require("axios");
-export const generateTargetWord = async () => {
+export const generateTargetWord = () => {
   const words = ["Fullstack", "Chicago", "Cheese", "Popcorn"];
   const targetWord = words[Math.floor(Math.random() * words.length - 1)];
   return targetWord;

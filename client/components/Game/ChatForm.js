@@ -29,7 +29,7 @@ const ChatForm = props => {
           <span className="input-group-btn">
             <button
               type="submit"
-              className="btn btn-primary btn-sm"
+              className="btn alert-light btn-sm"
               id="btn-chat"
             >
               Send Message
