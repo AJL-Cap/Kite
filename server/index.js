@@ -181,7 +181,7 @@ function confessingNHIE(sessionSnap) {
   }, 30000);
   //checking if any player's point is 0
   sessionSnap.ref.child("players").on("value", playersSnap => {
-    if (playersSnap.val() !== null) {
+    if (playersSnap.val() != null) {
       const players = Object.values(playersSnap.val());
       players.forEach(player => {
         if (parseInt(player.points) <= 0) {
@@ -207,54 +207,61 @@ function finished(sessionSnap) {
 
 function playingRD(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
-
+  sessionRef.child("points").on("value", pointSnapshot => {
+    if (pointSnapshot.val() === 0) sessionRef.update({ status: "finished" });
+  });
   sessionRef
     .child("players")
     .orderByKey()
     .on("value", playerSnapshot => {
-      console.log("playerRef on value triggered");
-      const players = Object.keys(playerSnapshot.val());
-      let turnCounter = 0;
-      //setting turn to first player in array
-      sessionRef.update({
-        turn: players[0],
-        turnTimeStarted: Date.now()
-      });
-      //ADD: timeout
-
-      //when a new letter is submitted, change turn to next player:
-      sessionRef.child("letterBank").on("child_added", letterSnapshot => {
-        console.log("letter added?:", letterSnapshot.key);
-        turnCounter += 1;
-        //this modulo ensures we loop the player array repeatedly:
-        let currentPlayerIdx = turnCounter % players.length;
+      console.log("playerRef on value triggered: ", playerSnapshot.val());
+      if (playerSnapshot.val() != null) {
+        const players = Object.keys(playerSnapshot.val());
+        let turnCounter = 0;
+        //setting turn to first player in array
         sessionRef.update({
-          turn: players[currentPlayerIdx],
+          turn: players[0],
           turnTimeStarted: Date.now()
         });
         //ADD: timeout
+        //when a new letter is submitted, change turn to next player:
+        sessionRef.child("letterBank").on("child_added", letterSnapshot => {
+          console.log("letter added?:", letterSnapshot.key);
+          turnCounter += 1;
+          //this modulo ensures we loop the player array repeatedly:
+          let currentPlayerIdx = turnCounter % players.length;
+          sessionRef.update({
+            turn: players[currentPlayerIdx],
+            turnTimeStarted: Date.now()
+          });
+          //ADD: timeout
 
-        //if letter bank has all the letters for target word, change game status to finished
-        sessionRef.child("letterBank").on("value", letterSnapshot => {
-          let letterBank = [];
-          if (letterSnapshot.val()) {
-            letterBank = Object.keys(letterSnapshot.val());
-          }
-          sessionRef.child("targetWord").on("value", wordSnapshot => {
-            const targetWord = wordSnapshot.val();
-            console.log(targetWord);
-            if (gameOverRD(letterBank, targetWord)) {
-              sessionRef.update({ status: "finished" });
+          //if letter bank has all the letters for target word, change game status to finished
+          sessionRef.child("letterBank").on("value", letterSnapshot => {
+            let letterBank = [];
+            if (letterSnapshot.val()) {
+              letterBank = Object.keys(letterSnapshot.val());
             }
+            sessionRef.child("targetWord").on("value", wordSnapshot => {
+              if (wordSnapshot.val() != null) {
+                const targetWord = wordSnapshot.val();
+                console.log(targetWord);
+                if (gameOverRD(letterBank, targetWord)) {
+                  sessionRef.update({ status: "finished" });
+                } else wordSnapshot.ref.off();
+              }
+            });
           });
         });
-      });
+      } else {
+        playerSnapshot.ref.off();
+      }
     });
 }
 
 function gameOverRD(letterBankArr, target) {
   let done = true;
-
+  if (!target) return done;
   for (let i = 0; i < target.length; i++) {
     let letter = target[i];
     if (!letterBankArr.includes(letter)) {

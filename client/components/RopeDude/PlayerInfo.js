@@ -6,10 +6,8 @@ import {
 } from "react-firebase-hooks/database";
 import fire from "../../fire";
 import { Card } from "react-bootstrap";
-
 const db = fire.database();
 const playerRef = db.ref("players");
-
 const PlayerInfo = props => {
   const { code, id, session } = props;
   const [playerSnapshot, playerLoading, playerError] = useObjectVal(
@@ -18,12 +16,9 @@ const PlayerInfo = props => {
   const [correctGuesses, loading, error] = useListVals(
     db.ref(`gameSessions/${code}/players/${id}/correctGuesses`)
   );
-
   if (playerLoading || loading) return "";
   if (playerError || error) return "Error";
-
   //to add: display words they guess correctly
-
   return (
     <div>
       <Card
@@ -41,7 +36,6 @@ const PlayerInfo = props => {
           <Card.Title>
             {playerSnapshot.nickname} <br />
           </Card.Title>
-
           <Card.Text>
             <label>Correct Guesses: </label>
             {correctGuesses &&
@@ -54,5 +48,4 @@ const PlayerInfo = props => {
     </div>
   );
 };
-
 export default PlayerInfo;

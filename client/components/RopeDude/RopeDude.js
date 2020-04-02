@@ -80,7 +80,7 @@ const RopeDude = props => {
                     <Button className="alert-danger" onClick={handleClick}>
                       Final Guess
                     </Button>
-                    {finalGuess && <FinalGuess />}
+                    {finalGuess && <FinalGuess session={session} code={code} />}
                   </div>
                 </div>
               )}
