@@ -20,7 +20,7 @@ const GamePage = props => {
 
   return (
     <div>
-      <div className="jumbotron text-center alert-secondary">
+      <div className="jumbotron text-center">
         <h1>Games</h1>
       </div>
       <Container fluid>

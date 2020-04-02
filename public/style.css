@@ -53,16 +53,6 @@ input {
   flex-direction: column; */
 }
 
-.chat-area .chat-bubble.user {
-  background-color: #bbdefb;
-  padding: 10px;
-  border-radius: 4px;
-  max-width: 100%;
-  word-wrap: break-word;
-  margin: 3px;
-  /* float: right; */
-}
-
 .chat-bubble .chat-time {
   font-size: 20px;
   color: #757575;
@@ -79,8 +69,16 @@ input {
   word-wrap: break-word;
   border-radius: 4px;
 }
-.avatar {
+.chat-area .chat-bubble.user {
+  background-color: #bbdefb;
+  padding: 10px;
+  border-radius: 4px;
   max-width: 100%;
-  height: auto;
-  position: relative;
+  word-wrap: break-word;
+  margin: 3px;
+  /* float: right; */
+}
+.avatar {
+  max-width: 20px;
+  height: 40px;
 }
