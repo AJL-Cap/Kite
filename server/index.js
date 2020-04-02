@@ -158,7 +158,6 @@ function respondingNHIE(snapshot) {
   });
 }
 
-// need to pass a bunch of things down to checkForZeroPoints and confessTimeout
 function confessingNHIE(sessionSnap) {
   console.log("in confessing");
   // console.log("HELLOOOOO", snapshot.val().players);
