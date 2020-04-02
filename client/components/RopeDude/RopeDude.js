@@ -4,13 +4,13 @@ import fire from "../../fire";
 import { useObjectVal, useList } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import PlayerInfo from "./PlayerInfo";
-import { generateTargetWord } from "./util";
 import DisplayWord from "./DisplayWord";
 import GuessLetter from "./GuessLetter";
+import LetterBank from "./LetterBank";
+import HangMan from "./HangMan";
 
 const db = fire.database();
 
-// eslint-disable-next-line complexity
 const RopeDude = props => {
   const { code, host, userId } = props;
   const [session, loading, error] = useObjectVal(
@@ -19,15 +19,15 @@ const RopeDude = props => {
 
   useEffect(() => {
     if (host) {
+      //host setting session total points to 120
       db.ref(`gameSessions/${code}`).update({
-        points: 120,
-        targetWord: generateTargetWord()
+        points: 120
       });
-      //setting current turn to host for testing purpose!
+
+      //setting current turn to host for testing purpose! (I assume admin backend would take care of the turn?)
       db.ref(`gameSessions/${code}`).update({
         turn: userId,
         turnTimeStarted: Date.now()
-        // turnStatus: "guessing"
       });
     }
   }, []);
@@ -43,6 +43,8 @@ const RopeDude = props => {
       {session.status === "playing" && (
         <div>
           <DisplayWord code={code} session={session} />
+          <LetterBank code={code} session={session} />
+          <HangMan code={code} session={session} />
           <div className="row" id="playerDisplayPoints">
             {players.map(key => {
               return <PlayerInfo key={key} id={key} />;
@@ -54,8 +56,8 @@ const RopeDude = props => {
         <GuessLetter userId={userId} code={code} session={session} />
       )}
       {/* {session.status === "finished" && (
-        <EndGame players={players} session={session} uid={props.userId} />
-      )} */}
+          <EndGame players={players} session={session} uid={props.userId} />
+        )} */}
     </div>
   );
 };

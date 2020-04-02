@@ -1,18 +1,8 @@
-export const generateTargetWord = () => {
-  const words = ["Fullstack", "Chicago", "Cheese", "Popcorn", ""];
+const axios = require("axios");
+export const generateTargetWord = async () => {
+  const words = ["Fullstack", "Chicago", "Cheese", "Popcorn"];
   const targetWord = words[Math.floor(Math.random() * words.length - 1)];
-  return targetWord.toUpperCase();
-  // let { data } = await axios.get(
-  //   "https://wordsapiv1.p.rapidapi.com/words/?lettersMin=12random=true",
-  //   {
-  //     headers: {
-  //       "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
-  //       "x-rapidapi-key": "78dc5262e8msh00adb59c72b136ap136fb3jsne36baffcbcdf"
-  //     }
-  //   }
-  // );
-  // console.log("DATA", data);
-  // return data;
+  return targetWord;
 };
 
 export const generateWordObj = word => {
@@ -29,12 +19,13 @@ export const generateWordObj = word => {
     });
   return wordObj;
 };
-
-//CHEESE:
-// { C: [ 0 ],
-//   H: [ 1 ],
-//   E: [ 2, 3, 5 ],
-//   S: [ 4 ] }
+/* Example:
+generateWordObj("cheese") =>
+ { C: [ 0 ],
+   H: [ 1 ],
+   E: [ 2, 3, 5 ],
+   S: [ 4 ] }
+*/
 
 export const displayIt = (letterBankArr, target) => {
   const wordObj = generateWordObj(target);
@@ -51,6 +42,9 @@ export const displayIt = (letterBankArr, target) => {
   });
   return displayed;
 };
+/* Example:
+  displayIt(["E"], cheese)) => "##EE#E"
+*/
 
 export const remainingLetters = letterBankArr => {
   let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -63,3 +57,6 @@ export const remainingLetters = letterBankArr => {
   });
   return alphabet;
 };
+/* Example:
+  remainingLetters(["C", "E"]) => "ABDFGHIJKLMNOPQRSTUVWXYZ"
+*/

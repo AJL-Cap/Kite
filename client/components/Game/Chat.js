@@ -31,7 +31,7 @@ const Chat = props => {
               );
             }
           })}
-          <div ref={myRef} className="mb-3" />
+          <div ref={myRef} className="mb-20" />
         </div>
       </div>
       <div>

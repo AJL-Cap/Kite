@@ -7,6 +7,7 @@ import NotFound from "../NotFound";
 import axios from "axios";
 import { useHistory } from "react-router";
 import Chat from "./Chat";
+import { generateTargetWord } from "../RopeDude/util";
 
 const db = fire.database();
 
@@ -36,6 +37,12 @@ const WaitingRoom = props => {
 
   const handleClick = () => {
     try {
+      if (gameId === "2") {
+        console.log("2");
+        const targetWord = generateTargetWord();
+        console.log("targetWord", targetWord);
+        db.ref(`gameSessions/${code}/targetWord`).set(targetWord);
+      }
       //updating that session status to playing
       axios.post(`/api/games/${code}`, { status: "playing" });
     } catch (err) {

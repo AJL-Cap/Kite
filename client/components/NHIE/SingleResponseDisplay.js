@@ -7,11 +7,6 @@ const db = fire.database();
 const SingleResponseDisplay = props => {
   const { response, uid, code, currentPoints, roundID, responseID } = props;
   const [answered, setAnswered] = useState(false);
-
-  // useEffect(() => {
-  //   if (responseID === uid) setAnswered(true);
-  // }, [responseID, uid]);
-
   const handleClick = iHave => {
     if (iHave) {
       subtract20();
@@ -25,11 +20,10 @@ const SingleResponseDisplay = props => {
   };
 
   const subtract20 = () => {
-    if (currentPoints > 0) {
+    if (currentPoints > 0)
       db
         .ref(`gameSessions/${code}/players/${uid}/points`)
         .set(currentPoints - 20);
-    }
   };
 
   let confessorsArr = [];
