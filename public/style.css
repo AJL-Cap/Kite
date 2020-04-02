@@ -5,7 +5,12 @@
 /* a {
   text-decoration: none;
 } */
-
+body {
+  font-family: "American Typewriter";
+  background: linear-gradient(rgb(250, 250, 250), rgb(208, 235, 236)) no-repeat
+    center fixed;
+  background-size: cover;
+}
 label {
   display: block;
 }
@@ -28,6 +33,52 @@ input {
   display: inline-block;
 } */
 
+.messageForm {
+  width: 350px;
+}
 .auth {
   color: #77535e;
+}
+
+/* .chat {
+} */
+.chat-area {
+  padding: 20px;
+  height: 300px;
+  width: 65vw;
+  background-color: #e6f0fa;
+  overflow-y: scroll;
+  font-size: 30px;
+  /* display: flex;
+  flex-direction: column; */
+}
+
+.chat-bubble .chat-time {
+  font-size: 20px;
+  color: #757575;
+}
+/* .form-control {
+  width: 60%;
+} */
+
+.chat-area .chat-bubble {
+  padding: 10px;
+  background-color: #a5d6a7;
+  margin: 3px;
+  max-width: 100%;
+  word-wrap: break-word;
+  border-radius: 4px;
+}
+.chat-area .chat-bubble.user {
+  background-color: #bbdefb;
+  padding: 10px;
+  border-radius: 4px;
+  max-width: 100%;
+  word-wrap: break-word;
+  margin: 3px;
+  /* float: right; */
+}
+.avatar {
+  max-width: 20px;
+  height: 40px;
 }

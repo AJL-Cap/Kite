@@ -6,7 +6,7 @@ import { useObjectVal } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import ResponseDisplay from "./ResponseDisplay";
 import axios from "axios";
-import EndGame from "./EndGame";
+import EndGame from "../Game/EndGame";
 
 const db = fire.database();
 
@@ -83,7 +83,12 @@ const NHIE = props => {
         </div>
       )}
       {session.status === "finished" && (
-        <EndGame players={players} session={session} uid={props.userId} />
+        <EndGame
+          players={players}
+          session={session}
+          uid={props.userId}
+          code={code}
+        />
       )}
     </div>
   );

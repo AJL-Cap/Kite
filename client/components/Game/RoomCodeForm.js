@@ -13,7 +13,10 @@ const RoomCodeForm = props => {
 
   return (
     <div className="card" style={{ margin: "5%" }}>
-      <div className="card-body text-primary">
+      <div className="card-body">
+        <h3 className="card-text">
+          Enter an existing game code to join your friends!
+        </h3>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             type="text"
@@ -34,8 +37,8 @@ const RoomCodeForm = props => {
             />
           )}
           <br />
-          <button type="submit" className="btn btn-primary">
-            join game
+          <button type="submit" className="btn alert-info">
+            Join Game
           </button>
         </form>
       </div>

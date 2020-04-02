@@ -53,11 +53,14 @@ const SingleResponseDisplay = props => {
         ))
       ) : (
         <div>
-          <button className="btn btn-danger" onClick={() => handleClick(true)}>
+          <button
+            className="btn alert-danger mx-2"
+            onClick={() => handleClick(true)}
+          >
             I have
           </button>
           <button
-            className="btn btn-success"
+            className="btn alert-success mx-2"
             onClick={() => handleClick(false)}
           >
             I have NOT
