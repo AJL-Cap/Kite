@@ -3,6 +3,7 @@ import SingleResponseDisplay from "./SingleResponseDisplay";
 import Timer from "../Game/Timer";
 import { useList, useObjectVal } from "react-firebase-hooks/database";
 import fire from "../../fire";
+import NotFound from "../NotFound";
 const db = fire.database();
 
 const ResponseDisplay = props => {

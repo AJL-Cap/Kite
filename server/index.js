@@ -114,6 +114,7 @@ function respondingNHIE(snapshot) {
       //timeout function
       const roundTimeout = setTimeout(function() {
         //if at the end of the round there are responses
+        console.log("RESPONSES", responses);
         if (responses) {
           snapshot.ref.child("rounds").off();
           //updating timeStarted for the front end timer
@@ -128,7 +129,9 @@ function respondingNHIE(snapshot) {
           snapshot.ref.child("rounds").off();
           //deleting that game session
           let refToDelete = "gameSessions/" + snapshot.key;
+          let chatToDelete = "lobbyMessages/" + snapshot.key;
           endGame(refToDelete);
+          endGame(chatToDelete);
         }
       }, 30000);
       //getting responses
@@ -166,6 +169,7 @@ function confessingNHIE(sessionSnap) {
   // console.log("refToChange:", refToChange);
   let isGameOver = false;
   let ref = sessionSnap.ref.child("players");
+
   //checking gameover when confessing time is up
   const roundTimeout = setTimeout(function() {
     if (isGameOver) {
@@ -194,9 +198,11 @@ function confessingNHIE(sessionSnap) {
 function finished(sessionSnap) {
   console.log("in finished");
   let refToDelete = "gameSessions/" + sessionSnap.key;
+  let chatToDelete = "lobbyMessages/" + sessionSnap.key;
   //ending finished in specified time and deleted the game session
   setTimeout(function() {
     endGame(refToDelete);
+    endGame(chatToDelete);
   }, 20000);
 }
 

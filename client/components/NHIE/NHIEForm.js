@@ -42,21 +42,31 @@ export default function NHIEForm(props) {
 
   return (
     <div>
-      <Timer roundTime={curRound.val().timeStarted} time={30} />
+      <div className="row justify-content-center">
+        <Timer roundTime={curRound.val().timeStarted} time={30} />
+      </div>
       {submitted ? (
-        <div>Your response has been submitted</div>
+        <h4>Your response has been submitted</h4>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h1>Submit your response for this round</h1>
-          <label htmlFor="response">Never have I ever...</label>
-          <input
-            type="text"
-            name="response"
-            placeholder="ex: peed in a pool"
-            ref={register({ required: true })}
-          />
-          {errors.response && <p>You must enter a response!</p>}
-          <input type="submit" />
+          <div className="card text-center">
+            <div className="card-header">
+              <strong>Submit your response for this round</strong>
+            </div>
+            <div className="card-body">
+              <h5 className="card-title">Never have I ever...</h5>
+              <p className="card-text">
+                <input
+                  type="text"
+                  name="response"
+                  placeholder="ex: peed in a pool"
+                  ref={register({ required: true })}
+                />
+                {errors.response && <p>You must enter a response!</p>}
+                <input type="submit" />
+              </p>
+            </div>
+          </div>
         </form>
       )}
     </div>

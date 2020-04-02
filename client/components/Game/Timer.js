@@ -18,7 +18,11 @@ const Timer = props => {
     };
   }, []);
 
-  return <h1>Remaining time: {timeLeft} </h1>;
+  return timeLeft <= 10 ? (
+    <h1 className="text-danger">Remaining time: {timeLeft} </h1>
+  ) : (
+    <h1>Remaining time: {timeLeft} </h1>
+  );
 };
 
 export default Timer;
