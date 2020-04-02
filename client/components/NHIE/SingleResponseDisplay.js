@@ -40,7 +40,7 @@ const SingleResponseDisplay = props => {
   }
 
   return (
-    <div className="jumbotron text-center">
+    <div className="jumbotron text-center" id="jumboPlayers">
       <h2>Never has {response.nickname} ever...</h2>
       <h1>{response.text}</h1>
       {answered ? (

@@ -39,7 +39,7 @@ const GuessLetter = props => {
     if (targetWord.includes(data.guessLetter.toUpperCase())) {
       db
         .ref(`gameSessions/${code}/players/${userId}/correctGuesses`)
-        .push(upperCaseLetter);
+        .push(letter);
     }
 
     //updating turn to next player (hardcoded for now)
