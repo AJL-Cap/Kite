@@ -181,7 +181,7 @@ function confessingNHIE(sessionSnap) {
   }, 30000);
   //checking if any player's point is 0
   sessionSnap.ref.child("players").on("value", playersSnap => {
-    if (playersSnap.val() !== null) {
+    if (playersSnap.val() != null) {
       const players = Object.values(playersSnap.val());
       players.forEach(player => {
         if (parseInt(player.points) <= 0) {
