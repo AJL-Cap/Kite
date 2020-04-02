@@ -202,7 +202,7 @@ function finished(sessionSnap) {
   setTimeout(function() {
     endGame(refToDelete);
     endGame(chatToDelete);
-  }, 20000);
+  }, 60000);
 }
 
 function playingRD(snapshot) {
