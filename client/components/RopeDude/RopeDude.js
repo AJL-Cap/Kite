@@ -10,6 +10,7 @@ import LetterBank from "./LetterBank";
 import HangMan from "./HangMan";
 import { Button } from "react-bootstrap";
 import FinalGuess from "./FinalGuess";
+import EndGame from "./EndGame";
 
 const db = fire.database();
 
@@ -30,7 +31,7 @@ const RopeDude = props => {
   if (loading) return "";
   if (error) return "Error";
   if (!session) return <NotFound />;
-
+  console.log("rope dude session: ", session);
   let players = Object.keys(session.players);
 
   const handleClick = () => {
@@ -50,18 +51,25 @@ const RopeDude = props => {
               return <PlayerInfo key={key} id={key} />;
             })}
           </div>
+          {session.turn === userId && (
+            <div>
+              <GuessLetter userId={userId} code={code} session={session} />
+              <Button variant="danger" onClick={handleClick}>
+                Final Guess
+              </Button>
+              {finalGuess && <FinalGuess session={session} code={code} />}
+            </div>
+          )}
         </div>
       )}
-      {session.turn === userId && (
-        <GuessLetter userId={userId} code={code} session={session} />
+      {session.status === "finished" && (
+        <EndGame
+          players={players}
+          session={session}
+          uid={props.userId}
+          code={code}
+        />
       )}
-      <Button variant="danger" onClick={handleClick}>
-        Final Guess
-      </Button>
-      {finalGuess && <FinalGuess />}
-      {/* {session.status === "finished" && (
-          <EndGame players={players} session={session} uid={props.userId} />
-        )} */}
     </div>
   );
 };

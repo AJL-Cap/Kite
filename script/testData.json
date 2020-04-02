@@ -1,12 +1,12 @@
 {
   "games": {
     "1": {
-      "Title": "never have i ever",
+      "title": "never have i ever",
       "rules":
         "Everyone starts with five kites and inputs something they've never done. If you have done a certain thing, choose I have and you lose one kite. Otherwise, if you haven't done it choose I have not. The first person to run out of kites loses."
     },
     "2": {
-      "Title": "Rope Dude",
+      "title": "Rope Dude",
       "rules":
         "It's hangman! However, in this version you will work together with your teammates to figure out the word by taking turns guessing letters. Just like classic hangman, once you build the whole body you lose."
     }

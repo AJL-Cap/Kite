@@ -7,6 +7,14 @@ const db = fire.database();
 const SingleResponseDisplay = props => {
   const { response, uid, code, currentPoints, roundID, responseID } = props;
   const [answered, setAnswered] = useState(false);
+
+  useEffect(
+    () => {
+      if (responseID === uid) setAnswered(true);
+    },
+    [responseID, uid]
+  );
+
   const handleClick = iHave => {
     if (iHave) {
       subtract20();

@@ -161,7 +161,6 @@ function respondingNHIE(snapshot) {
   });
 }
 
-// need to pass a bunch of things down to checkForZeroPoints and confessTimeout
 function confessingNHIE(sessionSnap) {
   console.log("in confessing");
   // console.log("HELLOOOOO", snapshot.val().players);
@@ -206,18 +205,6 @@ function finished(sessionSnap) {
   }, 20000);
 }
 
-// this is the controller specifically for NHIE
-function switchStatusNHIE(statusSnap, sessionSnap) {
-  const status = statusSnap.val();
-  if (status === "responding") {
-    respondingNHIE(sessionSnap);
-  } else if (status === "confessing") {
-    confessingNHIE(sessionSnap);
-  } else if (status === "finished") {
-    finished(sessionSnap);
-  }
-}
-
 function playingRD(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
 
@@ -247,10 +234,21 @@ function playingRD(snapshot) {
     });
 }
 
+// this is the controller specifically for NHIE
+function switchStatusNHIE(statusSnap, sessionSnap) {
+  const status = statusSnap.val();
+  if (status === "responding") {
+    respondingNHIE(sessionSnap);
+  } else if (status === "confessing") {
+    confessingNHIE(sessionSnap);
+  } else if (status === "finished") {
+    finished(sessionSnap);
+  }
+}
+
 // this is the controller specifically for ropedude
 function switchStatusRD(statusSnap, sessionSnap) {
   const status = statusSnap.val();
-  console.log(status);
   if (status === "playing") {
     playingRD(sessionSnap);
   } else if (status === "finished") {
