@@ -68,6 +68,7 @@
       "gameId": "2",
       "status": "waiting",
       "turn": "UID1",
+      "turnTimeStarted": "",
       "points": 120,
       "targetWord": "CHEESE",
       "letterBank": {

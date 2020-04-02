@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import fire from "../../fire";
 import { useList, useObjectVal } from "react-firebase-hooks/database";
-import Timer from "./Timer";
+import Timer from "../Game/Timer";
 import NotFound from "../NotFound";
 
 const db = fire.database();
@@ -42,7 +42,7 @@ export default function NHIEForm(props) {
 
   return (
     <div>
-      <Timer round={curRound} time={30} />
+      <Timer roundTime={curRound.val().timeStarted} time={30} />
       {submitted ? (
         <div>Your response has been submitted</div>
       ) : (

@@ -1,6 +1,6 @@
 import React from "react";
 import fire from "../../fire";
-import { useObjectVal } from "react-firebase-hooks/database";
+import { useObjectVal, useListVals } from "react-firebase-hooks/database";
 import SessionPlayer from "./SessionPlayers";
 import { Button } from "react-bootstrap";
 import NotFound from "../NotFound";
@@ -18,9 +18,12 @@ const WaitingRoom = props => {
   const [game, gameLoading, gameErr] = useObjectVal(db.ref(`games/${gameId}`));
   const gameSession = db.ref("gameSessions/" + code);
   const [session, loading, error] = useObjectVal(gameSession);
+  const [messages, messageLoading, messageError] = useListVals(
+    db.ref(`lobbyMessages/${props.code}/messages`)
+  );
 
-  if (loading || gameLoading) return "";
-  if (error || gameErr) return "Error";
+  if (loading || gameLoading || messageLoading) return "";
+  if (error || gameErr || messageError) return "Error";
   if (!session)
     return (
       <div>
@@ -94,8 +97,13 @@ const WaitingRoom = props => {
               <div />
             )}
           </div>
-          <div className="row">
-            <Chat code={code} userId={userId} players={players} />
+          <div className="row ">
+            <Chat
+              code={code}
+              userId={userId}
+              players={players}
+              messages={messages}
+            />
           </div>
         </div>
       ) : (

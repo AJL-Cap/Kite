@@ -44,11 +44,10 @@ export default function Form(props) {
   return (
     <div className="m-3">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h2 style={{ marginBottom: "20px" }}>Complete your profile</h2>
-        <label style={{ display: "block" }} htmlFor="nickname">
+        <h2 className="formMain">Complete your profile</h2>
+        <label htmlFor="nickname">
           Nickname{" "}
           <input
-            style={{ marginBottom: "10px" }}
             type="text"
             placeholder="Ex: Game lover"
             name="nickname"
@@ -57,10 +56,9 @@ export default function Form(props) {
         </label>
         {errors.nickname && <p>Must be at least 2 characters long</p>}
 
-        <label style={{ display: "block" }} htmlFor="profilePic">
+        <label htmlFor="profilePic">
           Profile Picture{" "}
           <input
-            style={{ marginBottom: "10px" }}
             type="file"
             placeholder="upload a picture"
             name="profilePic"

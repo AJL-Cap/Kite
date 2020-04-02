@@ -10,16 +10,16 @@ const SentMessage = props => {
   if (loading) return "";
   if (error) return "ERROR";
   return (
-    <div className="row msg_container base_receive">
-      <div className="col-md-2 col-xs-2 avatar">
-        <img src={player.profilePic.secure_url} className=" img-responsive " />
-        <time>{player.nickname}</time>
-      </div>
+    <div className="row msg_container base_sent">
       <div className="col-md-10 col-xs-10">
-        <div className="messages msg_receive">
+        <div className="messages msg_sent">
+          <p className="chat-time float-right">{player.nickname}</p>
           <p>{props.message.content}</p>
         </div>
       </div>
+      {/* <div className="avatar float-right">
+        {player.profilePic && <img src={player.profilePic.secure_url} />}
+      </div> */}
     </div>
   );
 };
