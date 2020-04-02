@@ -212,6 +212,22 @@ function switchStatusNHIE(statusSnap, sessionSnap) {
   }
 }
 
+function playingRopeDude(snapshot) {
+  const players = db.ref(`gameSessions/${snapshot.key}/players`).orderByKey();
+
+  // const x= Object.entries(players.key)
+  console.log("players:", players);
+}
+
+function switchStatusRopeDude(statusSnap, sessionSnap) {
+  const status = statusSnap.val();
+  if (status === "playing") {
+    playingRopeDude(sessionSnap);
+  } else if (status === "finished") {
+    finished(sessionSnap);
+  }
+}
+
 // this is the first function the session child added hits- directs based on gameID- maybe change to switch case
 function newGameSession(sessionSnap) {
   //getting the status for each session
@@ -219,6 +235,11 @@ function newGameSession(sessionSnap) {
   if (sessionSnap.val().gameId === "1") {
     sessionSnap.ref.child("status").on("value", statusSnap => {
       switchStatusNHIE(statusSnap, sessionSnap);
+    });
+  }
+  if (sessionSnap.val().gameId === "2") {
+    sessionSnap.ref.child("status").on("value", statusSnap => {
+      switchStatusRopeDude(statusSnap, sessionSnap);
     });
   }
 }
