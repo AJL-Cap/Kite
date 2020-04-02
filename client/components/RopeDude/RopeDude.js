@@ -10,6 +10,7 @@ import LetterBank from "./LetterBank";
 import HangMan from "./HangMan";
 import { Button } from "react-bootstrap";
 import FinalGuess from "./FinalGuess";
+import EndGame from "./EndGame";
 
 const db = fire.database();
 
@@ -79,13 +80,21 @@ const RopeDude = props => {
                     <Button className="alert-danger" onClick={handleClick}>
                       Final Guess
                     </Button>
-                    {finalGuess && <FinalGuess />}
+                    {finalGuess && <FinalGuess session={session} code={code} />}
                   </div>
                 </div>
               )}
             </div>
           </div>
         </div>
+      )}
+      {session.status === "finished" && (
+        <EndGame
+          players={players}
+          session={session}
+          uid={props.userId}
+          code={code}
+        />
       )}
     </div>
   );
