@@ -59,7 +59,7 @@ const RopeDude = props => {
               })}
             </div>
           </div>
-          <div className="col-10">
+          <div className="col-8">
             <div className="jumbotron text-center">
               <DisplayWord code={code} session={session} />
             </div>

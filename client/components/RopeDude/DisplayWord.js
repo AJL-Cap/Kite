@@ -28,7 +28,9 @@ const DisplayWord = props => {
       <div className="row">
         {display.map((char, idx) => (
           <Letter key={idx}>
-            <div className="alert alert-info col">{char}</div>
+            <div className="alert alert-info col border border-dark">
+              {char}
+            </div>
           </Letter>
         ))}
       </div>

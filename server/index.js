@@ -290,6 +290,7 @@ function switchStatusRD(statusSnap, sessionSnap) {
     playingRD(sessionSnap);
   } else if (status === "finished") {
     finished(sessionSnap);
+    sessionSnap.ref.off();
   }
 }
 
