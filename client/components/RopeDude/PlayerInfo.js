@@ -1,5 +1,9 @@
 import React from "react";
-import { useObjectVal, useListVals } from "react-firebase-hooks/database";
+import {
+  useObjectVal,
+  useListVals,
+  useList
+} from "react-firebase-hooks/database";
 import fire from "../../fire";
 import { Card } from "react-bootstrap";
 
@@ -7,7 +11,7 @@ const db = fire.database();
 const playerRef = db.ref("players");
 
 const PlayerInfo = props => {
-  const { code, id } = props;
+  const { code, id, session } = props;
   const [playerSnapshot, playerLoading, playerError] = useObjectVal(
     playerRef.child(id)
   );
@@ -15,8 +19,12 @@ const PlayerInfo = props => {
     db.ref(`gameSessions/${code}/players/${id}/correctGuesses`)
   );
 
-  if (playerLoading || loading) return "";
-  if (playerError || error) return "Error";
+  const [letterBank, letterLoading, letterEror] = useList(
+    db.ref(`gameSession/${code}/letterBank`)
+  );
+
+  if (playerLoading || loading || letterLoading) return "";
+  if (playerError || error || letterError) return "Error";
 
   //to add: display words they guess correctly
 

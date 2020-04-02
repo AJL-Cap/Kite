@@ -37,8 +37,8 @@ const WaitingRoom = props => {
 
   const handleClick = () => {
     try {
+      //if game is rope dude, generate random word & set it to target word
       if (gameId === "2") {
-        console.log("2");
         const targetWord = generateTargetWord();
         console.log("targetWord", targetWord);
         db.ref(`gameSessions/${code}/targetWord`).set(targetWord);

@@ -6,6 +6,7 @@ const HangMan = props => {
   const { code, session } = props;
   const points = session.points;
 
+  //rendering hangman based on current points
   if (points === 0) {
     return <div> {ASCIIART[0]} </div>;
   } else {

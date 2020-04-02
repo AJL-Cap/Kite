@@ -27,12 +27,6 @@ const RopeDude = props => {
       db.ref(`gameSessions/${code}`).update({
         points: 120
       });
-
-      //setting current turn to host for testing purpose! (I assume admin backend would take care of the turn?)
-      db.ref(`gameSessions/${code}`).update({
-        turn: userId,
-        turnTimeStarted: Date.now()
-      });
     }
   }, []);
 

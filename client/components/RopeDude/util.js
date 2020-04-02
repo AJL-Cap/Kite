@@ -62,11 +62,11 @@ export const generateWordObj = word => {
   word
     .toUpperCase()
     .split("")
-    .forEach((letter, idk) => {
+    .forEach((letter, idx) => {
       if (wordObj[letter]) {
-        wordObj[letter].push(idk);
+        wordObj[letter].push(idx);
       } else {
-        wordObj[letter] = [idk];
+        wordObj[letter] = [idx];
       }
     });
   return wordObj;
