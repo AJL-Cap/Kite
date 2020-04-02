@@ -56,7 +56,15 @@ const RopeDude = props => {
                 <strong>Players: </strong>
               </h2>
               {players.map(key => {
-                return <PlayerInfo key={key} id={key} code={code} />;
+                return (
+                  <PlayerInfo
+                    key={key}
+                    id={key}
+                    code={code}
+                    uid={userId}
+                    session={session}
+                  />
+                );
               })}
             </div>
           </div>

@@ -9,7 +9,7 @@ import { Card } from "react-bootstrap";
 const db = fire.database();
 const playerRef = db.ref("players");
 const PlayerInfo = props => {
-  const { code, id, session } = props;
+  const { code, id, session, uid } = props;
   const [playerSnapshot, playerLoading, playerError] = useObjectVal(
     playerRef.child(id)
   );
@@ -18,7 +18,10 @@ const PlayerInfo = props => {
   );
   if (playerLoading || loading) return "";
   if (playerError || error) return "Error";
-  //to add: display words they guess correctly
+  let turn = "";
+  if (session.turn === uid) {
+    turn = "🤔";
+  }
   return (
     <div>
       <Card
@@ -44,6 +47,7 @@ const PlayerInfo = props => {
               })}
           </Card.Text>
         </Card.Body>
+        {turn}
       </Card>
     </div>
   );
