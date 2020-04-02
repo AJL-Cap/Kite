@@ -7,11 +7,7 @@ const HangMan = props => {
   const points = session.points;
 
   //rendering hangman based on current points
-  if (points === 0) {
-    return <div> {ASCIIART[0]} </div>;
-  } else {
-    return <div> {ASCIIART[points / 20]} </div>;
-  }
+  return <div> {ASCIIART[points / 20]} </div>;
 };
 
 export default HangMan;

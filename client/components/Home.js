@@ -57,6 +57,7 @@ const Main = styled.div`
   background-image: url("https://png.pngtree.com/thumb_back/fw800/back_our/20190619/ourmid/pngtree-spring-kite-psd-layered-background-image_131321.jpg");
   // background: #FFFFA4;
   background-repeat: "no-repeat";
+  background-size: "cover"
   background-attachment: "fixed";
   width: 100%;
   height: 1000px;

@@ -19,7 +19,7 @@ const LetterBank = props => {
     letter => !targetWord.includes(letter)
   );
 
-  return <div>Wrong Guesses: {wrongGuesses}</div>;
+  return <h3 className="text-center">Wrong Guesses: {wrongGuesses}</h3>;
 };
 
 export default LetterBank;

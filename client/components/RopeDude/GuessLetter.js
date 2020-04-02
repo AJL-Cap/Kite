@@ -27,14 +27,18 @@ const GuessLetter = props => {
   );
 
   const onSubmit = data => {
-    console.log(data);
-    const letter = data.guessLetter.toUpperCase();
+    let letter = data.guessLetter.toUpperCase();
     //updating letterbank in db
     db.ref(`gameSessions/${code}/letterBank/${letter}`).set(userId);
 
     //when wrong guess is submitted, deduct 20 points
     if (!targetWord.includes(letter)) {
       db.ref(`gameSessions/${code}`).update({ points: session.points - 20 });
+    }
+    if (targetWord.includes(letter)) {
+      db
+        .ref(`gameSessions/${code}/players/${userId}/correctGuesses`)
+        .push(letter);
     }
   };
 
