@@ -59,7 +59,7 @@ const RopeDude = props => {
               })}
             </div>
           </div>
-          <div className="col-6">
+          <div className="col-10">
             <div className="jumbotron text-center">
               <DisplayWord code={code} session={session} />
             </div>
@@ -68,7 +68,7 @@ const RopeDude = props => {
             <br />
             <div className="row">
               {session.turn === userId && (
-                <div className="card" style={{ width: "50rem" }}>
+                <div className="card" style={{ width: "100rem" }}>
                   <div className="card-body">
                     <h5 className="card-title">Submit a guess!</h5>
                     <div className="card-subtitle mb-2 text-muted" />
@@ -86,15 +86,6 @@ const RopeDude = props => {
               )}
             </div>
           </div>
-          {session.turn === userId && (
-            <div>
-              <GuessLetter userId={userId} code={code} session={session} />
-              <Button variant="danger" onClick={handleClick}>
-                Final Guess
-              </Button>
-              {finalGuess && <FinalGuess session={session} code={code} />}
-            </div>
-          )}
         </div>
       )}
       {session.status === "finished" && (
