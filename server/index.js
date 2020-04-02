@@ -233,23 +233,23 @@ function playingRD(snapshot) {
           turnTimeStarted: Date.now()
         });
         //ADD: timeout
+
+        //if letter bank has all the letters for target word, change game status to finished
+        sessionRef.child("letterBank").on("value", letterSnapshot => {
+          let letterBank = [];
+          if (letterSnapshot.val()) {
+            letterBank = Object.keys(letterSnapshot.val());
+          }
+          sessionRef.child("targetWord").on("value", wordSnapshot => {
+            const targetWord = wordSnapshot.val();
+            console.log(targetWord);
+            if (gameOverRD(letterBank, targetWord)) {
+              sessionRef.update({ status: "finished" });
+            }
+          });
+        });
       });
     });
-
-  //if letter bank has all the letters for target word, change game status to finished
-  sessionRef.child("letterBank").on("value", letterSnapshot => {
-    let letterBank = [];
-    if (letterSnapshot.val()) {
-      letterBank = Object.keys(letterSnapshot.val());
-    }
-    sessionRef.child("targetWord").on("value", wordSnapshot => {
-      const targetWord = wordSnapshot.val();
-      console.log(targetWord);
-      if (gameOverRD(letterBank, targetWord)) {
-        sessionRef.update({ status: "finished" });
-      }
-    });
-  });
 }
 
 function gameOverRD(letterBankArr, target) {
