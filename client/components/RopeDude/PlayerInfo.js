@@ -19,12 +19,8 @@ const PlayerInfo = props => {
     db.ref(`gameSessions/${code}/players/${id}/correctGuesses`)
   );
 
-  const [letterBank, letterLoading, letterEror] = useList(
-    db.ref(`gameSession/${code}/letterBank`)
-  );
-
-  if (playerLoading || loading || letterLoading) return "";
-  if (playerError || error || letterError) return "Error";
+  if (playerLoading || loading) return "";
+  if (playerError || error) return "Error";
 
   //to add: display words they guess correctly
 

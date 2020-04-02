@@ -28,9 +28,6 @@ const FinalGuess = props => {
           ref={register({ required: true })}
         />
         <Button className="alert-danger" type="submit">
-          {errors.wordGuess && (
-            <span className="alert-warning">code must be 4 letters long</span>
-          )}
           Submit Final Guess
         </Button>
       </form>
