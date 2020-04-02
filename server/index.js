@@ -220,18 +220,44 @@ function playingRD(snapshot) {
         turn: players[0],
         turnTimeStarted: Date.now()
       });
+      //ADD: timeout
+
       //when a new letter is submitted, change turn to next player:
       sessionRef.child("letterBank").on("child_added", letterSnapshot => {
         console.log("letter added?:", letterSnapshot.key);
         turnCounter += 1;
-        //modulo ensures we loop the player array repeatedly
+        //this modulo ensures we loop the player array repeatedly:
         let currentPlayerIdx = turnCounter % players.length;
         sessionRef.update({
           turn: players[currentPlayerIdx],
           turnTimeStarted: Date.now()
         });
+        //ADD: timeout
       });
     });
+
+  //if letter bank has all the letters for target word, change game status to finished
+  sessionRef.child("letterBank").on("value", letterSnapshot => {
+    const letterBank = Object.keys(letterSnapshot.val());
+    sessionRef.child("targetWord").on("value", wordSnapshot => {
+      const targetWord = wordSnapshot.val();
+      if (gameOverRD(letterBank, targetWord)) {
+        sessionRef.update({ status: "finished" });
+      }
+    });
+  });
+}
+
+function gameOverRD(letterBankArr, target) {
+  let done = true;
+
+  for (let i = 0; i < target.length; i++) {
+    let letter = target[i];
+    if (!letterBankArr.includes(letter)) {
+      done = false;
+    }
+  }
+  return done;
 }
 
 // this is the controller specifically for NHIE
