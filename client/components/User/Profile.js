@@ -41,7 +41,7 @@ export default function Profile({ userId }) {
               </h3>
               <h3 className="card-text">
                 Winning percentage:{" "}
-                {player.wins / player.totalGamesPlayed * 100}%
+                {Math.round(player.wins / player.totalGamesPlayed * 100)}%
               </h3>
             </div>
           </div>

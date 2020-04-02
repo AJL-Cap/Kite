@@ -207,49 +207,54 @@ function finished(sessionSnap) {
 
 function playingRD(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
+  const playerRef = sessionRef.child("players");
 
-  sessionRef
-    .child("players")
-    .orderByKey()
-    .on("value", playerSnapshot => {
-      console.log("playerRef on value triggered");
-      const players = Object.keys(playerSnapshot.val());
-      let turnCounter = 0;
-      //setting turn to first player in array
+  sessionRef.child("points").on("value", pointSnapshot => {
+    if (pointSnapshot.val() === 0) sessionRef.update({ status: "finished" });
+    sessionRef.off();
+    playerRef.off();
+  });
+
+  playerRef.orderByKey().on("value", playerSnapshot => {
+    console.log("playerRef on value triggered");
+    const players = Object.keys(playerSnapshot.val());
+    let turnCounter = 0;
+    //setting turn to first player in array
+    sessionRef.update({
+      turn: players[0],
+      turnTimeStarted: Date.now()
+    });
+    //ADD: timeout
+
+    //when a new letter is submitted, change turn to next player:
+    sessionRef.child("letterBank").on("child_added", letterSnapshot => {
+      console.log("letter added?:", letterSnapshot.key);
+      turnCounter += 1;
+      //this modulo ensures we loop the player array repeatedly:
+      let currentPlayerIdx = turnCounter % players.length;
       sessionRef.update({
-        turn: players[0],
+        turn: players[currentPlayerIdx],
         turnTimeStarted: Date.now()
       });
       //ADD: timeout
 
-      //when a new letter is submitted, change turn to next player:
-      sessionRef.child("letterBank").on("child_added", letterSnapshot => {
-        console.log("letter added?:", letterSnapshot.key);
-        turnCounter += 1;
-        //this modulo ensures we loop the player array repeatedly:
-        let currentPlayerIdx = turnCounter % players.length;
-        sessionRef.update({
-          turn: players[currentPlayerIdx],
-          turnTimeStarted: Date.now()
-        });
-        //ADD: timeout
-
-        //if letter bank has all the letters for target word, change game status to finished
-        sessionRef.child("letterBank").on("value", letterSnapshot => {
-          let letterBank = [];
-          if (letterSnapshot.val()) {
-            letterBank = Object.keys(letterSnapshot.val());
+      //if letter bank has all the letters for target word, change game status to finished
+      sessionRef.child("letterBank").on("value", letterSnapshot => {
+        let letterBank = [];
+        if (letterSnapshot.val()) {
+          letterBank = Object.keys(letterSnapshot.val());
+        }
+        sessionRef.child("targetWord").on("value", wordSnapshot => {
+          const targetWord = wordSnapshot.val();
+          console.log(targetWord);
+          if (gameOverRD(letterBank, targetWord)) {
+            sessionRef.update({ status: "finished" });
+            playerRef.off();
           }
-          sessionRef.child("targetWord").on("value", wordSnapshot => {
-            const targetWord = wordSnapshot.val();
-            console.log(targetWord);
-            if (gameOverRD(letterBank, targetWord)) {
-              sessionRef.update({ status: "finished" });
-            }
-          });
         });
       });
     });
+  });
 }
 
 function gameOverRD(letterBankArr, target) {
@@ -283,6 +288,7 @@ function switchStatusRD(statusSnap, sessionSnap) {
     playingRD(sessionSnap);
   } else if (status === "finished") {
     finished(sessionSnap);
+    sessionSnap.ref.off();
   }
 }
 
