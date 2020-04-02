@@ -30,9 +30,9 @@ const EndGame = props => {
   return (
     <div className="container mt-3">
       <div>
-        <h1>the word was: {targetWord}</h1>
+        <h1>The word was: {targetWord}</h1>
         <h2>
-          you got it{" "}
+          You got it{" "}
           {points
             ? "right! good job."
             : `WRONG. You had ${
