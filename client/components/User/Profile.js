@@ -13,6 +13,7 @@ export default function Profile({ userId }) {
   if (err) {
     return <div>error!</div>;
   }
+  let winPercentage = Math.round(player.wins / player.totalGamesPlayed * 100);
   if (player) {
     return (
       <div>
@@ -39,10 +40,14 @@ export default function Profile({ userId }) {
               <h3 className="card-text">
                 Total Games Played: {player.totalGamesPlayed}
               </h3>
-              <h3 className="card-text">
-                Winning percentage:{" "}
-                {Math.round(player.wins / player.totalGamesPlayed * 100)}%
-              </h3>
+              {winPercentage ? (
+                <h3 className="card-text">
+                  Winning percentage:
+                  {winPercentage}%
+                </h3>
+              ) : (
+                <h3>Winning percentage: 0</h3>
+              )}
             </div>
           </div>
         </div>

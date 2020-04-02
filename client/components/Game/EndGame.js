@@ -9,6 +9,7 @@ const db = fire.database();
 const EndGame = props => {
   const { players } = props.session;
   const { uid } = props;
+  console.log("endgame players", players);
   const [playerSnap, loading, error] = useObject(db.ref(`players/${uid}`));
   const [messages, messageLoading, messageError] = useListVals(
     db.ref(`lobbyMessages/${props.code}/messages`)
@@ -39,6 +40,7 @@ const EndGame = props => {
       winners.push(playerKey);
     }
   });
+  let playerKeys = Object.keys(players);
   //console.log("winners", winners, "losers", losers);
   return (
     <div className="container mt-3">
@@ -72,6 +74,8 @@ const EndGame = props => {
         <UpdateFinalPoints
           updatePointsObj={updatePointsObj}
           playerSnapRef={playerSnap.ref}
+          players={playerKeys}
+          userId={uid}
         />
       )}
       <Chat

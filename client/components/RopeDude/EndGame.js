@@ -12,7 +12,6 @@ const EndGame = props => {
   const [messages, messageLoading, messageError] = useListVals(
     db.ref(`lobbyMessages/${props.code}/messages`)
   );
-
   if (loading || messageLoading) return "";
   if (error || messageError) return "Error";
 
@@ -37,13 +36,15 @@ const EndGame = props => {
             ? "right! good job."
             : `WRONG. You had ${
                 players.length
-              } brains and you still couldn't figure it out.`}{" "}
+              } brains and you still couldn't figure it out.`}
         </h2>
       </div>
       {playerSnap.ref && (
         <UpdateFinalPoints
           updatePointsObj={updatePointsObj}
           playerSnapRef={playerSnap.ref}
+          players={players}
+          userId={uid}
         />
       )}
       <Chat code={code} userId={uid} players={players} messages={messages} />
