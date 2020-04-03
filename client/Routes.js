@@ -12,7 +12,8 @@ import {
   ActiveGame,
   NotFound,
   Loading,
-  Form
+  Form,
+  FriendProfile
 } from "./components";
 
 export default function Routes() {
@@ -42,6 +43,7 @@ export default function Routes() {
             render={props => <ActiveGame userId={user.uid} {...props} />}
           />
           <Route path="/players" component={Players} />
+          <Route path="/profile/:uid" component={FriendProfile} />
           <Route
             path="/profile"
             render={props => <Profile userId={user.uid} {...props} />}

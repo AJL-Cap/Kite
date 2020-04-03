@@ -14,10 +14,15 @@ const SingleRecent = props => {
   if (err) {
     return <div>error!</div>;
   }
+  console.log(player);
   return (
     <div className="border border-dark m-2 bg-light">
       <h4 className="card-subtitle m-2">{recentPlayer.nickname}</h4>
-      <button type="button" onClick={profileClick} className="alert-danger m-2">
+      <button
+        type="button"
+        onClick={() => profileClick(player)}
+        className="alert-danger m-2"
+      >
         Player Profile
       </button>
       <button type="button" onClick={gameClick} className="alert-danger m-2">

@@ -10,6 +10,7 @@ import Loading from "./Loading";
 import NHIE from "./NHIE/NHIE";
 import ActiveGame from "./Game/ActiveGame";
 import Form from "./User/Form";
+import FriendProfile from "./User/FriendProfile";
 
 export {
   Home,
@@ -23,5 +24,6 @@ export {
   Loading,
   NHIE,
   ActiveGame,
-  Form
+  Form,
+  FriendProfile
 };

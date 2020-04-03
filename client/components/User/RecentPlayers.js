@@ -1,17 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 
 import SingleRecent from "./SingleRecent";
+import { useHistory } from "react-router-dom";
 
 const RecentPlayers = props => {
   const { recents } = props;
+  const history = useHistory();
+
   let recentPlayers = Object.values(recents);
 
-  const profileClick = () => {
+  const profileClick = player => {
     console.log("take to player profile");
+    history.push(`profile/${player}`);
   };
+
   const gameClick = () => {
     console.log("invite to a game");
   };
+
   return (
     <>
       <div
