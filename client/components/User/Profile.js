@@ -19,19 +19,14 @@ export default function Profile(props) {
   if (player) {
     return (
       <div>
-        <div className="jumbotron text-center alert-dark">
-          <h1>
-            <strong>Welcome to Your Profile {player.nickname}</strong>
-          </h1>
-        </div>
-        <div className="col mb-4 align-self-center">
+        <div className="column m-5">
           <Stats player={player} />
-          {player.recentPlayers && (
-            <div className="column m-5">
-              <RecentPlayers recents={player.recentPlayers} />
-            </div>
-          )}
         </div>
+        {player.recentPlayers && (
+          <div className="column m-5">
+            <RecentPlayers recents={player.recentPlayers} />
+          </div>
+        )}
       </div>
     );
   }
