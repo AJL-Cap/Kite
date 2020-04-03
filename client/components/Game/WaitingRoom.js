@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import fire from "../../fire";
 import { useObjectVal, useListVals } from "react-firebase-hooks/database";
 import SessionPlayer from "./SessionPlayers";
@@ -8,6 +8,7 @@ import axios from "axios";
 import { useHistory } from "react-router";
 import Chat from "./Chat";
 import { generateTargetWord } from "../RopeDude/util";
+import ViewRP from "./ViewRP";
 
 const db = fire.database();
 
@@ -22,6 +23,7 @@ const WaitingRoom = props => {
   const [messages, messageLoading, messageError] = useListVals(
     db.ref(`lobbyMessages/${props.code}/messages`)
   );
+  const [toggle, setToggle] = useState(false);
 
   if (loading || gameLoading || messageLoading) return "";
   if (error || gameErr || messageError) return "Error";
@@ -112,6 +114,10 @@ const WaitingRoom = props => {
               <div />
             )}
           </div>
+          <button type="button" onClick={() => setToggle(!toggle)}>
+            View Recent Players
+          </button>
+          {toggle && <ViewRP uid={userId} />}
           <div className="row ">
             <Chat
               code={code}
