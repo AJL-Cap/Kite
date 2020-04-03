@@ -45,7 +45,7 @@ const PlayerInfo = props => {
               })}
           </Card.Text>
         </Card.Body>
-        {!end && session.turn === id && <div>:thinking_face:</div>}
+        {!end && session.turn === id && <div>🤔</div>}
       </Card>
     </div>
   );

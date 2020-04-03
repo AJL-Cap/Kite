@@ -202,12 +202,30 @@ function finished(sessionSnap) {
   setTimeout(function() {
     endGame(refToDelete);
     endGame(chatToDelete);
-  }, 60000);
+  }, 30000);
 }
 
 function playingRD(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
   let players;
+  sessionRef
+    .child("players")
+    .orderByKey()
+    .on("value", playerSnapshot => {
+      if (playerSnapshot.val() !== null) {
+        players = Object.keys(playerSnapshot.val());
+
+        //setting turn to first player in array
+        sessionRef.update({
+          turn: players[0],
+          turnTimeStarted: Date.now()
+        });
+      } else {
+        playerSnapshot.ref.off();
+      }
+    });
+
+  let turnTimeout;
   let turnCounter = 0;
   let missedTurns = 0;
   sessionRef
@@ -221,14 +239,13 @@ function playingRD(snapshot) {
         turnTimeStarted: Date.now()
       });
     });
-  let turnTimeout;
   sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
     if (turnTimeout) clearTimeout(turnTimeout);
     sessionRef.update({ status: "finished" });
   });
   sessionRef.child("turn").on("value", turnSnap => {
     console.log("inside turn value, what's going on??? ", turnSnap.val());
-    if (turnSnap.val() == null) sessionRef.child("turn").off();
+    if (turnSnap.val() === null) sessionRef.child("turn").off();
     turnTimeout = setTimeout(function() {
       let status;
       db.ref(`gameSessions/${snapshot.key}/status`).once("value", statSnap => {
@@ -339,10 +356,12 @@ function newGameSession(sessionSnap) {
   // swtich on snapshot.val().gameID
   if (sessionSnap.val().gameId === "1") {
     sessionSnap.ref.child("status").on("value", statusSnap => {
+      console.log("status:", statusSnap.val());
       switchStatusNHIE(statusSnap, sessionSnap);
     });
   } else if (sessionSnap.val().gameId === "2") {
     sessionSnap.ref.child("status").on("value", statusSnap => {
+      console.log("status:", statusSnap.val());
       switchStatusRD(statusSnap, sessionSnap);
     });
   }

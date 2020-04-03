@@ -41,7 +41,7 @@ const RopeDude = props => {
     console.log("clicked");
     setFinalGuess(!finalGuess);
   };
-  console.log("session", session);
+
   return (
     <div className="container-xl mx-5">
       {session.status === "playing" && (
