@@ -202,7 +202,7 @@ function finished(sessionSnap) {
   setTimeout(function() {
     endGame(refToDelete);
     endGame(chatToDelete);
-  }, 10000);
+  }, 60000);
 }
 
 function playingRD(snapshot) {
@@ -252,12 +252,14 @@ function playingRD(snapshot) {
         endGame(sessionRef);
         endGame(chatToDelete);
       }
-    }, 10000);
+    }, 30000);
   });
 
   sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
-    if (turnTimeout) clearTimeout(turnTimeout);
-    sessionRef.child("turn").off();
+    if (finalGuessSnap.val()) {
+      if (turnTimeout) clearTimeout(turnTimeout);
+      sessionRef.child("turn").off();
+    }
   });
   //when a new letter is submitted, change turn to next player:
 
