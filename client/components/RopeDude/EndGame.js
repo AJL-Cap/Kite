@@ -1,8 +1,10 @@
+/* eslint-disable complexity */
 import React from "react";
 import { useObject, useListVals } from "react-firebase-hooks/database";
 import fire from "../../fire";
 import Chat from "../Game/Chat";
 import UpdateFinalPoints from "./UpdateFinalPoints";
+import PlayerInfo from "./PlayerInfo";
 const db = fire.database();
 
 const EndGame = props => {
@@ -30,9 +32,9 @@ const EndGame = props => {
   return (
     <div className="container mt-3">
       <div>
-        <h1>the word was: {targetWord}</h1>
+        <h1>The word was: {targetWord}</h1>
         <h2>
-          you got it{" "}
+          You got it{" "}
           {points
             ? "right! good job."
             : `WRONG. You had ${
@@ -45,6 +47,15 @@ const EndGame = props => {
           updatePointsObj={updatePointsObj}
           playerSnapRef={playerSnap.ref}
         />
+      )}
+      {players.map(key => {
+        return <PlayerInfo key={key} id={key} code={code} />;
+      })}
+      {session.finalGuess && (
+        <div>
+          Final guess was: {Object.values(session.finalGuess)[0]} by{" "}
+          {Object.keys(session.finalGuess)[0]}
+        </div>
       )}
       <Chat code={code} userId={uid} players={players} messages={messages} />
     </div>

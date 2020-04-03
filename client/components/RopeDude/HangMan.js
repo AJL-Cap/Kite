@@ -1,5 +1,5 @@
 import React from "react";
-import fire from "../../fire";
+import images from "../../images/images";
 import ASCIIART from "./ASCIIART";
 
 const HangMan = props => {
@@ -7,7 +7,8 @@ const HangMan = props => {
   const points = session.points;
 
   //rendering hangman based on current points
-  return <div> {ASCIIART[points / 20]} </div>;
+  // return <div>{ASCIIART[points /20]}</div>
+  return <img src={images[points / 20]} />;
 };
 
 export default HangMan;

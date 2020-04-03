@@ -202,7 +202,7 @@ function finished(sessionSnap) {
   setTimeout(function() {
     endGame(refToDelete);
     endGame(chatToDelete);
-  }, 200000);
+  }, 60000);
 }
 
 function playingRD(snapshot) {
@@ -317,6 +317,7 @@ function switchStatusRD(statusSnap, sessionSnap) {
     playingRD(sessionSnap);
   } else if (status === "finished") {
     finished(sessionSnap);
+    sessionSnap.ref.off();
   }
 }
 
