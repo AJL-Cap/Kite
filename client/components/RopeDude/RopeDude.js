@@ -61,7 +61,6 @@ const RopeDude = props => {
                     key={key}
                     id={key}
                     code={code}
-                    uid={userId}
                     session={session}
                   />
                 );

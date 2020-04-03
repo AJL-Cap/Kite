@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   useObjectVal,
   useListVals,
@@ -6,22 +6,22 @@ import {
 } from "react-firebase-hooks/database";
 import fire from "../../fire";
 import { Card } from "react-bootstrap";
+
 const db = fire.database();
 const playerRef = db.ref("players");
+
 const PlayerInfo = props => {
-  const { code, id, session, uid } = props;
+  const { code, id, session } = props;
   const [playerSnapshot, playerLoading, playerError] = useObjectVal(
     playerRef.child(id)
   );
   const [correctGuesses, loading, error] = useListVals(
     db.ref(`gameSessions/${code}/players/${id}/correctGuesses`)
   );
+
   if (playerLoading || loading) return "";
   if (playerError || error) return "Error";
-  let turn = "";
-  if (session.turn === uid) {
-    turn = "🤔";
-  }
+
   return (
     <div>
       <Card
@@ -47,7 +47,7 @@ const PlayerInfo = props => {
               })}
           </Card.Text>
         </Card.Body>
-        {turn}
+        {session.turn === id && <div>🤔</div>}
       </Card>
     </div>
   );
