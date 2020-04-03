@@ -209,7 +209,11 @@ function playingRD(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
   sessionRef.child("points").on("value", pointSnapshot => {
     console.log("inside pointSnapshot");
-    if (pointSnapshot.val() === 0) sessionRef.update({ status: "finished" });
+    if (pointSnapshot.val() === 0) {
+      sessionRef.child("turn").off();
+      sessionRef.child("points").off();
+      sessionRef.update({ status: "finished" });
+    }
   });
   let players;
   sessionRef
