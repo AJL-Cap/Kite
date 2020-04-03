@@ -202,7 +202,7 @@ function finished(sessionSnap) {
   setTimeout(function() {
     endGame(refToDelete);
     endGame(chatToDelete);
-  }, 60000);
+  }, 10000);
 }
 
 function playingRD(snapshot) {
@@ -211,17 +211,33 @@ function playingRD(snapshot) {
     console.log("inside pointSnapshot");
     if (pointSnapshot.val() === 0) sessionRef.update({ status: "finished" });
   });
-  let missedTurns;
-  let turnTimeout;
   let players;
+  sessionRef
+    .child("players")
+    .orderByKey()
+    .once("value", playerSnapshot => {
+      console.log("inside playerSnapshot");
+
+      players = Object.keys(playerSnapshot.val());
+      //setting turn to first player in array
+      sessionRef.update({
+        turn: players[0],
+        turnTimeStarted: Date.now()
+      });
+    });
+  let missedTurns = 0;
+  let turnTimeout;
+
   let turnCounter = 0;
   sessionRef.child("turn").on("value", turnSnap => {
+    console.log("PLAYERLENGTH", players);
     console.log("inside turn value, what's going on??? ", turnSnap.val());
     if (turnSnap.val() == null) sessionRef.child("turn").off();
     turnTimeout = setTimeout(function() {
       console.log("inside timeout");
       missedTurns += 1;
-      if (missedTurns <= players.length) {
+      console.log("MISSED TURNS", missedTurns);
+      if (missedTurns <= players.length - 1) {
         turnCounter += 1;
         //this modulo ensures we loop the player array repeatedly:
         let currentPlayerIdx = turnCounter % players.length;
@@ -231,62 +247,52 @@ function playingRD(snapshot) {
         });
       } else {
         const chatToDelete = "lobbyMessages/" + snapshot.key;
+        sessionRef.child("turn").off();
+        sessionRef.child("points").off();
         endGame(sessionRef);
         endGame(chatToDelete);
       }
-    }, 30000);
+    }, 10000);
   });
-  sessionRef
-    .child("players")
-    .orderByKey()
-    .on("value", playerSnapshot => {
-      console.log("inside playerSnapshot");
-      if (playerSnapshot.val() != null) {
-        players = Object.keys(playerSnapshot.val());
-        //setting turn to first player in array
-        sessionRef.update({
-          turn: players[0],
-          turnTimeStarted: Date.now()
-        });
-        // sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
-        //   if (turnTimeout) clearTimeout(turnTimeout);
-        // });
-        //when a new letter is submitted, change turn to next player:
-        sessionRef.child("letterBank").on("child_added", letterSnapshot => {
-          console.log("letter added?:", letterSnapshot.key);
-          if (turnTimeout) {
-            clearTimeout(turnTimeout);
-            missedTurns = 0;
-          }
-          turnCounter += 1;
-          //this modulo ensures we loop the player array repeatedly:
-          let currentPlayerIdx = turnCounter % players.length;
-          sessionRef.update({
-            turn: players[currentPlayerIdx],
-            turnTimeStarted: Date.now()
-          });
-          //ADD: timeout
 
-          //if letter bank has all the letters for target word, change game status to finished
-          sessionRef.child("letterBank").on("value", letterSnapshot => {
-            let letterBank = [];
-            if (letterSnapshot.val()) {
-              letterBank = Object.keys(letterSnapshot.val());
-            }
-            sessionRef.child("targetWord").on("value", wordSnapshot => {
-              if (wordSnapshot.val() != null) {
-                const targetWord = wordSnapshot.val();
-                if (gameOverRD(letterBank, targetWord)) {
-                  sessionRef.update({ status: "finished" });
-                } else wordSnapshot.ref.off();
-              }
-            });
-          });
-        });
-      } else {
-        playerSnapshot.ref.off();
+  sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
+    if (turnTimeout) clearTimeout(turnTimeout);
+    sessionRef.child("turn").off();
+  });
+  //when a new letter is submitted, change turn to next player:
+
+  sessionRef.child("letterBank").on("value", bankSnapshot => {
+    let letterBank;
+    let targetWord;
+    if (bankSnapshot.val()) {
+      letterBank = Object.keys(bankSnapshot.val());
+
+      console.log("bank snapshot:", bankSnapshot.val());
+      clearTimeout(turnTimeout);
+      missedTurns = 0;
+      turnCounter += 1;
+      //this modulo ensures we loop the player array repeatedly:
+      let currentPlayerIdx = turnCounter % players.length;
+      sessionRef.update({
+        turn: players[currentPlayerIdx],
+        turnTimeStarted: Date.now()
+      });
+      //ADD: timeout
+
+      //if letter bank has all the letters for target word, change game status to finished
+      sessionRef.child("targetWord").once("value", wordSnapshot => {
+        if (wordSnapshot.val() != null) {
+          targetWord = wordSnapshot.val();
+        }
+      });
+      if (gameOverRD(letterBank, targetWord)) {
+        sessionRef.child("turn").off();
+        sessionRef.child("points").off();
+        clearTimeout(turnTimeout);
+        sessionRef.update({ status: "finished" });
       }
-    });
+    }
+  });
 }
 
 function gameOverRD(letterBankArr, target) {
@@ -309,6 +315,7 @@ function switchStatusNHIE(statusSnap, sessionSnap) {
   } else if (status === "confessing") {
     confessingNHIE(sessionSnap);
   } else if (status === "finished") {
+    sessionSnap.ref.off();
     finished(sessionSnap);
   }
 }
