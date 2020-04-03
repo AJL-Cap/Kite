@@ -22,11 +22,13 @@ export default function Profile(props) {
         <div className="column m-5">
           <Stats player={player} />
         </div>
-        {player.recentPlayers && (
-          <div className="column m-5">
-            <RecentPlayers recents={player.recentPlayers} />
-          </div>
-        )}
+        <div className="col mb-4 align-self-center">
+          {player.recentPlayers && (
+            <div className="column m-5">
+              <RecentPlayers recents={player.recentPlayers} />
+            </div>
+          )}
+        </div>
       </div>
     );
   }

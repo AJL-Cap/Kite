@@ -7,9 +7,7 @@ const app = express();
 const admin = require("firebase-admin");
 const serviceAccount = require("../admin.json");
 const { databaseURL } = require("../secrets");
-
 module.exports = app;
-
 /**
  * In your development environment, you can keep all of your
  * app's secret API keys in a file called `secrets.js`, in your project
@@ -19,23 +17,17 @@ module.exports = app;
  * Node process on process.env
  */
 if (process.env.NODE_ENV !== "production") require("../secrets");
-
 const createApp = () => {
   // logging middleware
   app.use(morgan("dev"));
-
   // body parsing middleware
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-
   // compression middleware
   app.use(compression());
-
   app.use("/api", require("./api"));
-
   // static file-serving middleware
   app.use(express.static(path.join(__dirname, "..", "public")));
-
   // any remaining requests with an extension (.js, .css, etc.) send 404
   app.use((req, res, next) => {
     if (path.extname(req.path).length) {
@@ -46,12 +38,10 @@ const createApp = () => {
       next();
     }
   });
-
   // sends index.html
   app.use("*", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "public/index.html"));
   });
-
   // error handling endware
   app.use((err, req, res, next) => {
     console.error(err);
@@ -59,34 +49,27 @@ const createApp = () => {
     res.status(err.status || 500).send(err.message || "Internal server error.");
   });
 };
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: databaseURL
 });
-
 const startListening = () => {
   // start listening (and create a 'server' object representing our server)
   const server = app.listen(PORT, () =>
     console.log(`Mixing it up on port ${PORT}`)
   );
 };
-
 //start of game controller
-
 const db = admin.database();
-
 function endRound(ref, updateRef, status) {
   if (ref) {
     ref.off();
   }
   db.ref(updateRef).set(status);
 }
-
 function endGame(deleteRef) {
   db.ref(deleteRef).remove();
 }
-
 function respondingNHIE(snapshot) {
   db.ref(`gameSessions/${snapshot.key}/rounds`).push({
     timeStarted: Date.now()
@@ -100,7 +83,6 @@ function respondingNHIE(snapshot) {
     .then(playerSnapshot => {
       totalPlayers = playerSnapshot.numChildren();
     });
-
   //getting the rounds object limited to the last round
   snapshot.ref.child("rounds").on("child_added", roundSnapshot => {
     const rounds = roundSnapshot.val();
@@ -160,7 +142,6 @@ function respondingNHIE(snapshot) {
     }
   });
 }
-
 function confessingNHIE(sessionSnap) {
   console.log("in confessing");
   // console.log("HELLOOOOO", snapshot.val().players);
@@ -168,7 +149,6 @@ function confessingNHIE(sessionSnap) {
   // console.log("refToChange:", refToChange);
   let isGameOver = false;
   let ref = sessionSnap.ref.child("players");
-
   //checking gameover when confessing time is up
   const roundTimeout = setTimeout(function() {
     if (isGameOver) {
@@ -192,7 +172,6 @@ function confessingNHIE(sessionSnap) {
   });
   //ending the game right away if at least one player reaches 0 points
 }
-
 // reusable in other games
 function finished(sessionSnap) {
   console.log("in finished");
@@ -202,9 +181,8 @@ function finished(sessionSnap) {
   setTimeout(function() {
     endGame(refToDelete);
     endGame(chatToDelete);
-  }, 30000);
+  }, 60000);
 }
-
 function playingRD(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
   sessionRef.child("points").on("value", pointSnapshot => {
@@ -221,7 +199,6 @@ function playingRD(snapshot) {
     .orderByKey()
     .once("value", playerSnapshot => {
       console.log("inside playerSnapshot");
-
       players = Object.keys(playerSnapshot.val());
       //setting turn to first player in array
       sessionRef.update({
@@ -231,7 +208,6 @@ function playingRD(snapshot) {
     });
   let missedTurns = 0;
   let turnTimeout;
-
   let turnCounter = 0;
   sessionRef.child("turn").on("value", turnSnap => {
     console.log("PLAYERLENGTH", players);
@@ -258,7 +234,6 @@ function playingRD(snapshot) {
       }
     }, 30000);
   });
-
   sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
     if (finalGuessSnap.val()) {
       if (turnTimeout) clearTimeout(turnTimeout);
@@ -266,13 +241,11 @@ function playingRD(snapshot) {
     }
   });
   //when a new letter is submitted, change turn to next player:
-
   sessionRef.child("letterBank").on("value", bankSnapshot => {
     let letterBank;
     let targetWord;
     if (bankSnapshot.val()) {
       letterBank = Object.keys(bankSnapshot.val());
-
       console.log("bank snapshot:", bankSnapshot.val());
       clearTimeout(turnTimeout);
       missedTurns = 0;
@@ -284,7 +257,6 @@ function playingRD(snapshot) {
         turnTimeStarted: Date.now()
       });
       //ADD: timeout
-
       //if letter bank has all the letters for target word, change game status to finished
       sessionRef.child("targetWord").once("value", wordSnapshot => {
         if (wordSnapshot.val() != null) {
@@ -311,7 +283,6 @@ function gameOverRD(letterBankArr, target) {
   }
   return done;
 }
-
 // this is the controller specifically for NHIE
 function switchStatusNHIE(statusSnap, sessionSnap) {
   const status = statusSnap.val();
@@ -324,38 +295,32 @@ function switchStatusNHIE(statusSnap, sessionSnap) {
     finished(sessionSnap);
   }
 }
-
 // this is the controller specifically for ropedude
 function switchStatusRD(statusSnap, sessionSnap) {
   const status = statusSnap.val();
   if (status === "playing") {
     playingRD(sessionSnap);
   } else if (status === "finished") {
-    finishedRD(sessionSnap);
+    finished(sessionSnap);
+    sessionSnap.ref.off();
   }
 }
-
 // this is the first function the session child added hits- directs based on gameID
 function newGameSession(sessionSnap) {
   //getting the status for each session
   // swtich on snapshot.val().gameID
   if (sessionSnap.val().gameId === "1") {
     sessionSnap.ref.child("status").on("value", statusSnap => {
-      console.log("status:", statusSnap.val());
       switchStatusNHIE(statusSnap, sessionSnap);
     });
   } else if (sessionSnap.val().gameId === "2") {
     sessionSnap.ref.child("status").on("value", statusSnap => {
-      console.log("status:", statusSnap.val());
       switchStatusRD(statusSnap, sessionSnap);
     });
   }
 }
-
 db.ref("gameSessions").on("child_added", newGameSession);
-
 //end of game controller
-
 async function bootApp() {
   await createApp();
   await startListening();
