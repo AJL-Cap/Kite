@@ -6,7 +6,6 @@ import Chat from "../Game/Chat";
 import UpdateFinalPoints from "./UpdateFinalPoints";
 import PlayerInfo from "./PlayerInfo";
 const db = fire.database();
-
 const EndGame = props => {
   const { uid, players, session, code } = props;
   const { points, targetWord } = session;
@@ -16,7 +15,6 @@ const EndGame = props => {
   );
   if (loading || messageLoading) return "";
   if (error || messageError) return "Error";
-
   const { totalPoints, totalGamesPlayed, wins } = playerSnap.val();
   const newTP = totalPoints + points;
   const newTG = totalGamesPlayed + 1;
@@ -27,7 +25,6 @@ const EndGame = props => {
     totalGamesPlayed: newTG,
     wins: newWins
   };
-
   return (
     <div className="container mt-3">
       <div>
@@ -50,7 +47,7 @@ const EndGame = props => {
         />
       )}
       {players.map(key => {
-        return <PlayerInfo key={key} id={key} code={code} />;
+        return <PlayerInfo key={key} id={key} code={code} end={true} />;
       })}
       {session.finalGuess && (
         <div>
@@ -62,5 +59,4 @@ const EndGame = props => {
     </div>
   );
 };
-
 export default EndGame;
