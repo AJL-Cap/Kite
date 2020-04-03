@@ -208,46 +208,49 @@ function finished(sessionSnap) {
 function playingRD(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
   sessionRef.child("points").on("value", pointSnapshot => {
+    console.log("inside pointSnapshot");
     if (pointSnapshot.val() === 0) sessionRef.update({ status: "finished" });
+  });
+  let missedTurns;
+  let turnTimeout;
+  let players;
+  let turnCounter = 0;
+  sessionRef.child("turn").on("value", turnSnap => {
+    console.log("inside turn value, what's going on??? ", turnSnap.val());
+    if (turnSnap.val() == null) sessionRef.child("turn").off();
+    turnTimeout = setTimeout(function() {
+      console.log("inside timeout");
+      missedTurns += 1;
+      if (missedTurns <= players.length) {
+        turnCounter += 1;
+        //this modulo ensures we loop the player array repeatedly:
+        let currentPlayerIdx = turnCounter % players.length;
+        sessionRef.update({
+          turn: players[currentPlayerIdx],
+          turnTimeStarted: Date.now()
+        });
+      } else {
+        const chatToDelete = "lobbyMessages/" + snapshot.key;
+        endGame(sessionRef);
+        endGame(chatToDelete);
+      }
+    }, 30000);
   });
   sessionRef
     .child("players")
     .orderByKey()
     .on("value", playerSnapshot => {
+      console.log("inside playerSnapshot");
       if (playerSnapshot.val() != null) {
-        const players = Object.keys(playerSnapshot.val());
-        let turnCounter = 0;
-        let missedTurns = 0;
+        players = Object.keys(playerSnapshot.val());
         //setting turn to first player in array
         sessionRef.update({
           turn: players[0],
           turnTimeStarted: Date.now()
         });
-
-        let turnTimeout;
-        sessionRef.child("turn").on("value", turnSnap => {
-          console.log("inside turn value, what's going on??? ", turnSnap.val());
-          if (turnSnap.val() == null) sessionRef.child("turn").off();
-          turnTimeout = setTimeout(function() {
-            missedTurns += 1;
-            if (missedTurns <= players.length) {
-              turnCounter += 1;
-              //this modulo ensures we loop the player array repeatedly:
-              let currentPlayerIdx = turnCounter % players.length;
-              sessionRef.update({
-                turn: players[currentPlayerIdx],
-                turnTimeStarted: Date.now()
-              });
-            } else {
-              const chatToDelete = "lobbyMessages/" + snapshot.key;
-              endGame(sessionRef);
-              endGame(chatToDelete);
-            }
-          }, 30000);
-        });
-        sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
-          if (turnTimeout) clearTimeout(turnTimeout);
-        });
+        // sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
+        //   if (turnTimeout) clearTimeout(turnTimeout);
+        // });
         //when a new letter is submitted, change turn to next player:
         sessionRef.child("letterBank").on("child_added", letterSnapshot => {
           console.log("letter added?:", letterSnapshot.key);

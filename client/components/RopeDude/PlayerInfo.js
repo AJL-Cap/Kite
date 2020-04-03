@@ -6,6 +6,7 @@ import {
 } from "react-firebase-hooks/database";
 import fire from "../../fire";
 import { Card } from "react-bootstrap";
+import NotFound from "../NotFound";
 
 const db = fire.database();
 const playerRef = db.ref("players");
@@ -52,4 +53,5 @@ const PlayerInfo = props => {
     </div>
   );
 };
+
 export default PlayerInfo;
