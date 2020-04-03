@@ -26,7 +26,7 @@ const Stats = props => {
           {winPercentage ? (
             <h3 className="card-text">Winning percentage: {winPercentage}%</h3>
           ) : (
-            <h3>Winning percentage: N/A</h3>
+            <h3>Winning percentage: 0%</h3>
           )}
         </div>
       </div>

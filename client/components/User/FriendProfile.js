@@ -2,7 +2,6 @@ import React from "react";
 import { useObjectVal } from "react-firebase-hooks/database";
 import fire from "../../fire";
 import Stats from "./Stats";
-import RecentPlayers from "./RecentPlayers";
 
 export default function FriendProfile(props) {
   const { uid } = props.match.params;
