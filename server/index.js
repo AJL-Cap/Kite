@@ -225,7 +225,6 @@ function playingRD(snapshot) {
       }
     });
 
-  let turnTimeout;
   let turnCounter = 0;
   let missedTurns = 0;
   sessionRef
