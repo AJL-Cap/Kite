@@ -71,6 +71,9 @@
       "turnTimeStarted": "",
       "points": 120,
       "targetWord": "CHEESE",
+      "finalGuess": {
+        "Lizzy": "CHEESE"
+      },
       "letterBank": {
         "A": "UID1",
         "B": "UID2",

@@ -1,8 +1,10 @@
+/* eslint-disable complexity */
 import React from "react";
 import { useObject, useListVals } from "react-firebase-hooks/database";
 import fire from "../../fire";
 import Chat from "../Game/Chat";
 import UpdateFinalPoints from "./UpdateFinalPoints";
+import PlayerInfo from "./PlayerInfo";
 const db = fire.database();
 
 const EndGame = props => {
@@ -46,6 +48,15 @@ const EndGame = props => {
           players={players}
           userId={uid}
         />
+      )}
+      {players.map(key => {
+        return <PlayerInfo key={key} id={key} code={code} />;
+      })}
+      {session.finalGuess && (
+        <div>
+          Final guess was: {Object.values(session.finalGuess)[0]} by{" "}
+          {Object.keys(session.finalGuess)[0]}
+        </div>
       )}
       <Chat code={code} userId={uid} players={players} messages={messages} />
     </div>

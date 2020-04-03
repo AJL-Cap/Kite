@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import fire from "../../fire";
@@ -33,7 +34,7 @@ const RopeDude = props => {
   if (loading) return "";
   if (error) return "Error";
   if (!session) return <NotFound />;
-  console.log("rope dude session: ", session);
+  const nick = session.players[userId].nickname;
   let players = Object.keys(session.players);
 
   const handleClick = () => {
@@ -55,7 +56,14 @@ const RopeDude = props => {
                 <strong>Players: </strong>
               </h2>
               {players.map(key => {
-                return <PlayerInfo key={key} id={key} code={code} />;
+                return (
+                  <PlayerInfo
+                    key={key}
+                    id={key}
+                    code={code}
+                    session={session}
+                  />
+                );
               })}
             </div>
           </div>
@@ -80,7 +88,14 @@ const RopeDude = props => {
                     <Button className="alert-danger" onClick={handleClick}>
                       Final Guess
                     </Button>
-                    {finalGuess && <FinalGuess session={session} code={code} />}
+                    {finalGuess && (
+                      <FinalGuess
+                        session={session}
+                        code={code}
+                        uid={userId}
+                        nick={nick}
+                      />
+                    )}
                   </div>
                 </div>
               )}
