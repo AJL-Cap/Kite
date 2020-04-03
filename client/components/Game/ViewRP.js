@@ -20,7 +20,7 @@ export default function ViewRP(props) {
       <div className="col mb-4 align-self-center">
         {player.recentPlayers ? (
           <div className="column m-5">
-            <RecentPlayers recents={player.recentPlayers} />
+            <RecentPlayers recents={player.recentPlayers} invite={true} />
           </div>
         ) : (
           <div>There aren't any recent players</div>

@@ -4,7 +4,7 @@ import SingleRecent from "./SingleRecent";
 import { useHistory } from "react-router-dom";
 
 const RecentPlayers = props => {
-  const { recents } = props;
+  const { recents, invite } = props;
   const history = useHistory();
 
   let recentPlayers = Object.values(recents);
@@ -31,7 +31,8 @@ const RecentPlayers = props => {
               key={player}
               player={player}
               profileClick={profileClick}
-              gameClick={gameClick}
+              gameClaick={gameClick}
+              invite={invite}
             />
           ))}
         </div>

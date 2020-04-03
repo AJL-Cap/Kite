@@ -25,7 +25,7 @@ export default function Profile(props) {
         <div className="col mb-4 align-self-center">
           {player.recentPlayers && (
             <div className="column m-5">
-              <RecentPlayers recents={player.recentPlayers} />
+              <RecentPlayers recents={player.recentPlayers} invite={false} />
             </div>
           )}
         </div>
