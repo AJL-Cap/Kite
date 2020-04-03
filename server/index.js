@@ -202,7 +202,7 @@ function finished(sessionSnap) {
   setTimeout(function() {
     endGame(refToDelete);
     endGame(chatToDelete);
-  }, 20000);
+  }, 200000);
 }
 
 function playingRD(snapshot) {
@@ -214,19 +214,47 @@ function playingRD(snapshot) {
     .child("players")
     .orderByKey()
     .on("value", playerSnapshot => {
-      console.log("playerRef on value triggered: ", playerSnapshot.val());
       if (playerSnapshot.val() != null) {
         const players = Object.keys(playerSnapshot.val());
         let turnCounter = 0;
+        let missedTurns = 0;
         //setting turn to first player in array
         sessionRef.update({
           turn: players[0],
           turnTimeStarted: Date.now()
         });
-        //ADD: timeout
+
+        let turnTimeout;
+        sessionRef.child("turn").on("value", turnSnap => {
+          console.log("inside turn value, what's going on??? ", turnSnap.val());
+          if (turnSnap.val() == null) sessionRef.child("turn").off();
+          turnTimeout = setTimeout(function() {
+            missedTurns += 1;
+            if (missedTurns <= players.length) {
+              turnCounter += 1;
+              //this modulo ensures we loop the player array repeatedly:
+              let currentPlayerIdx = turnCounter % players.length;
+              sessionRef.update({
+                turn: players[currentPlayerIdx],
+                turnTimeStarted: Date.now()
+              });
+            } else {
+              const chatToDelete = "lobbyMessages/" + snapshot.key;
+              endGame(sessionRef);
+              endGame(chatToDelete);
+            }
+          }, 30000);
+        });
+        sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
+          if (turnTimeout) clearTimeout(turnTimeout);
+        });
         //when a new letter is submitted, change turn to next player:
         sessionRef.child("letterBank").on("child_added", letterSnapshot => {
           console.log("letter added?:", letterSnapshot.key);
+          if (turnTimeout) {
+            clearTimeout(turnTimeout);
+            missedTurns = 0;
+          }
           turnCounter += 1;
           //this modulo ensures we loop the player array repeatedly:
           let currentPlayerIdx = turnCounter % players.length;
@@ -245,7 +273,6 @@ function playingRD(snapshot) {
             sessionRef.child("targetWord").on("value", wordSnapshot => {
               if (wordSnapshot.val() != null) {
                 const targetWord = wordSnapshot.val();
-                console.log(targetWord);
                 if (gameOverRD(letterBank, targetWord)) {
                   sessionRef.update({ status: "finished" });
                 } else wordSnapshot.ref.off();
