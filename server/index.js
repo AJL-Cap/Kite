@@ -232,7 +232,7 @@ function playingRD(snapshot) {
         endGame(sessionRef);
         endGame(chatToDelete);
       }
-    }, 30000);
+    }, 15000);
   });
   sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
     if (finalGuessSnap.val()) {
