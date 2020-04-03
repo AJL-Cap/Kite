@@ -50,7 +50,7 @@ const EndGame = props => {
         />
       )}
       {players.map(key => {
-        return <PlayerInfo key={key} id={key} code={code} />;
+        return <PlayerInfo key={key} id={key} code={code} end={true} />;
       })}
       {session.finalGuess && (
         <div>

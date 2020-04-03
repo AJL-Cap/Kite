@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React, { useState, useEffect } from "react";
 import {
   useObjectVal,
@@ -11,7 +12,7 @@ const db = fire.database();
 const playerRef = db.ref("players");
 
 const PlayerInfo = props => {
-  const { code, id, session } = props;
+  const { code, id, session, end } = props;
   const [playerSnapshot, playerLoading, playerError] = useObjectVal(
     playerRef.child(id)
   );
@@ -47,7 +48,7 @@ const PlayerInfo = props => {
               })}
           </Card.Text>
         </Card.Body>
-        {session.turn === id && <div>🤔</div>}
+        {!end && session.turn === id && <div>🤔</div>}
       </Card>
     </div>
   );

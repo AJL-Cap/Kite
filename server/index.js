@@ -245,9 +245,9 @@ function playingRD(snapshot) {
             }
           }, 30000);
         });
-        sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
-          if (turnTimeout) clearTimeout(turnTimeout);
-        });
+        // sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
+        //   if (turnTimeout) clearTimeout(turnTimeout);
+        // });
         //when a new letter is submitted, change turn to next player:
         sessionRef.child("letterBank").on("child_added", letterSnapshot => {
           console.log("letter added?:", letterSnapshot.key);
@@ -262,7 +262,6 @@ function playingRD(snapshot) {
             turn: players[currentPlayerIdx],
             turnTimeStarted: Date.now()
           });
-          //ADD: timeout
 
           //if letter bank has all the letters for target word, change game status to finished
           sessionRef.child("letterBank").on("value", letterSnapshot => {
