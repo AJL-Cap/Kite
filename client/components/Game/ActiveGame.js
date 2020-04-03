@@ -4,6 +4,7 @@ import { useObjectVal } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import WaitingRoom from "./WaitingRoom";
 import NHIE from "../NHIE/NHIE";
+import RopeDude from "../RopeDude/RopeDude";
 
 const db = fire.database();
 
@@ -42,6 +43,8 @@ const ActiveGame = props => {
     );
   } else if (session.gameId === "1") {
     return <NHIE userId={props.userId} code={code} host={host} />;
+  } else if (session.gameId === "2") {
+    return <RopeDude userId={props.userId} code={code} host={host} />;
   }
   return <div />;
 };

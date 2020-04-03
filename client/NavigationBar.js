@@ -3,6 +3,7 @@ import fire from "./fire";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Nav, Navbar } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+// import styled from 'styled-components';
 
 export default function NavigationBar() {
   const [user, initialising, error] = useAuthState(fire.auth());
@@ -22,7 +23,7 @@ export default function NavigationBar() {
   }
 
   return (
-    <Navbar expand="lg" style={{ backgroundColor: "#ddd" }}>
+    <Navbar expand="lg" style={{ backgroundColor: "#FFCAD4" }}>
       <Navbar.Brand href="/">Kite</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
@@ -65,3 +66,8 @@ export default function NavigationBar() {
     </Navbar>
   );
 }
+
+// const Title = styled.h1`
+//   font-size: 1.5em;
+//   text-align: center
+// `

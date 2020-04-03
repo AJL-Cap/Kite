@@ -30,7 +30,8 @@ const PlayerInfo = props => {
         )}
         <Card.Body>
           <Card.Title>
-            {playerSnapshot.nickname} <br /> {kites()}
+            {playerSnapshot.nickname} <br /> <br />
+            {kites()}
           </Card.Title>
           <Card.Text />
         </Card.Body>

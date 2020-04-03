@@ -17,7 +17,7 @@ const GameCard = props => {
     db.ref("gameSessions/" + code).set({
       gameId: gameId,
       status: "waiting",
-      players: { [uid]: { host: true, nickname: nick, points: 0 } }
+      players: { [uid]: { host: true, nickname: nick } }
     });
     history.push({
       pathname: `/games/${code}`,
@@ -28,10 +28,10 @@ const GameCard = props => {
   return (
     <div className="card" style={{ margin: "5%" }}>
       <div className="card-body">
-        <h2 className="card-title">title: {game.val().title}</h2>
-        <p className="card-text">rules: {game.val().rules}</p>
-        <button type="button" className="btn btn-primary" onClick={handleClick}>
-          start new game
+        <h2 className="card-title">Title: {game.val().title}</h2>
+        <p className="card-text">Rules: {game.val().rules}</p>
+        <button type="button" className="btn alert-info" onClick={handleClick}>
+          Start New Game
         </button>
       </div>
     </div>

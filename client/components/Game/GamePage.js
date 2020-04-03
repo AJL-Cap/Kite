@@ -21,7 +21,9 @@ const GamePage = props => {
   return (
     <div>
       <div className="jumbotron text-center">
-        <h1>Games</h1>
+        <h1>
+          <strong>Games</strong>
+        </h1>
       </div>
       <Container fluid>
         <Row>

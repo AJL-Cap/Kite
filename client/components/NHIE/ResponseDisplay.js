@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import SingleResponseDisplay from "./SingleResponseDisplay";
-import Timer from "./Timer";
+import Timer from "../Game/Timer";
 import { useList, useObjectVal } from "react-firebase-hooks/database";
 import fire from "../../fire";
+import NotFound from "../NotFound";
 const db = fire.database();
 
 const ResponseDisplay = props => {
@@ -19,17 +20,15 @@ const ResponseDisplay = props => {
   const roundsArr = Object.entries(session.rounds);
   const recentRound = roundsArr[roundsArr.length - 1];
   const roundID = recentRound[0];
-  const responses = Object.entries(recentRound[1].responses);
-  // .filter(
-  //   entry => entry[0] !== uid
-  // );
-  // filter commented out for easier solo testing
+  const responses = Object.entries(recentRound[1].responses); //.filter(entry => entry[0] !== uid);
 
   // finding the most recent round, filtering the responses to exclude the one you sent in yourself
   // console.log("recentRound", recentRound);
   return (
     <div>
-      <Timer round={curRound} time={30} />
+      <div className="row justify-content-center">
+        <Timer roundTime={curRound.val().timeStarted} time={30} />
+      </div>
       {responses.map(response => (
         <SingleResponseDisplay
           key={response[0]}

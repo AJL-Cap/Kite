@@ -1,13 +1,14 @@
 {
   "games": {
     "1": {
-      "title": "never have i ever",
+      "title": "Never Have I Ever",
       "rules":
-        "everyone starts with five fingers, and says a thing they've never done. if you have done it, put one (virtual) finger down. the first person to run out of fingers loses."
+        "Everyone starts with five kites and inputs something they've never done. If you have done a certain thing, choose I have and you lose one kite. Otherwise, if you haven't done it choose I have not. The first person to run out of kites loses."
     },
     "2": {
-      "title": "rope dude",
-      "rules": "it's hangman actually"
+      "title": "Rope Dude",
+      "rules":
+        "It's hangman! However, in this version you will work together with your teammates to figure out the word by taking turns guessing letters. Just like classic hangman, once you build the whole body you lose."
     }
   },
   "players": {
@@ -30,6 +31,26 @@
       "totalGamesPlayed": 1
     }
   },
+  "messageGameMessages": {
+    "GAME": {
+      "messages": {
+        "messageID- generated from push": {
+          "UID": "UID1",
+          "content": "hi"
+        }
+      }
+    }
+  },
+  "lobbyMessages": {
+    "GAME": {
+      "messages": {
+        "messageID- generated from push": {
+          "UID": "UID1",
+          "content": "hi"
+        }
+      }
+    }
+  },
   "gameSessions": {
     "GAME": {
       "players": {
@@ -47,26 +68,16 @@
       "gameId": "2",
       "status": "waiting",
       "turn": "UID1",
+      "turnTimeStarted": "",
       "points": 120,
       "targetWord": "CHEESE",
-      "displayedWord": "_H____",
-      "wordObj": {
-        "C": {
-          "index": "0"
-        },
-        "H": {
-          "index": "1"
-        },
-        "E": {
-          "index": "2,3,5"
-        },
-        "S": {
-          "index": "4"
-        }
+      "finalGuess": {
+        "Lizzy": "CHEESE"
       },
       "letterBank": {
-        "A": true,
-        "B": true
+        "A": "UID1",
+        "B": "UID2",
+        "C": "UID3"
       }
     }
   }

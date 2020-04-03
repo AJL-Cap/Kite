@@ -1,8 +1,11 @@
 import React from "react";
 import { useObjectVal } from "react-firebase-hooks/database";
 import fire from "../../fire";
+import Stats from "./Stats";
+import RecentPlayers from "./RecentPlayers";
 
-export default function Profile({ userId }) {
+export default function Profile(props) {
+  const { userId } = props;
   const playerRef = fire.database().ref(`players/${userId}`);
 
   const [player, loading, err] = useObjectVal(playerRef);
@@ -16,16 +19,16 @@ export default function Profile({ userId }) {
   if (player) {
     return (
       <div>
-        <div>Nickname: {player.nickname}</div>
-        <div>Total Points: {player.totalPoints}</div>
-        <div>Total Wins: {player.wins}</div>
-        <div>Total Games: {player.totalGamesPlayed}</div>
-        {player.totalGamesPlayed !== 0 && (
-          <div>
-            Winning percentage: {player.wins / player.totalGamesPlayed * 100}%
-          </div>
-        )}
-        {player.profilePic && <img src={player.profilePic.secure_url} alt="" />}
+        <div className="column m-5">
+          <Stats player={player} />
+        </div>
+        <div className="col mb-4 align-self-center">
+          {player.recentPlayers && (
+            <div className="column m-5">
+              <RecentPlayers recents={player.recentPlayers} />
+            </div>
+          )}
+        </div>
       </div>
     );
   }

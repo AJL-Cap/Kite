@@ -1,20 +1,24 @@
 import React from "react";
-import PlayerInfo from "./PlayerInfo";
-import { useObject } from "react-firebase-hooks/database";
-import UpdateFinalPoints from "./UpdateFinalPoints";
+import PlayerInfo from "../NHIE/PlayerInfo";
+import { useObject, useListVals } from "react-firebase-hooks/database";
+import UpdateFinalPoints from "../NHIE/UpdateFinalPoints";
 import fire from "../../fire";
+import Chat from "./Chat";
 const db = fire.database();
 
 const EndGame = props => {
   const { players } = props.session;
   const { uid } = props;
+  console.log("endgame players", players);
   const [playerSnap, loading, error] = useObject(db.ref(`players/${uid}`));
+  const [messages, messageLoading, messageError] = useListVals(
+    db.ref(`lobbyMessages/${props.code}/messages`)
+  );
 
-  if (loading) return "";
-  if (error) return "Error";
+  if (loading || messageLoading) return "";
+  if (error || messageError) return "Error";
 
   const { totalPoints, totalGamesPlayed, wins } = playerSnap.val();
-  console.log("finishedPoints: ", players[uid].points);
   const newTP = totalPoints + players[uid].points;
   const newTG = totalGamesPlayed + 1;
   let newWins = wins;
@@ -36,6 +40,7 @@ const EndGame = props => {
       winners.push(playerKey);
     }
   });
+  let playerKeys = Object.keys(players);
   //console.log("winners", winners, "losers", losers);
   return (
     <div className="container mt-3">
@@ -69,8 +74,16 @@ const EndGame = props => {
         <UpdateFinalPoints
           updatePointsObj={updatePointsObj}
           playerSnapRef={playerSnap.ref}
+          players={playerKeys}
+          userId={uid}
         />
       )}
+      <Chat
+        code={props.code}
+        userId={uid}
+        players={players}
+        messages={messages}
+      />
     </div>
   );
 };

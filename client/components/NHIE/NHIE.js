@@ -6,7 +6,7 @@ import { useObjectVal } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import ResponseDisplay from "./ResponseDisplay";
 import axios from "axios";
-import EndGame from "./EndGame";
+import EndGame from "../Game/EndGame";
 
 const db = fire.database();
 
@@ -41,12 +41,25 @@ const NHIE = props => {
   return (
     <div>
       {session.status === "responding" && (
-        <NHIEForm
-          userId={props.userId}
-          code={code}
-          rounds={session.rounds}
-          host={host}
-        />
+        <div>
+          <NHIEForm
+            userId={props.userId}
+            code={code}
+            rounds={session.rounds}
+            host={host}
+          />
+          <div className="row" id="playerDisplayPoints">
+            {players.map(key => {
+              return (
+                <PlayerInfo
+                  points={session.players[key].points}
+                  key={key}
+                  id={key}
+                />
+              );
+            })}
+          </div>
+        </div>
       )}
       {session.status === "confessing" && (
         <div>
@@ -70,7 +83,12 @@ const NHIE = props => {
         </div>
       )}
       {session.status === "finished" && (
-        <EndGame players={players} session={session} uid={props.userId} />
+        <EndGame
+          players={players}
+          session={session}
+          uid={props.userId}
+          code={code}
+        />
       )}
     </div>
   );
