@@ -50,7 +50,6 @@ const Main = styled.div`
   background-size: "cover"
   background-attachment: "fixed";
   min-height: 100%;
-  min-width: 1024px;
   width: 100%;
   height: auto;
   position: fixed;
