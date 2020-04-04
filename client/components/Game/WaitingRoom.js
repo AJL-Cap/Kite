@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import fire from "../../fire";
 import { useObjectVal, useListVals } from "react-firebase-hooks/database";
 import SessionPlayer from "./SessionPlayers";
@@ -8,6 +8,7 @@ import axios from "axios";
 import { useHistory } from "react-router";
 import Chat from "./Chat";
 import { generateTargetWord } from "../RopeDude/util";
+import ViewRP from "./ViewRP";
 
 const db = fire.database();
 
@@ -22,6 +23,7 @@ const WaitingRoom = props => {
   const [messages, messageLoading, messageError] = useListVals(
     db.ref(`lobbyMessages/${props.code}/messages`)
   );
+  const [toggle, setToggle] = useState(false);
 
   if (loading || gameLoading || messageLoading) return "";
   if (error || gameErr || messageError) return "Error";
@@ -35,13 +37,26 @@ const WaitingRoom = props => {
       </div>
     );
 
+  //getting players from the session
+  let players = Object.keys(session.players);
+
   const handleClick = () => {
     try {
-      //if game is rope dude, generate random word & set it to target word
+      //for rope dude, generate a random word for the session
       if (gameId === "2") {
         const targetWord = generateTargetWord();
         console.log("targetWord", targetWord);
         db.ref(`gameSessions/${code}/targetWord`).set(targetWord);
+      }
+      //for drawing a blank, generate a random word per player
+      if (gameId === "3") {
+        players.forEach(player => {
+          const targetWord = generateTargetWord();
+          console.log("targetWord", targetWord);
+          db
+            .ref(`gameSessions/${code}/players/${player}/targetWord`)
+            .set(targetWord);
+        });
       }
       //updating that session status to playing
       axios.post(`/api/games/${code}`, { status: "playing" });
@@ -53,8 +68,6 @@ const WaitingRoom = props => {
     history.push("/games");
     gameSession.remove();
   };
-  //getting players from the session
-  let players = Object.keys(session.players);
 
   return (
     <>
@@ -112,6 +125,10 @@ const WaitingRoom = props => {
               <div />
             )}
           </div>
+          <button type="button" onClick={() => setToggle(!toggle)}>
+            View Recent Players
+          </button>
+          {toggle && <ViewRP uid={userId} code={code} gameId={gameId} />}
           <div className="row ">
             <Chat
               code={code}

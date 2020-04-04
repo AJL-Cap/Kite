@@ -1,8 +1,9 @@
 import React from "react";
 import fire from "./fire";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Nav, Navbar } from "react-bootstrap";
+import { Nav, Navbar, Dropdown, Button, Badge } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import Notifications from "./components/User/Notifications";
 // import styled from 'styled-components';
 
 export default function NavigationBar() {
@@ -21,7 +22,6 @@ export default function NavigationBar() {
       </Navbar>
     );
   }
-
   return (
     <Navbar expand="lg" style={{ backgroundColor: "#FFCAD4" }}>
       <Navbar.Brand href="/">Kite</Navbar.Brand>
@@ -41,6 +41,9 @@ export default function NavigationBar() {
             <Nav.Item>
               <Nav.Link href="/games">Games</Nav.Link>
             </Nav.Item>
+            <Dropdown as={Nav.Item} id="dropdown-button-drop-left" drop="left">
+              <Notifications uid={user.uid} />
+            </Dropdown>
             <button
               type="button"
               className="btn btn-secondary"
@@ -59,6 +62,9 @@ export default function NavigationBar() {
             </Nav.Item>
             <Nav.Item>
               <Nav.Link href="/signup">Sign up</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link href="/viewGames">Games</Nav.Link>
             </Nav.Item>
           </Nav>
         )}

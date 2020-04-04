@@ -1,9 +1,9 @@
 {
   "games": {
     "1": {
-      "title": "Never Have I Ever",
+      "title": "Fess Up!",
       "rules":
-        "Everyone starts with five kites and inputs something they've never done. If you have done a certain thing, choose I have and you lose one kite. Otherwise, if you haven't done it choose I have not. The first person to run out of kites loses."
+        "Similar to Never Have I Ever, everyone starts with five kites and inputs something they've never done. If you've done a certain thing, choose 'I have' and you lose one kite. If you haven't, choose 'I have not'. The first person to run out of kites loses."
     },
     "2": {
       "title": "Rope Dude",
@@ -63,11 +63,13 @@
           "nickname": "Lizzy",
           "host": true,
           "points": 20,
-          "targetWord": "CHEESE"
+          "targetWord": "CHEESE",
+          "drawing": ""
         },
         "UID2": {
           "nickname": "Ji",
           "points": 0,
+          "targetWord": "STRAW",
           "responses": {
             "1": "potato",
             "2": "meatball",
@@ -77,8 +79,9 @@
         "UID3": {
           "nickname": "Anna",
           "points": 20,
+          "targetWord": "POPCORN",
           "responses": {
-            "1": "swiss cheese",
+            "1": "cheese",
             "2": "cake",
             "3": "pie"
           }

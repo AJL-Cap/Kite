@@ -8,12 +8,7 @@ import NotFound from "../NotFound";
 const db = fire.database();
 
 export default function NHIEForm(props) {
-  const { userId, code, host } = props;
-  // useEffect(() => {
-  //   if (host) {
-  //     db.ref(`gameSessions/${code}/rounds`).push({ timeStarted: Date.now() });
-  //   }
-  // }, []);
+  const { userId, code } = props;
   const [submitted, setSubmitted] = useState(false);
   const [rounds, loading, error] = useList(
     db.ref(`gameSessions/${code}/rounds`)
@@ -43,7 +38,7 @@ export default function NHIEForm(props) {
   return (
     <div>
       <div className="row justify-content-center">
-        <Timer roundTime={curRound.val().timeStarted} time={30} />
+        <Timer roundTime={curRound.val().timeStarted} time={60} />
       </div>
       {submitted ? (
         <h4>Your response has been submitted</h4>

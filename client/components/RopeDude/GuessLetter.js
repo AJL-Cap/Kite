@@ -41,16 +41,11 @@ const GuessLetter = props => {
         .ref(`gameSessions/${code}/players/${userId}/correctGuesses`)
         .push(letter);
     }
-
-    //updating turn to next player (hardcoded for now)
-    // db.ref(`gameSessions/${code}`).update({
-    //   turn: "UID2"
-    // });
   };
 
   return (
     <div>
-      <Timer roundTime={session.turnTimeStarted} time={30} />
+      <Timer roundTime={session.turnTimeStarted} time={20} />
       Choose from the following letters:
       {displayLetters
         .split("")

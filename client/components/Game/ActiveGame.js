@@ -5,6 +5,7 @@ import NotFound from "../NotFound";
 import WaitingRoom from "./WaitingRoom";
 import NHIE from "../NHIE/NHIE";
 import RopeDude from "../RopeDude/RopeDude";
+import DAB from "../DAB/DAB";
 
 const db = fire.database();
 
@@ -42,9 +43,22 @@ const ActiveGame = props => {
       />
     );
   } else if (session.gameId === "1") {
-    return <NHIE userId={props.userId} code={code} host={host} />;
+    return (
+      <NHIE userId={props.userId} code={code} host={host} session={session} />
+    );
   } else if (session.gameId === "2") {
-    return <RopeDude userId={props.userId} code={code} host={host} />;
+    return (
+      <RopeDude
+        userId={props.userId}
+        code={code}
+        host={host}
+        session={session}
+      />
+    );
+  } else if (session.gameId === "3") {
+    return (
+      <DAB userId={props.userId} code={code} host={host} session={session} />
+    );
   }
   return <div />;
 };
