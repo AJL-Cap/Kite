@@ -5,11 +5,12 @@ const DrawingDisplay = props => {
   const { session, code, uid } = props;
   const { turn, turnTimeStarted } = session;
   const [display, setDisplay] = useState(null);
-
+  console.log("sessionTurn", session.turn);
   const { drawing, nickname, points, targetWord } = session.players[turn];
 
   useEffect(() => {
     //retrieving current turn's drawing
+
     setDisplay(drawing);
   }, []);
 

@@ -56,6 +56,7 @@ const WaitingRoom = props => {
           db
             .ref(`gameSessions/${code}/players/${player}/targetWord`)
             .set(targetWord);
+          db.ref(`gameSessions/${code}/turnTimeStarted`).set(Date.now());
         });
       }
       //updating that session status to playing

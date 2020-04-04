@@ -61,19 +61,6 @@ const startListening = () => {
 };
 //start of game controller
 const db = admin.database();
-
-const shuffle = inputArr => {
-  const arr = [...inputArr];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const swapIndex = Math.floor(Math.random() * (i + 1));
-    const current = arr[i];
-    const toSwap = arr[swapIndex];
-    arr[i] = toSwap;
-    arr[swapIndex] = current;
-  }
-  return arr;
-};
-
 function endRound(ref, updateRef, status) {
   if (ref) {
     ref.off();
@@ -211,8 +198,7 @@ function playingRD(snapshot) {
     .child("players")
     .orderByKey()
     .once("value", playerSnapshot => {
-      const playersSorted = Object.keys(playerSnapshot.val());
-      players = shuffle(playersSorted);
+      players = Object.keys(playerSnapshot.val());
       //setting turn to first player in array
       sessionRef.update({
         turn: players[0],
@@ -223,13 +209,11 @@ function playingRD(snapshot) {
   let turnTimeout;
   let turnCounter = 0;
   sessionRef.child("turn").on("value", turnSnap => {
-    console.log("PLAYERLENGTH", players);
-    console.log("inside turn value, what's going on??? ", turnSnap.val());
     if (turnSnap.val() === null) sessionRef.child("turn").off();
     turnTimeout = setTimeout(function() {
       console.log("inside timeout");
       missedTurns += 1;
-      console.log("MISSED TURNS", missedTurns);
+
       if (missedTurns <= players.length - 1) {
         turnCounter += 1;
         //this modulo ensures we loop the player array repeatedly:
@@ -259,7 +243,7 @@ function playingRD(snapshot) {
     let targetWord;
     if (bankSnapshot.val()) {
       letterBank = Object.keys(bankSnapshot.val());
-      console.log("bank snapshot:", bankSnapshot.val());
+
       clearTimeout(turnTimeout);
       missedTurns = 0;
       turnCounter += 1;
@@ -300,7 +284,11 @@ function gameOverRD(letterBankArr, target) {
 function playingDAB(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
   let players;
+  const drawingTimeout = setTimeout(function() {
+    sessionRef.child("status").set("guessing");
+  }, 10000);
   //getting all players in an array for turn
+
   sessionRef
     .child("players")
     .orderByKey()
@@ -308,7 +296,6 @@ function playingDAB(snapshot) {
     .then(playersSnap => {
       players = Object.keys(playersSnap.val());
       //setting timestamp for front end timer (i must be doing something wrong cuz the timer goes from 60 to NaN..and you have to reresh the page to get it to work)
-      sessionRef.child("turnTimeStarted").set(Date.now());
     });
   //and... here's come spaghetti
 }

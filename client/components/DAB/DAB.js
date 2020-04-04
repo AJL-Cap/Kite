@@ -9,7 +9,6 @@ const db = fire.database();
 const DAB = props => {
   const { session, code, host, userId } = props;
   const { targetWord } = session.players[userId];
-  console.log(targetWord);
 
   useEffect(() => {
     if (host) {

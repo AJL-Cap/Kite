@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Timer from "../Game/Timer";
 import SignatureCanvas from "react-signature-canvas";
 import Container from "react-bootstrap/Container";
@@ -15,7 +15,27 @@ const SigCanvas = props => {
   const [submitted, setSubmitted] = useState(false);
   const sigCanvas = useRef({});
 
+  let timeout;
+  useEffect(() => {
+    timeout = setTimeout(function() {
+      const imageURL = sigCanvas.current
+        .getTrimmedCanvas()
+        .toDataURL("image/png");
+
+      //saving that in db
+      db.ref(`gameSessions/${code}/players/${uid}`).update({
+        drawing: imageURL
+      });
+      db.ref(`gameSessions/${code}`).update({
+        status: "guessing",
+        turn: uid,
+        turnTimeStarted: Date.now()
+      });
+    }, 9000);
+  }, []);
+
   const handleClick = () => {
+    clearTimeout(timeout);
     //converting the drawing to url
     const imageURL = sigCanvas.current
       .getTrimmedCanvas()
