@@ -11,7 +11,7 @@
         "It's hangman! However, in this version you will work together with your teammates to figure out the word by taking turns guessing letters. Just like classic hangman, once you build the whole body you lose."
     },
     "3": {
-      "title": "DaB: Drawing a Blank",
+      "title": "Drawing a Blank",
       "rules":
         "It's (kinda) like pictionary. In each round, one person draws a picture of the prompt, your teammates each have three tries to guess what you drew. Both the guesser and the drawer earn points if they guess correctly."
     }

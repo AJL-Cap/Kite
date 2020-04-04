@@ -8,10 +8,8 @@ import {
 import fire from "../../fire";
 import { Card } from "react-bootstrap";
 import NotFound from "../NotFound";
-
 const db = fire.database();
 const playerRef = db.ref("players");
-
 const PlayerInfo = props => {
   const { code, id, session, end } = props;
   const [playerSnapshot, playerLoading, playerError] = useObjectVal(
@@ -20,10 +18,8 @@ const PlayerInfo = props => {
   const [correctGuesses, loading, error] = useListVals(
     db.ref(`gameSessions/${code}/players/${id}/correctGuesses`)
   );
-
   if (playerLoading || loading) return "";
   if (playerError || error) return "Error";
-
   return (
     <div>
       <Card
@@ -54,5 +50,4 @@ const PlayerInfo = props => {
     </div>
   );
 };
-
 export default PlayerInfo;
