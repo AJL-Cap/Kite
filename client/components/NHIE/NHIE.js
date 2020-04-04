@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import PlayerInfo from "./PlayerInfo";
 import NHIEForm from "./NHIEForm";
 import fire from "../../fire";
-import { useObjectVal } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import ResponseDisplay from "./ResponseDisplay";
 import axios from "axios";
@@ -11,10 +10,7 @@ import EndGame from "../Game/EndGame";
 const db = fire.database();
 
 const NHIE = props => {
-  const { code, host } = props;
-  const [session, loading, error] = useObjectVal(
-    db.ref("gameSessions/" + code)
-  );
+  const { code, host, session } = props;
 
   useEffect(() => {
     if (host) {
@@ -33,8 +29,6 @@ const NHIE = props => {
     }
   }, []);
 
-  if (loading) return "";
-  if (error) return "Error";
   if (!session) return <NotFound />;
 
   let players = Object.keys(session.players);

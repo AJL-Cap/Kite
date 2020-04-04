@@ -37,13 +37,26 @@ const WaitingRoom = props => {
       </div>
     );
 
+  //getting players from the session
+  let players = Object.keys(session.players);
+
   const handleClick = () => {
     try {
-      //if game is rope dude, generate random word & set it to target word
+      //for rope dude, generate a random word for the session
       if (gameId === "2") {
         const targetWord = generateTargetWord();
         console.log("targetWord", targetWord);
         db.ref(`gameSessions/${code}/targetWord`).set(targetWord);
+      }
+      //for drawing a blank, generate a random word per player
+      if (gameId === "3") {
+        players.forEach(player => {
+          const targetWord = generateTargetWord();
+          console.log("targetWord", targetWord);
+          db
+            .ref(`gameSessions/${code}/players/${player}/targetWord`)
+            .set(targetWord);
+        });
       }
       //updating that session status to playing
       axios.post(`/api/games/${code}`, { status: "playing" });
@@ -55,8 +68,6 @@ const WaitingRoom = props => {
     history.push("/games");
     gameSession.remove();
   };
-  //getting players from the session
-  let players = Object.keys(session.players);
 
   return (
     <>

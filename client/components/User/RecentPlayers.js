@@ -31,7 +31,7 @@ const RecentPlayers = props => {
               key={player}
               player={player}
               profileClick={profileClick}
-              gameClaick={gameClick}
+              gameClick={gameClick}
               invite={invite}
             />
           ))}

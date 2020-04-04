@@ -45,7 +45,7 @@ const GuessLetter = props => {
 
   return (
     <div>
-      <Timer roundTime={session.turnTimeStarted} time={15} />
+      <Timer roundTime={session.turnTimeStarted} time={20} />
       Choose from the following letters:
       {displayLetters
         .split("")

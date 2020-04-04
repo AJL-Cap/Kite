@@ -13,7 +13,8 @@ import {
   NotFound,
   Loading,
   Form,
-  FriendProfile
+  FriendProfile,
+  ViewGames
 } from "./components";
 
 export default function Routes() {
@@ -69,6 +70,7 @@ export default function Routes() {
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SignUp} />
+          <Route path="/viewGames" component={ViewGames} />
         </Switch>
       )}
       <Route component={NotFound} />

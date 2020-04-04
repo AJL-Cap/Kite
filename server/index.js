@@ -115,7 +115,7 @@ function respondingNHIE(snapshot) {
           endGame(refToDelete);
           endGame(chatToDelete);
         }
-      }, 30000);
+      }, 60000);
       //getting responses
       responsesRef.on("value", roundResponsesSnapshot => {
         responses = roundResponsesSnapshot.val();
@@ -158,7 +158,7 @@ function confessingNHIE(sessionSnap) {
       //chaging status to responding if game is still on
       endRound(ref, refToChange, "responding");
     }
-  }, 30000);
+  }, 60000);
   //checking if any player's point is 0
   sessionSnap.ref.child("players").on("value", playersSnap => {
     if (playersSnap.val() != null) {
@@ -232,7 +232,7 @@ function playingRD(snapshot) {
         endGame(sessionRef);
         endGame(chatToDelete);
       }
-    }, 15000);
+    }, 20000);
   });
   sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
     if (finalGuessSnap.val()) {
