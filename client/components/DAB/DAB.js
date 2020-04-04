@@ -24,6 +24,8 @@ const DAB = props => {
             childSnap.ref.update({ points: 0 });
           });
         });
+      //setting first turn time started since backend is being weird
+      db.ref(`gameSessions/${code}/turnTimeStarted`).set(Date.now());
     }
   }, []);
   if (loading) return "";

@@ -301,12 +301,13 @@ function gameOverRD(letterBankArr, target) {
 
 function playingDAB(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
-  sessionRef.child("turnTimeStarted").set(Date.now());
+  // sessionRef.update({turnTimeStarted: Date.now()});
+  console.log("playingDAB");
   let players;
-  const drawingTimeout = setTimeout(function() {
-    //getting the picture for each player
-    sessionRef.child("status").set("guessing");
-  }, 30000);
+  // const drawingTimeout = setTimeout(function() {
+  //   //getting the picture for each player
+  //   sessionRef.child("status").set("guessing");
+  // }, 30000);
   //getting all players in an array for turn
   sessionRef
     .child("players")

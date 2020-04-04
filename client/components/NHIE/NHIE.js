@@ -5,12 +5,16 @@ import fire from "../../fire";
 import NotFound from "../NotFound";
 import ResponseDisplay from "./ResponseDisplay";
 import axios from "axios";
+import { useObjectVal } from "react-firebase-hooks/database";
 import EndGame from "../Game/EndGame";
 
 const db = fire.database();
 
 const NHIE = props => {
-  const { code, host, session } = props;
+  const { code, host } = props;
+  const [session, loading, error] = useObjectVal(
+    db.ref("gameSessions/" + code)
+  );
 
   useEffect(() => {
     if (host) {
@@ -29,6 +33,8 @@ const NHIE = props => {
     }
   }, []);
 
+  if (loading) return "";
+  if (error) return "Error";
   if (!session) return <NotFound />;
 
   let players = Object.keys(session.players);

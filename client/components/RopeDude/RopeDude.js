@@ -10,12 +10,16 @@ import HangMan from "./HangMan";
 import { Button } from "react-bootstrap";
 import FinalGuess from "./FinalGuess";
 import EndGame from "./EndGame";
+import { useObjectVal } from "react-firebase-hooks/database";
 
 const db = fire.database();
 
 const RopeDude = props => {
-  const { code, host, userId, session } = props;
+  const { code, host, userId } = props;
   const [finalGuess, setFinalGuess] = useState(false);
+  const [session, loading, error] = useObjectVal(
+    db.ref("gameSessions/" + code)
+  );
 
   useEffect(() => {
     if (host) {
@@ -26,6 +30,8 @@ const RopeDude = props => {
     }
   }, []);
 
+  if (loading) return "";
+  if (error) return "Error";
   if (!session) return <NotFound />;
   const nick = session.players[userId].nickname;
   let players = Object.keys(session.players);

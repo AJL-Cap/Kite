@@ -43,18 +43,9 @@ const ActiveGame = props => {
       />
     );
   } else if (session.gameId === "1") {
-    return (
-      <NHIE userId={props.userId} code={code} host={host} session={session} />
-    );
+    return <NHIE userId={props.userId} code={code} host={host} />;
   } else if (session.gameId === "2") {
-    return (
-      <RopeDude
-        userId={props.userId}
-        code={code}
-        host={host}
-        session={session}
-      />
-    );
+    return <RopeDude userId={props.userId} code={code} host={host} />;
   } else if (session.gameId === "3") {
     return <DAB userId={props.userId} code={code} host={host} />;
   }

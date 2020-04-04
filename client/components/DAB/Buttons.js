@@ -5,6 +5,7 @@ const Buttons = props => {
 
   return (
     <div>
+      <hr />
       <button type="button" onClick={() => sigCanvas.current.clear()}>
         Reset Canvas
       </button>{" "}

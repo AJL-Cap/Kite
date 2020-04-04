@@ -9,7 +9,7 @@ const GuessForm = props => {
   const { register, handleSubmit, errors } = useForm();
 
   const onSubmit = data => {
-    console.log(data);
+    console.log("guesses submitted:", data);
     const { guess1, guess2, guess3 } = data;
     db.ref(`gameSessions/${code}/players/${uid}/responses`).update({
       1: guess1,
@@ -25,26 +25,18 @@ const GuessForm = props => {
             <strong>Guess what {drawer} drew...</strong>
           </div>
           <div className="card-body">
-            <h5 className="card-title">Submit 3 guesses</h5>
-            <p className="card-text">
+            <h5 className="card-title">Submit up to 3 guesses</h5>
+            <div className="card-text">
               <input
                 type="text"
                 name="guess1"
                 ref={register({ required: true })}
               />
-              <input
-                type="text"
-                name="guess2"
-                ref={register({ required: true })}
-              />
-              <input
-                type="text"
-                name="guess3"
-                ref={register({ required: true })}
-              />
-              {errors.response && <p>You must enter 3 guesses!</p>}
+              <input type="text" name="guess2" ref={register()} />
+              <input type="text" name="guess3" ref={register()} />
+              {errors.guess1 && <p>You must enter at least 1 guess!</p>}
               <input type="submit" />
-            </p>
+            </div>
           </div>
         </div>
       </form>
