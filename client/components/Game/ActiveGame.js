@@ -56,9 +56,7 @@ const ActiveGame = props => {
       />
     );
   } else if (session.gameId === "3") {
-    return (
-      <DAB userId={props.userId} code={code} host={host} session={session} />
-    );
+    return <DAB userId={props.userId} code={code} host={host} />;
   }
   return <div />;
 };

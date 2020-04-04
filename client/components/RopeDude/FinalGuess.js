@@ -17,7 +17,6 @@ const FinalGuess = props => {
       db.ref(`gameSessions/${code}/points`).set(0);
     }
     db.ref(`gameSessions/${code}`).update({
-      status: "finished",
       finalGuess: { [nick]: guess }
     });
   };

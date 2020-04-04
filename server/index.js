@@ -61,6 +61,19 @@ const startListening = () => {
 };
 //start of game controller
 const db = admin.database();
+
+const shuffle = inputArr => {
+  const arr = [...inputArr];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const swapIndex = Math.floor(Math.random() * (i + 1));
+    const current = arr[i];
+    const toSwap = arr[swapIndex];
+    arr[i] = toSwap;
+    arr[swapIndex] = current;
+  }
+  return arr;
+};
+
 function endRound(ref, updateRef, status) {
   if (ref) {
     ref.off();
@@ -150,6 +163,18 @@ function confessingNHIE(sessionSnap) {
   let isGameOver = false;
   let ref = sessionSnap.ref.child("players");
   //checking gameover when confessing time is up
+  let players;
+  sessionSnap.ref.child("players").on("value", playersSnap => {
+    if (playersSnap.val() !== null) {
+      players = Object.values(playersSnap.val());
+      players.forEach(player => {
+        if (parseInt(player.points) <= 0) {
+          isGameOver = true;
+        }
+      });
+    }
+  });
+  const timeForRound = players.length * 10000;
   const roundTimeout = setTimeout(function() {
     if (isGameOver) {
       //changing status to finished if game is over
@@ -158,18 +183,8 @@ function confessingNHIE(sessionSnap) {
       //chaging status to responding if game is still on
       endRound(ref, refToChange, "responding");
     }
-  }, 60000);
+  }, timeForRound);
   //checking if any player's point is 0
-  sessionSnap.ref.child("players").on("value", playersSnap => {
-    if (playersSnap.val() !== null) {
-      const players = Object.values(playersSnap.val());
-      players.forEach(player => {
-        if (parseInt(player.points) <= 0) {
-          isGameOver = true;
-        }
-      });
-    }
-  });
   //ending the game right away if at least one player reaches 0 points
 }
 // reusable in other games
@@ -198,7 +213,8 @@ function playingRD(snapshot) {
     .child("players")
     .orderByKey()
     .once("value", playerSnapshot => {
-      players = Object.keys(playerSnapshot.val());
+      const playersSorted = Object.keys(playerSnapshot.val());
+      players = shuffle(playersSorted);
       //setting turn to first player in array
       sessionRef.update({
         turn: players[0],
@@ -285,7 +301,12 @@ function gameOverRD(letterBankArr, target) {
 
 function playingDAB(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
+  sessionRef.child("turnTimeStarted").set(Date.now());
   let players;
+  const drawingTimeout = setTimeout(function() {
+    //getting the picture for each player
+    sessionRef.child("status").set("guessing");
+  }, 30000);
   //getting all players in an array for turn
   sessionRef
     .child("players")
@@ -294,9 +315,7 @@ function playingDAB(snapshot) {
     .then(playersSnap => {
       players = Object.keys(playersSnap.val());
       //setting timestamp for front end timer (i must be doing something wrong cuz the timer goes from 60 to NaN..and you have to reresh the page to get it to work)
-      sessionRef.child("turnTimeStarted").set(Date.now());
     });
-  //and... here's come spaghetti
 }
 
 // this is the controller specifically for NHIE

@@ -45,20 +45,33 @@ const SigCanvas = props => {
           <Timer roundTime={session.turnTimeStarted} time={60} />
         </Col>
         <Col xs={12} md={8}>
-          <h3>DaB it ✎</h3>
-          <SignatureCanvas
-            penColor={color}
-            canvasProps={{ width: 600, height: 600, className: "sigCanvas" }}
-            backgroundColor="#FCFAE3"
-            ref={sigCanvas}
-          />
+          <Container>
+            <Row>
+              <h3>draw it ✎</h3>
+            </Row>
+            <Row>
+              <SignatureCanvas
+                penColor={color}
+                canvasProps={{
+                  width: 600,
+                  height: 400,
+                  className: "sigCanvas"
+                }}
+                backgroundColor="#FCFAE3"
+                ref={sigCanvas}
+              />
+            </Row>
+            <Row>
+              <br />
+              <Buttons
+                handleClick={handleClick}
+                setColor={setColor}
+                sigCanvas={sigCanvas}
+              />
+            </Row>
+          </Container>
         </Col>
       </Row>
-      <Buttons
-        handleClick={handleClick}
-        setColor={setColor}
-        sigCanvas={sigCanvas}
-      />
     </Container>
   );
 };

@@ -22,12 +22,13 @@ const ResponseDisplay = props => {
   const roundID = recentRound[0];
   const responses = Object.entries(recentRound[1].responses); //.filter(entry => entry[0] !== uid);
 
+  const numPlayers = Object.keys(session.players).length;
   // finding the most recent round, filtering the responses to exclude the one you sent in yourself
   // console.log("recentRound", recentRound);
   return (
     <div>
       <div className="row justify-content-center">
-        <Timer roundTime={curRound.val().timeStarted} time={60} />
+        <Timer roundTime={curRound.val().timeStarted} time={numPlayers * 10} />
       </div>
       {responses.map(response => (
         <SingleResponseDisplay

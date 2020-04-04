@@ -4,7 +4,7 @@ const Buttons = props => {
   const { sigCanvas, handleClick, setColor } = props;
 
   return (
-    <div style={{ position: "absolute", right: "23.5%" }}>
+    <div>
       <button type="button" onClick={() => sigCanvas.current.clear()}>
         Reset Canvas
       </button>{" "}

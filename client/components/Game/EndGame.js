@@ -4,6 +4,8 @@ import { useObject, useListVals } from "react-firebase-hooks/database";
 import UpdateFinalPoints from "../NHIE/UpdateFinalPoints";
 import fire from "../../fire";
 import Chat from "./Chat";
+import { Link } from "react-router-dom";
+
 const db = fire.database();
 
 const EndGame = props => {
@@ -84,6 +86,9 @@ const EndGame = props => {
           userId={uid}
         />
       )}
+      <Link to="/games">
+        <button className="btn btn-outline-info">Back to Games</button>
+      </Link>
       <Chat
         code={props.code}
         userId={uid}

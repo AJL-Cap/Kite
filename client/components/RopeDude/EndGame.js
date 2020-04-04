@@ -5,6 +5,10 @@ import fire from "../../fire";
 import Chat from "../Game/Chat";
 import UpdateFinalPoints from "./UpdateFinalPoints";
 import PlayerInfo from "./PlayerInfo";
+import { Link } from "react-router-dom";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 const db = fire.database();
 
 const EndGame = props => {
@@ -16,7 +20,6 @@ const EndGame = props => {
   );
   if (loading || messageLoading) return "";
   if (error || messageError) return "Error";
-
   const { totalPoints, totalGamesPlayed, wins } = playerSnap.val();
   const newTP = totalPoints + points;
   const newTG = totalGamesPlayed + 1;
@@ -27,10 +30,9 @@ const EndGame = props => {
     totalGamesPlayed: newTG,
     wins: newWins
   };
-
   return (
-    <div className="container mt-3">
-      <div>
+    <Container fluid>
+      <Row>
         <h1>The word was: {targetWord}</h1>
         <h2>
           You got it{" "}
@@ -40,7 +42,7 @@ const EndGame = props => {
                 players.length
               } brains and you still couldn't figure it out.`}
         </h2>
-      </div>
+      </Row>
       {playerSnap.ref && (
         <UpdateFinalPoints
           updatePointsObj={updatePointsObj}
@@ -49,18 +51,31 @@ const EndGame = props => {
           userId={uid}
         />
       )}
-      {players.map(key => {
-        return <PlayerInfo key={key} id={key} code={code} end={true} />;
-      })}
-      {session.finalGuess && (
-        <div>
-          Final guess was: {Object.values(session.finalGuess)[0]} by{" "}
-          {Object.keys(session.finalGuess)[0]}
-        </div>
-      )}
-      <Chat code={code} userId={uid} players={players} messages={messages} />
-    </div>
+      <Row>
+        <Col xs={6} md={4}>
+          {players.map(key => {
+            return <PlayerInfo key={key} id={key} code={code} end={true} />;
+          })}
+        </Col>
+        <Col xs={12} md={8}>
+          {session.finalGuess && (
+            <div>
+              Final guess was: {Object.values(session.finalGuess)[0]} by{" "}
+              {Object.keys(session.finalGuess)[0]}
+            </div>
+          )}
+          <Link to="/games">
+            <button className="btn btn-outline-info">Back to Games</button>
+          </Link>
+          <Chat
+            code={code}
+            userId={uid}
+            players={players}
+            messages={messages}
+          />
+        </Col>
+      </Row>
+    </Container>
   );
 };
-
 export default EndGame;
