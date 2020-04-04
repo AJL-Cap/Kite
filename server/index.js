@@ -61,6 +61,19 @@ const startListening = () => {
 };
 //start of game controller
 const db = admin.database();
+
+const shuffle = inputArr => {
+  const arr = [...inputArr];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const swapIndex = Math.floor(Math.random() * (i + 1));
+    const current = arr[i];
+    const toSwap = arr[swapIndex];
+    arr[i] = toSwap;
+    arr[swapIndex] = current;
+  }
+  return arr;
+};
+
 function endRound(ref, updateRef, status) {
   if (ref) {
     ref.off();
@@ -198,7 +211,8 @@ function playingRD(snapshot) {
     .child("players")
     .orderByKey()
     .once("value", playerSnapshot => {
-      players = Object.keys(playerSnapshot.val());
+      const playersSorted = Object.keys(playerSnapshot.val());
+      players = shuffle(playersSorted);
       //setting turn to first player in array
       sessionRef.update({
         turn: players[0],
