@@ -10,6 +10,7 @@ const db = fire.database();
 
 const SigCanvas = props => {
   const { session, uid, code } = props;
+  const [color, setColor] = useState("#2D1E2F");
   const [submitted, setSubmitted] = useState(false);
   const sigCanvas = useRef({});
 
@@ -43,21 +44,47 @@ const SigCanvas = props => {
           <Timer roundTime={session.turnTimeStarted} time={60} />
         </Col>
         <Col xs={12} md={8}>
-          <h3>DAB it ✎</h3>
+          <h3>DaB it ✎</h3>
           <SignatureCanvas
-            penColor="#2D1E2F"
+            penColor={color}
             canvasProps={{ width: 600, height: 600, className: "sigCanvas" }}
             backgroundColor="#FCFAE3"
             ref={sigCanvas}
           />
         </Col>
       </Row>
-      <button type="button" onClick={() => sigCanvas.current.clear()}>
-        Reset Canvas
-      </button>
-      <button type="button" onClick={handleClick}>
-        Submit your art!
-      </button>
+      <div style={{ position: "absolute", right: "23.5%" }}>
+        <button type="button" onClick={() => sigCanvas.current.clear()}>
+          Reset Canvas
+        </button>{" "}
+        <button type="button" onClick={() => setColor("#FF474A")}>
+          💔
+        </button>
+        <button type="button" onClick={() => setColor("#FF8349")}>
+          🧡
+        </button>
+        <button type="button" onClick={() => setColor("#FFCA3A")}>
+          💛
+        </button>
+        <button type="button" onClick={() => setColor("#85C629")}>
+          💚
+        </button>
+        <button type="button" onClick={() => setColor("#1982C4")}>
+          💙
+        </button>
+        <button type="button" onClick={() => setColor("#6A4C93")}>
+          💜
+        </button>
+        <button type="button" onClick={() => setColor("#FF99C8")}>
+          💖
+        </button>
+        <button type="button" onClick={() => setColor("black")}>
+          🖤
+        </button>{" "}
+        <button type="button" onClick={handleClick}>
+          Submit your art!
+        </button>
+      </div>
     </Container>
   );
 };
