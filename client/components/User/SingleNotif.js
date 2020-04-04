@@ -2,6 +2,7 @@ import React from "react";
 import fire from "../../fire";
 import { useObjectVal, useListVals } from "react-firebase-hooks/database";
 import { useHistory } from "react-router-dom";
+import { timeSince } from "../RopeDude/util";
 const db = fire.database();
 
 const SingleNotif = props => {
@@ -27,33 +28,6 @@ const SingleNotif = props => {
   const deny = () => {
     db.ref(`notifications/${uid}/${id}`).remove();
   };
-
-  function timeSince(time) {
-    var seconds = Math.floor((new Date() - time) / 1000);
-
-    var interval = Math.floor(seconds / 31536000);
-
-    if (interval > 1) {
-      return `${interval} years ago`;
-    }
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) {
-      return `${interval} months ago`;
-    }
-    interval = Math.floor(seconds / 86400);
-    if (interval > 1) {
-      return `${interval} days ago`;
-    }
-    interval = Math.floor(seconds / 3600);
-    if (interval > 1) {
-      return `${interval} hours ago`;
-    }
-    interval = Math.floor(seconds / 60);
-    if (interval > 1) {
-      return `${interval} minutes ago`;
-    }
-    return `${Math.floor(seconds)} seconds ago`;
-  }
 
   return (
     <div className="m-1 border border-dark row justify-content-between bg-light">
