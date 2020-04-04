@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import fire from "../../fire";
+import Buttons from "./Buttons";
 
 const db = fire.database();
 
@@ -53,38 +54,11 @@ const SigCanvas = props => {
           />
         </Col>
       </Row>
-      <div style={{ position: "absolute", right: "23.5%" }}>
-        <button type="button" onClick={() => sigCanvas.current.clear()}>
-          Reset Canvas
-        </button>{" "}
-        <button type="button" onClick={() => setColor("#FF474A")}>
-          💔
-        </button>
-        <button type="button" onClick={() => setColor("#FF8349")}>
-          🧡
-        </button>
-        <button type="button" onClick={() => setColor("#FFCA3A")}>
-          💛
-        </button>
-        <button type="button" onClick={() => setColor("#85C629")}>
-          💚
-        </button>
-        <button type="button" onClick={() => setColor("#1982C4")}>
-          💙
-        </button>
-        <button type="button" onClick={() => setColor("#6A4C93")}>
-          💜
-        </button>
-        <button type="button" onClick={() => setColor("#FF99C8")}>
-          💖
-        </button>
-        <button type="button" onClick={() => setColor("black")}>
-          🖤
-        </button>{" "}
-        <button type="button" onClick={handleClick}>
-          Submit your art!
-        </button>
-      </div>
+      <Buttons
+        handleClick={handleClick}
+        setColor={setColor}
+        sigCanvas={sigCanvas}
+      />
     </Container>
   );
 };

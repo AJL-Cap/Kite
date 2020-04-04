@@ -70,19 +70,16 @@ const Text = styled.div`
 `;
 
 const Title = styled.div`
-  font-family: Arnoldboecklin;
   font-size: 70px;
   color: #ffa4a4;
 `;
 
 const Paragraph = styled.div`
-  font-family: Brushstroke;
   font-size: 40px;
   background: rgba(200, 200, 200, 0.15);
 `;
 
 const Intro = styled.div`
-  font-family: Brushstroke;
   font-size: 30px;
   color: #9d8189;
 `;

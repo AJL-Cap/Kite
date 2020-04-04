@@ -8,7 +8,12 @@ const db = fire.database();
 const Notifications = props => {
   const { uid } = props;
   const [notifs, loading, error] = useObjectVal(db.ref(`notifications/${uid}`));
-  if (loading) return "";
+  if (loading)
+    return (
+      <Dropdown.Toggle as={Nav.Link}>
+        Notifications <Badge variant="light">⋯</Badge>
+      </Dropdown.Toggle>
+    );
   if (error) return "ERROR";
   let notifKeys;
   if (notifs) {
