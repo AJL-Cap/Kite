@@ -1,8 +1,6 @@
 /* eslint-disable complexity */
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import fire from "../../fire";
-import { useObjectVal, useList } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import PlayerInfo from "./PlayerInfo";
 import DisplayWord from "./DisplayWord";
@@ -16,11 +14,8 @@ import EndGame from "./EndGame";
 const db = fire.database();
 
 const RopeDude = props => {
-  const { code, host, userId } = props;
+  const { code, host, userId, session } = props;
   const [finalGuess, setFinalGuess] = useState(false);
-  const [session, loading, error] = useObjectVal(
-    db.ref("gameSessions/" + code)
-  );
 
   useEffect(() => {
     if (host) {
@@ -31,8 +26,6 @@ const RopeDude = props => {
     }
   }, []);
 
-  if (loading) return "";
-  if (error) return "Error";
   if (!session) return <NotFound />;
   const nick = session.players[userId].nickname;
   let players = Object.keys(session.players);

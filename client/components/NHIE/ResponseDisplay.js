@@ -27,7 +27,7 @@ const ResponseDisplay = props => {
   return (
     <div>
       <div className="row justify-content-center">
-        <Timer roundTime={curRound.val().timeStarted} time={30} />
+        <Timer roundTime={curRound.val().timeStarted} time={60} />
       </div>
       {responses.map(response => (
         <SingleResponseDisplay

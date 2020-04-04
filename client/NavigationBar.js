@@ -63,6 +63,9 @@ export default function NavigationBar() {
             <Nav.Item>
               <Nav.Link href="/signup">Sign up</Nav.Link>
             </Nav.Item>
+            <Nav.Item>
+              <Nav.Link href="/viewGames">Games</Nav.Link>
+            </Nav.Item>
           </Nav>
         )}
       </Navbar.Collapse>

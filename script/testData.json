@@ -1,14 +1,19 @@
 {
   "games": {
     "1": {
-      "title": "Never Have I Ever",
+      "title": "Fess Up!",
       "rules":
-        "Everyone starts with five kites and inputs something they've never done. If you have done a certain thing, choose I have and you lose one kite. Otherwise, if you haven't done it choose I have not. The first person to run out of kites loses."
+        "Similar to Never Have I Ever, everyone starts with five kites and inputs something they've never done. If you've done a certain thing, choose 'I have' and you lose one kite. If you haven't, choose 'I have not'. The first person to run out of kites loses."
     },
     "2": {
       "title": "Rope Dude",
       "rules":
         "It's hangman! However, in this version you will work together with your teammates to figure out the word by taking turns guessing letters. Just like classic hangman, once you build the whole body you lose."
+    },
+    "3": {
+      "title": "DAB: Drawing a Blank",
+      "rules":
+        "It's (kinda) like pictionary. In each round, one person draws a picture of the prompt, your teammates each have three tries to guess what you drew. Both the guesser and the drawer earn points if they guess correctly."
     }
   },
   "players": {
@@ -56,29 +61,36 @@
       "players": {
         "UID1": {
           "nickname": "Lizzy",
-          "host": true
+          "host": true,
+          "points": 20,
+          "targetWord": "CHEESE",
+          "drawing": ""
         },
         "UID2": {
-          "nickname": "Ji"
+          "nickname": "Ji",
+          "points": 0,
+          "targetWord": "STRAW",
+          "responses": {
+            "1": "potato",
+            "2": "meatball",
+            "3": "moon"
+          }
         },
         "UID3": {
-          "nickname": "Anna"
+          "nickname": "Anna",
+          "points": 20,
+          "targetWord": "POPCORN",
+          "responses": {
+            "1": "cheese",
+            "2": "cake",
+            "3": "pie"
+          }
         }
       },
-      "gameId": "2",
+      "gameId": "3",
       "status": "waiting",
       "turn": "UID1",
-      "turnTimeStarted": "",
-      "points": 120,
-      "targetWord": "CHEESE",
-      "finalGuess": {
-        "Lizzy": "CHEESE"
-      },
-      "letterBank": {
-        "A": "UID1",
-        "B": "UID2",
-        "C": "UID3"
-      }
+      "turnTimeStarted": ""
     }
   }
 }

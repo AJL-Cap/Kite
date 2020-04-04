@@ -115,7 +115,7 @@ function respondingNHIE(snapshot) {
           endGame(refToDelete);
           endGame(chatToDelete);
         }
-      }, 30000);
+      }, 60000);
       //getting responses
       responsesRef.on("value", roundResponsesSnapshot => {
         responses = roundResponsesSnapshot.val();
@@ -158,10 +158,10 @@ function confessingNHIE(sessionSnap) {
       //chaging status to responding if game is still on
       endRound(ref, refToChange, "responding");
     }
-  }, 30000);
+  }, 60000);
   //checking if any player's point is 0
   sessionSnap.ref.child("players").on("value", playersSnap => {
-    if (playersSnap.val() != null) {
+    if (playersSnap.val() !== null) {
       const players = Object.values(playersSnap.val());
       players.forEach(player => {
         if (parseInt(player.points) <= 0) {
@@ -198,7 +198,6 @@ function playingRD(snapshot) {
     .child("players")
     .orderByKey()
     .once("value", playerSnapshot => {
-      console.log("inside playerSnapshot");
       players = Object.keys(playerSnapshot.val());
       //setting turn to first player in array
       sessionRef.update({
@@ -212,7 +211,7 @@ function playingRD(snapshot) {
   sessionRef.child("turn").on("value", turnSnap => {
     console.log("PLAYERLENGTH", players);
     console.log("inside turn value, what's going on??? ", turnSnap.val());
-    if (turnSnap.val() == null) sessionRef.child("turn").off();
+    if (turnSnap.val() === null) sessionRef.child("turn").off();
     turnTimeout = setTimeout(function() {
       console.log("inside timeout");
       missedTurns += 1;
@@ -232,7 +231,7 @@ function playingRD(snapshot) {
         endGame(sessionRef);
         endGame(chatToDelete);
       }
-    }, 15000);
+    }, 20000);
   });
   sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
     if (finalGuessSnap.val()) {
@@ -259,7 +258,7 @@ function playingRD(snapshot) {
       //ADD: timeout
       //if letter bank has all the letters for target word, change game status to finished
       sessionRef.child("targetWord").once("value", wordSnapshot => {
-        if (wordSnapshot.val() != null) {
+        if (wordSnapshot.val() !== null) {
           targetWord = wordSnapshot.val();
         }
       });
@@ -283,6 +282,23 @@ function gameOverRD(letterBankArr, target) {
   }
   return done;
 }
+
+function playingDAB(snapshot) {
+  const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
+  let players;
+  //getting all players in an array for turn
+  sessionRef
+    .child("players")
+    .orderByKey()
+    .once("value")
+    .then(playersSnap => {
+      players = Object.keys(playersSnap.val());
+      //setting timestamp for front end timer (i must be doing something wrong cuz the timer goes from 60 to NaN..and you have to reresh the page to get it to work)
+      sessionRef.child("turnTimeStarted").set(Date.now());
+    });
+  //and... here's come spaghetti
+}
+
 // this is the controller specifically for NHIE
 function switchStatusNHIE(statusSnap, sessionSnap) {
   const status = statusSnap.val();
@@ -305,6 +321,19 @@ function switchStatusRD(statusSnap, sessionSnap) {
     sessionSnap.ref.off();
   }
 }
+// this is the controller specifically for DAB
+function switchStatusDAB(statusSnap, sessionSnap) {
+  const status = statusSnap.val();
+  if (status === "playing") {
+    playingDAB(sessionSnap);
+  }
+  // else if (status === "guessing") {
+  //   guessingDAB(sessionSnap);
+  // } else if (status === "finished") {
+  //   finished(sessionSnap);
+  //   sessionSnap.ref.off();
+  // }
+}
 // this is the first function the session child added hits- directs based on gameID
 function newGameSession(sessionSnap) {
   //getting the status for each session
@@ -316,6 +345,10 @@ function newGameSession(sessionSnap) {
   } else if (sessionSnap.val().gameId === "2") {
     sessionSnap.ref.child("status").on("value", statusSnap => {
       switchStatusRD(statusSnap, sessionSnap);
+    });
+  } else if (sessionSnap.val().gameId === "3") {
+    sessionSnap.ref.child("status").on("value", statusSnap => {
+      switchStatusDAB(statusSnap, sessionSnap);
     });
   }
 }
