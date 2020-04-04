@@ -117,7 +117,7 @@ const WaitingRoom = props => {
           <button type="button" onClick={() => setToggle(!toggle)}>
             View Recent Players
           </button>
-          {toggle && <ViewRP uid={userId} />}
+          {toggle && <ViewRP uid={userId} code={code} gameId={gameId} />}
           <div className="row ">
             <Chat
               code={code}

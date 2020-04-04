@@ -19,6 +19,11 @@ export default function Profile(props) {
   if (player) {
     return (
       <div>
+        <div className="jumbotron text-center alert-dark">
+          <h1>
+            <strong>Welcome to your Profile {player.nickname} </strong>
+          </h1>
+        </div>
         <div className="column m-5">
           <Stats player={player} />
         </div>

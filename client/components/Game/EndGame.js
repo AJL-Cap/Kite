@@ -46,7 +46,10 @@ const EndGame = props => {
     <div className="container mt-3">
       <div className="row justify-content-between">
         <div className=" col-6">
-          <div className="jumbotron text-center border border-dark">
+          <div
+            className="jumbotron text-center border border-dark"
+            id="jumboPlayers"
+          >
             <h1>Winners</h1>
             {winners.map(winner => (
               <PlayerInfo
@@ -58,7 +61,10 @@ const EndGame = props => {
           </div>
         </div>
         <div className="col-6">
-          <div className="jumbotron text-center border border-dark">
+          <div
+            className="jumbotron text-center border border-dark"
+            id="jumboPlayers"
+          >
             <h1>Losers</h1>
             {losers.map(loser => (
               <PlayerInfo

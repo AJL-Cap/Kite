@@ -6,7 +6,7 @@ import RecentPlayers from "../User/RecentPlayers";
 const db = fire.database();
 
 export default function ViewRP(props) {
-  const { uid } = props;
+  const { uid, code, gameId } = props;
   const [player, loading, err] = useObjectVal(db.ref(`players/${uid}`));
 
   if (loading) {
@@ -20,7 +20,13 @@ export default function ViewRP(props) {
       <div className="col mb-4 align-self-center">
         {player.recentPlayers ? (
           <div className="column m-5">
-            <RecentPlayers recents={player.recentPlayers} invite={true} />
+            <RecentPlayers
+              recents={player.recentPlayers}
+              invite={true}
+              uid={uid}
+              code={code}
+              gameId={gameId}
+            />
           </div>
         ) : (
           <div>There aren't any recent players</div>
