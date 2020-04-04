@@ -163,6 +163,18 @@ function confessingNHIE(sessionSnap) {
   let isGameOver = false;
   let ref = sessionSnap.ref.child("players");
   //checking gameover when confessing time is up
+  let players;
+  sessionSnap.ref.child("players").on("value", playersSnap => {
+    if (playersSnap.val() !== null) {
+      players = Object.values(playersSnap.val());
+      players.forEach(player => {
+        if (parseInt(player.points) <= 0) {
+          isGameOver = true;
+        }
+      });
+    }
+  });
+  const timeForRound = players.length * 10000;
   const roundTimeout = setTimeout(function() {
     if (isGameOver) {
       //changing status to finished if game is over
@@ -171,18 +183,8 @@ function confessingNHIE(sessionSnap) {
       //chaging status to responding if game is still on
       endRound(ref, refToChange, "responding");
     }
-  }, 60000);
+  }, timeForRound);
   //checking if any player's point is 0
-  sessionSnap.ref.child("players").on("value", playersSnap => {
-    if (playersSnap.val() !== null) {
-      const players = Object.values(playersSnap.val());
-      players.forEach(player => {
-        if (parseInt(player.points) <= 0) {
-          isGameOver = true;
-        }
-      });
-    }
-  });
   //ending the game right away if at least one player reaches 0 points
 }
 // reusable in other games
