@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import fire from "../../fire";
 
 import SingleRecent from "./SingleRecent";
 import { useHistory } from "react-router-dom";
 
 const RecentPlayers = props => {
-  const { recents, invite } = props;
+  const { recents, invite, uid, code, gameId } = props;
   const history = useHistory();
 
   let recentPlayers = Object.values(recents);
@@ -12,10 +13,6 @@ const RecentPlayers = props => {
   const profileClick = player => {
     console.log("take to player profile");
     history.push(`profile/${player}`);
-  };
-
-  const gameClick = () => {
-    console.log("invite to a game");
   };
 
   return (
@@ -31,8 +28,10 @@ const RecentPlayers = props => {
               key={player}
               player={player}
               profileClick={profileClick}
-              gameClick={gameClick}
               invite={invite}
+              uid={uid}
+              code={code}
+              gameId={gameId}
             />
           ))}
         </div>

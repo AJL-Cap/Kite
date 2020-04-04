@@ -21,7 +21,7 @@ export default function Profile(props) {
       <div>
         <div className="jumbotron text-center alert-dark">
           <h1>
-            <strong>Welcome to your profile {player.nickname}</strong>
+            <strong>Welcome to your Profile {player.nickname} </strong>
           </h1>
         </div>
         <div className="column m-5">
