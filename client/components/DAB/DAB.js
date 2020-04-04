@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
-import { useObjectVal } from "react-firebase-hooks/database";
+import React, { useEffect, useState } from "react";
 import fire from "../../fire";
 import NotFound from "../NotFound";
+import SigCanvas from "./SigCanvas";
+import DrawingDisplay from "./DrawingDisplay";
 
 const db = fire.database();
 
@@ -24,14 +25,26 @@ const DAB = props => {
     }
   }, []);
   if (!session) return <NotFound />;
+
   return (
-    <div className="m-5 text-center">
-      <h1>
-        Here's your word:
-        <div className="alert alert-info col border border-dark">
-          {targetWord}
+    <div>
+      {session.status === "playing" && (
+        <div className="m-5 text-center">
+          <h1>
+            Here's your word:
+            <div className="alert alert-info col border border-dark">
+              {targetWord}
+            </div>
+          </h1>
+          <br />
+          <SigCanvas session={session} uid={userId} code={code} />
         </div>
-      </h1>
+      )}
+      {session.status === "guessing" && (
+        <div>
+          <DrawingDisplay session={session} uid={userId} code={code} />
+        </div>
+      )}
     </div>
   );
 };

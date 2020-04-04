@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 const Timer = props => {
   const { roundTime, time } = props;
-  console.log();
   const [timeLeft, setTimeLeft] = useState(time);
 
   useEffect(() => {

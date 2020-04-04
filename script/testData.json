@@ -63,7 +63,8 @@
           "nickname": "Lizzy",
           "host": true,
           "points": 20,
-          "targetWord": "CHEESE"
+          "targetWord": "CHEESE",
+          "drawing": ""
         },
         "UID2": {
           "nickname": "Ji",

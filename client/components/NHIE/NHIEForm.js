@@ -8,12 +8,7 @@ import NotFound from "../NotFound";
 const db = fire.database();
 
 export default function NHIEForm(props) {
-  const { userId, code, host } = props;
-  // useEffect(() => {
-  //   if (host) {
-  //     db.ref(`gameSessions/${code}/rounds`).push({ timeStarted: Date.now() });
-  //   }
-  // }, []);
+  const { userId, code } = props;
   const [submitted, setSubmitted] = useState(false);
   const [rounds, loading, error] = useList(
     db.ref(`gameSessions/${code}/rounds`)

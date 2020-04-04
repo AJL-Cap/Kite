@@ -161,7 +161,7 @@ function confessingNHIE(sessionSnap) {
   }, 60000);
   //checking if any player's point is 0
   sessionSnap.ref.child("players").on("value", playersSnap => {
-    if (playersSnap.val() != null) {
+    if (playersSnap.val() !== null) {
       const players = Object.values(playersSnap.val());
       players.forEach(player => {
         if (parseInt(player.points) <= 0) {
@@ -198,7 +198,6 @@ function playingRD(snapshot) {
     .child("players")
     .orderByKey()
     .once("value", playerSnapshot => {
-      console.log("inside playerSnapshot");
       players = Object.keys(playerSnapshot.val());
       //setting turn to first player in array
       sessionRef.update({
@@ -212,7 +211,7 @@ function playingRD(snapshot) {
   sessionRef.child("turn").on("value", turnSnap => {
     console.log("PLAYERLENGTH", players);
     console.log("inside turn value, what's going on??? ", turnSnap.val());
-    if (turnSnap.val() == null) sessionRef.child("turn").off();
+    if (turnSnap.val() === null) sessionRef.child("turn").off();
     turnTimeout = setTimeout(function() {
       console.log("inside timeout");
       missedTurns += 1;
@@ -259,7 +258,7 @@ function playingRD(snapshot) {
       //ADD: timeout
       //if letter bank has all the letters for target word, change game status to finished
       sessionRef.child("targetWord").once("value", wordSnapshot => {
-        if (wordSnapshot.val() != null) {
+        if (wordSnapshot.val() !== null) {
           targetWord = wordSnapshot.val();
         }
       });
@@ -286,10 +285,17 @@ function gameOverRD(letterBankArr, target) {
 
 function playingDAB(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
-
-  sessionRef.push({
-    turnTimeStarted: Date.now()
-  });
+  let players;
+  //getting all players in an array for turn
+  sessionRef
+    .child("players")
+    .orderByKey()
+    .once("value")
+    .then(playersSnap => {
+      players = Object.keys(playersSnap.val());
+      //setting timestamp for front end timer (i must be doing something wrong cuz the timer goes from 60 to NaN..and you have to reresh the page to get it to work)
+      sessionRef.child("turnTimeStarted").set(Date.now());
+    });
   //and... here's come spaghetti
 }
 
