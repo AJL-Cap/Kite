@@ -286,7 +286,7 @@ function playingDAB(snapshot) {
   let players;
   const drawingTimeout = setTimeout(function() {
     sessionRef.child("status").set("guessing");
-  }, 10000);
+  }, 46000);
   //getting all players in an array for turn
 
   sessionRef

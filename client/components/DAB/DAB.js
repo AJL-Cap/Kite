@@ -3,13 +3,13 @@ import fire from "../../fire";
 import NotFound from "../NotFound";
 import SigCanvas from "./SigCanvas";
 import DrawingDisplay from "./DrawingDisplay";
-
+import { useObjectVal } from "react-firebase-hooks/database";
 const db = fire.database();
-
 const DAB = props => {
-  const { session, code, host, userId } = props;
-  const { targetWord } = session.players[userId];
-
+  const { code, host, userId } = props;
+  const [session, loading, error] = useObjectVal(
+    db.ref("gameSessions/" + code)
+  );
   useEffect(() => {
     if (host) {
       //host setting everyone's game points to 0
@@ -23,8 +23,10 @@ const DAB = props => {
         });
     }
   }, []);
+  if (loading) return "";
+  if (error) return "Error";
   if (!session) return <NotFound />;
-
+  const { targetWord } = session.players[userId];
   return (
     <div>
       {session.status === "playing" && (
@@ -47,5 +49,4 @@ const DAB = props => {
     </div>
   );
 };
-
 export default DAB;
