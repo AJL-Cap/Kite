@@ -284,23 +284,40 @@ function gameOverRD(letterBankArr, target) {
 }
 
 function playingDAB(snapshot) {
+  console.log("in playing/drawing");
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
   let players;
   const drawingTimeout = setTimeout(function() {
     sessionRef.child("status").set("guessing");
   }, 46000);
-  //getting all players in an array for turn
 
+  //getting all players in an array for turn
   sessionRef
     .child("players")
     .orderByKey()
-    .once("value")
-    .then(playersSnap => {
-      players = Object.keys(playersSnap.val());
-      //setting timestamp for front end timer (i must be doing something wrong cuz the timer goes from 60 to NaN..and you have to reresh the page to get it to work)
+    .on("value", playersSnap => {
+      if (playersSnap.val()) {
+        players = Object.keys(playersSnap.val());
+        let drawings = [];
+        players.forEach(player => {
+          if (playersSnap.val()[player].drawing) {
+            drawings.push(player);
+          }
+        });
+        console.log(drawings);
+        // console.log(drawings.length);
+        if (drawings.length === players.length) {
+          clearTimeout(drawingTimeout);
+          sessionRef.child("players").off();
+          sessionRef.update({
+            status: "guessing"
+          });
+        }
+      }
     });
   //and... here's come spaghetti
 }
+function guessingDAB(snapshot) {}
 
 // this is the controller specifically for NHIE
 function switchStatusNHIE(statusSnap, sessionSnap) {
@@ -329,9 +346,9 @@ function switchStatusDAB(statusSnap, sessionSnap) {
   const status = statusSnap.val();
   if (status === "playing") {
     playingDAB(sessionSnap);
+  } else if (status === "guessing") {
+    guessingDAB(sessionSnap);
   }
-  // else if (status === "guessing") {
-  //   guessingDAB(sessionSnap);
   // } else if (status === "finished") {
   //   finished(sessionSnap);
   //   sessionSnap.ref.off();

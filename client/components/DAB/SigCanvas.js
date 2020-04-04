@@ -46,15 +46,7 @@ const SigCanvas = props => {
       drawing: imageURL
     });
     setSubmitted(true);
-
-    //setting the turn to oneself, resetting time & status to guessing: this is solely for front end testing (backend will eventually take care of assigning turns)
-    db.ref(`gameSessions/${code}`).update({
-      status: "guessing",
-      turn: uid,
-      turnTimeStarted: Date.now()
-    });
   };
-
   if (submitted) {
     return <h4>Your response has been submitted</h4>;
   }
