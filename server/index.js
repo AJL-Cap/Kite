@@ -283,6 +283,16 @@ function gameOverRD(letterBankArr, target) {
   }
   return done;
 }
+
+function playingDAB(snapshot) {
+  const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
+
+  sessionRef.push({
+    turnTimeStarted: Date.now()
+  });
+  //and... here's come spaghetti
+}
+
 // this is the controller specifically for NHIE
 function switchStatusNHIE(statusSnap, sessionSnap) {
   const status = statusSnap.val();
@@ -305,6 +315,19 @@ function switchStatusRD(statusSnap, sessionSnap) {
     sessionSnap.ref.off();
   }
 }
+// this is the controller specifically for DAB
+function switchStatusDAB(statusSnap, sessionSnap) {
+  const status = statusSnap.val();
+  if (status === "playing") {
+    playingDAB(sessionSnap);
+  }
+  // else if (status === "guessing") {
+  //   guessingDAB(sessionSnap);
+  // } else if (status === "finished") {
+  //   finished(sessionSnap);
+  //   sessionSnap.ref.off();
+  // }
+}
 // this is the first function the session child added hits- directs based on gameID
 function newGameSession(sessionSnap) {
   //getting the status for each session
@@ -316,6 +339,10 @@ function newGameSession(sessionSnap) {
   } else if (sessionSnap.val().gameId === "2") {
     sessionSnap.ref.child("status").on("value", statusSnap => {
       switchStatusRD(statusSnap, sessionSnap);
+    });
+  } else if (sessionSnap.val().gameId === "3") {
+    sessionSnap.ref.child("status").on("value", statusSnap => {
+      switchStatusDAB(statusSnap, sessionSnap);
     });
   }
 }
