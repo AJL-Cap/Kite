@@ -3,7 +3,7 @@ import { useObjectVal } from "react-firebase-hooks/database";
 import fire from "../../fire";
 import Stats from "./Stats";
 import RecentPlayers from "./RecentPlayers";
-import UIfx from "uifx";
+// import UIfx from "uifx";
 // import beepSound from "../../assets/success-low.wav";
 
 export default function Profile(props) {
