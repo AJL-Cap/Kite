@@ -17,15 +17,18 @@ const DisplayResults = props => {
 
   if (loading || turnLoading) return "";
   if (error || turnErr) return "error";
+  //getting guessors from drawer's db (= those who submitted responses):
   let drawerGuessors = [];
   if (playersSnap[turnSnap].guessors) {
     drawerGuessors = Object.keys(playersSnap[turnSnap].guessors);
   }
-  const players = Object.entries(playersSnap);
-  const guessors = players.filter(guessor => guessor[0] !== turnSnap);
-  console.log("drawerGuessors", drawerGuessors);
-  console.log("guessors", guessors);
 
+  //getting all players info from session which include nickname,responses & correct (boolean):
+  const players = Object.entries(playersSnap);
+  //and filtering out the drawer so we only have players who are suppose to guess (regardless of whether they submitted respones for the current round):
+  const guessors = players.filter(guessor => guessor[0] !== turnSnap);
+
+  //and further filtering players info so we only have those that submitteed responses for the current round:
   let filteredGuessors = [];
   for (let i = 0; i < guessors.length; i++) {
     for (let j = 0; j < drawerGuessors.length; j++) {
@@ -38,8 +41,7 @@ const DisplayResults = props => {
   if (turnSnap === uid) {
     // if there is at least one player who guessed
     if (drawerGuessors.length > 0) {
-      console.log("drew & drawerGuessor", drawerGuessors);
-      console.log("filtered", filteredGuessors);
+      console.log("drew and at least 1 guessed", drawerGuessors);
       return (
         <div>
           <h4>The answer is {targetWord}</h4>
@@ -58,12 +60,11 @@ const DisplayResults = props => {
         </div>
       );
     } else {
-      console.log("drew but no drawerGuessor");
+      console.log("drew but no one has guessed yet");
       return <div>Wait while other players guess your drawing!</div>;
     }
   } else {
     console.log("did not draw and guessed", drawerGuessors);
-    console.log("filtered", filteredGuessors);
     return (
       <div>
         <h4>The answer is {targetWord}</h4>

@@ -8,13 +8,11 @@ const db = fire.database();
 
 const DrawingDisplay = props => {
   const { session, code, uid, targetWord } = props;
-
   const { turn, turnTimeStarted } = session;
   let drawerNick = "";
   if (turn) {
     drawerNick = session.players[turn].nickname;
   }
-
   const [turnTime, loading, error] = useObjectVal(
     db.ref(`gameSessions/${code}/turnTimeStarted`)
   );
@@ -26,7 +24,6 @@ const DrawingDisplay = props => {
   const numPlayers = Object.keys(session.players).length;
   let timeForRound = 10 + numPlayers * 10;
 
-  //add timer
   return (
     <div>
       <div className="row justify-content-center">
