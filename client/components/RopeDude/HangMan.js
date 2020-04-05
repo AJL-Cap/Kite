@@ -1,5 +1,5 @@
 import React from "react";
-import images from "../../images/images";
+import images from "../../assets/images";
 import ASCIIART from "./ASCIIART";
 
 const HangMan = props => {

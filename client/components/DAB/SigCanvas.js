@@ -6,7 +6,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import fire from "../../fire";
 import Buttons from "./Buttons";
-import HandleResponses from "./HandleResponses";
 
 const db = fire.database();
 
@@ -25,6 +24,7 @@ const SigCanvas = props => {
     db.ref(`gameSessions/${code}/players/${uid}`).update({
       drawing: imageURL
     });
+    setSubmitted(true);
 
     //for front end testing purpose (eventually backend will handle this):
     db.ref(`gameSessions/${code}`).update({
@@ -36,9 +36,7 @@ const SigCanvas = props => {
 
   useEffect(() => {
     timeout = setTimeout(function() {
-      console.log("setTimeout");
       saveCanvas();
-      setSubmitted(true);
     }, 5000);
     //unsubscribing:
     return () => {
@@ -48,10 +46,8 @@ const SigCanvas = props => {
   }, []);
 
   const handleClick = () => {
-    console.log("handle click");
     clearTimeout(timeout);
     saveCanvas();
-    setSubmitted(true);
   };
 
   if (submitted) {

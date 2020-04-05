@@ -4,6 +4,7 @@ import NotFound from "../NotFound";
 import SigCanvas from "./SigCanvas";
 import DrawingDisplay from "./DrawingDisplay";
 import { useObjectVal } from "react-firebase-hooks/database";
+import PointsTally from "./PointsTally";
 
 const db = fire.database();
 
@@ -35,6 +36,7 @@ const DAB = props => {
 
   return (
     <div>
+      <PointsTally session={session} uid={userId} code={code} />
       {session.status === "playing" && (
         <div className="m-5 text-center">
           <h1>

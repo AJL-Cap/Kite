@@ -5,8 +5,9 @@ const DrawingDisplay = props => {
   const { session, code, uid } = props;
   const { turn, turnTimeStarted } = session;
   const [display, setDisplay] = useState(null);
+  const drawerNick = session.players[turn].nickname;
 
-  const { drawing, nickname, points, targetWord } = session.players[turn];
+  const { drawing } = session.players[turn];
 
   useEffect(() => {
     //retrieving current turn's drawing
@@ -16,7 +17,7 @@ const DrawingDisplay = props => {
   //add timer
   return (
     <div>
-      <h2>Time to Guess!</h2>
+      <h2>Look at the masterpiece by {drawerNick}!</h2>
       <img
         src={display}
         style={{
@@ -25,13 +26,7 @@ const DrawingDisplay = props => {
           border: "1px solid black"
         }}
       />
-      <GuessForm
-        session={session}
-        uid={uid}
-        code={code}
-        drawer={nickname}
-        drawerID={turn}
-      />
+      <GuessForm session={session} uid={uid} code={code} drawerId={turn} />
     </div>
   );
 };

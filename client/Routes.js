@@ -43,22 +43,21 @@ export default function Routes() {
             path="/games/:code"
             render={props => <ActiveGame userId={user.uid} {...props} />}
           />
-          <Route path="/players" component={Players} />
           <Route path="/profile/:uid" component={FriendProfile} />
+          <Route path="/players" component={Players} />
           <Route
             path="/profile"
             render={props => <Profile userId={user.uid} {...props} />}
           />
           <Route
-            exact
             path="/games"
             render={props => <GamePage userId={user.uid} {...props} />}
           />
           <Route
-            exact
             path="/form"
             render={props => <Form userId={user.uid} {...props} />}
           />
+          <Route path="/:anythingElse" component={NotFound} />
           <Route
             exact
             path="/"
@@ -67,13 +66,13 @@ export default function Routes() {
         </Switch>
       ) : (
         <Switch>
-          <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SignUp} />
           <Route path="/viewGames" component={ViewGames} />
+          <Route path="/:anythingElse" component={NotFound} />
+          <Route exact path="/" component={Home} />
         </Switch>
       )}
-      <Route component={NotFound} />
     </Switch>
   );
 }

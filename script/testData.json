@@ -64,7 +64,11 @@
           "host": true,
           "points": 20,
           "targetWord": "CHEESE",
-          "drawing": ""
+          "drawing": "",
+          "guessors": {
+            "UID2": false,
+            "UID3": true
+          }
         },
         "UID2": {
           "nickname": "Ji",

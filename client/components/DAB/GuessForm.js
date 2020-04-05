@@ -1,28 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import fire from "../../fire";
+import HandleResponse from "./HandleResponse";
 
 const db = fire.database();
 
 const GuessForm = props => {
-  const { drawer, session, code, uid, drawerID } = props;
+  const { drawerId, code, uid, session } = props;
   const { register, handleSubmit, errors } = useForm();
+  const [submitted, setSubmitted] = useState(false);
 
   const onSubmit = data => {
     console.log("guesses submitted:", data);
     const { guess1, guess2, guess3 } = data;
     db.ref(`gameSessions/${code}/players/${uid}/responses`).update({
-      1: guess1,
-      2: guess2,
-      3: guess3
+      1: guess1.toUpperCase(),
+      2: guess2.toUpperCase(),
+      3: guess3.toUpperCase()
     });
+    setSubmitted(true);
   };
+  if (submitted) {
+    return <HandleResponse {...props} />;
+  }
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="card text-center">
           <div className="card-header">
-            <strong>Guess what {drawer} drew...</strong>
+            <strong>Time to Guess..</strong>
           </div>
           <div className="card-body">
             <h5 className="card-title">Submit up to 3 guesses</h5>
