@@ -230,13 +230,10 @@ function playingRD(snapshot) {
   let turnTimeout;
   let turnCounter = 0;
   sessionRef.child("turn").on("value", turnSnap => {
-    console.log("PLAYERLENGTH", players);
-    console.log("inside turn value, what's going on??? ", turnSnap.val());
     if (turnSnap.val() === null) sessionRef.child("turn").off();
     turnTimeout = setTimeout(function() {
       console.log("inside timeout");
       missedTurns += 1;
-      console.log("MISSED TURNS", missedTurns);
       if (missedTurns <= players.length - 1) {
         turnCounter += 1;
         //this modulo ensures we loop the player array repeatedly:
@@ -266,7 +263,6 @@ function playingRD(snapshot) {
     let targetWord;
     if (bankSnapshot.val()) {
       letterBank = Object.keys(bankSnapshot.val());
-      console.log("bank snapshot:", bankSnapshot.val());
       clearTimeout(turnTimeout);
       missedTurns = 0;
       turnCounter += 1;
@@ -305,23 +301,75 @@ function gameOverRD(letterBankArr, target) {
 }
 
 function playingDAB(snapshot) {
+  console.log("in playing/drawing");
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
   // sessionRef.update({turnTimeStarted: Date.now()});
   console.log("playingDAB");
   let players;
-  // const drawingTimeout = setTimeout(function() {
-  //   //getting the picture for each player
-  //   sessionRef.child("status").set("guessing");
-  // }, 30000);
+  const drawingTimeout = setTimeout(function() {
+    sessionRef.child("status").set("guessing");
+  }, 46000);
+
   //getting all players in an array for turn
   sessionRef
     .child("players")
     .orderByKey()
-    .once("value")
-    .then(playersSnap => {
-      players = Object.keys(playersSnap.val());
-      //setting timestamp for front end timer (i must be doing something wrong cuz the timer goes from 60 to NaN..and you have to reresh the page to get it to work)
+    .on("value", playersSnap => {
+      if (playersSnap.val()) {
+        players = Object.keys(playersSnap.val());
+        let drawings = [];
+        players.forEach(player => {
+          if (playersSnap.val()[player].drawing) {
+            drawings.push(player);
+          }
+        });
+        // console.log(drawings.length);
+        if (drawings.length === players.length) {
+          clearTimeout(drawingTimeout);
+          sessionRef.child("players").off();
+          sessionRef.update({
+            status: "guessing"
+          });
+        }
+      }
     });
+}
+function guessingDAB(snapshot) {
+  const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
+  let players;
+  sessionRef
+    .child("players")
+    .orderByKey()
+    .once("value", playerSnapshot => {
+      const playersSorted = Object.keys(playerSnapshot.val());
+      players = shuffle(playersSorted);
+      //setting turn to first player in array
+      sessionRef.update({
+        turn: players[0],
+        turnTimeStarted: Date.now()
+      });
+    });
+  let turnCounter = 0;
+  const timeForRound = players.length * 10000 + 10000;
+  sessionRef.child("turn").on("value", turnSnap => {
+    if (turnSnap.val() === null) sessionRef.child("turn").off();
+    let turnTimeout = setTimeout(function() {
+      console.log("inside timeout");
+      if (turnCounter < players.length - 1) {
+        turnCounter += 1;
+        //this modulo ensures we loop the player array repeatedly:
+        let currentPlayerIdx = turnCounter % players.length;
+        sessionRef.update({
+          turn: players[currentPlayerIdx],
+          turnTimeStarted: Date.now()
+        });
+      } else {
+        sessionRef.child("turn").off();
+        sessionRef.child("players").off();
+        sessionRef.update({ status: "finished" });
+      }
+    }, timeForRound);
+  });
 }
 
 // this is the controller specifically for NHIE
@@ -351,13 +399,12 @@ function switchStatusDAB(statusSnap, sessionSnap) {
   const status = statusSnap.val();
   if (status === "playing") {
     playingDAB(sessionSnap);
+  } else if (status === "guessing") {
+    guessingDAB(sessionSnap);
+  } else if (status === "finished") {
+    finished(sessionSnap);
+    sessionSnap.ref.off();
   }
-  // else if (status === "guessing") {
-  //   guessingDAB(sessionSnap);
-  // } else if (status === "finished") {
-  //   finished(sessionSnap);
-  //   sessionSnap.ref.off();
-  // }
 }
 // this is the first function the session child added hits- directs based on gameID
 function newGameSession(sessionSnap) {

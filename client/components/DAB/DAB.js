@@ -7,7 +7,6 @@ import { useObjectVal } from "react-firebase-hooks/database";
 import PlayerInfo from "./PlayerInfo";
 
 const db = fire.database();
-
 const DAB = props => {
   const { code, host, userId } = props;
   const [session, loading, error] = useObjectVal(
@@ -40,7 +39,7 @@ const DAB = props => {
       {session.status === "playing" && (
         <div>
           {players.map(key => (
-            <PlayerInfo key={key} session={session} uid={userId} code={code} />
+            <PlayerInfo key={key} session={session} uid={key} code={code} />
           ))}
           <div className="m-5 text-center">
             <h1>
@@ -57,7 +56,7 @@ const DAB = props => {
       {session.status === "guessing" && (
         <div>
           {players.map(key => (
-            <PlayerInfo key={key} session={session} uid={userId} code={code} />
+            <PlayerInfo key={key} session={session} uid={key} code={code} />
           ))}
           <DrawingDisplay
             session={session}
@@ -67,8 +66,8 @@ const DAB = props => {
           />
         </div>
       )}
+      {session.status === "finished" && <div>Finished</div>}
     </div>
   );
 };
-
 export default DAB;

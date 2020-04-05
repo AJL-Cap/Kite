@@ -1,34 +1,49 @@
 import React, { useState, useEffect } from "react";
 import GuessForm from "./GuessForm";
+import DisplayResults from "./DisplayResults";
+import Timer from "../Game/Timer";
 
 const DrawingDisplay = props => {
-  const { session, code, uid } = props;
+  const { session, code, uid, targetWord } = props;
   const { turn, turnTimeStarted } = session;
-  const [display, setDisplay] = useState(null);
-  const drawerNick = session.players[turn].nickname;
-
-  const { drawing } = session.players[turn];
-
-  useEffect(() => {
-    //retrieving current turn's drawing
-    setDisplay(drawing);
-  }, []);
+  let drawerNick = "";
+  if (turn) {
+    drawerNick = session.players[turn].nickname;
+  }
+  const numPlayers = Object.keys(session.players).length;
+  let timeForRound = 10 + numPlayers * 10;
 
   //add timer
   return (
     <div>
-      <h2 className="text-center">{drawerNick}'s masterpiece</h2>
-      <div style={{ margin: "2%" }}>
-        <img
-          src={display}
-          style={{
-            display: "block",
-            margin: "0 auto",
-            border: "2px solid black"
-          }}
-        />
+      <div className="row justify-content-center">
+        <Timer roundTime={turnTimeStarted} time={timeForRound} />
       </div>
-      <GuessForm session={session} uid={uid} code={code} drawerId={turn} />
+      <h2 className="text-center">{drawerNick}'s masterpiece</h2>
+      {turn && (
+        <div style={{ margin: "2%" }}>
+          <img
+            src={session.players[turn].drawing}
+            style={{
+              display: "block",
+              margin: "0 auto",
+              border: "2px solid black"
+            }}
+          />
+        </div>
+      )}
+      {uid === turn ? (
+        <div>
+          <DisplayResults
+            code={code}
+            drawerId={turn}
+            targetWord={targetWord}
+            uid={uid}
+          />
+        </div>
+      ) : (
+        <GuessForm session={session} uid={uid} code={code} drawerId={turn} />
+      )}
     </div>
   );
 };

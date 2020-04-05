@@ -56,6 +56,7 @@ const WaitingRoom = props => {
           db
             .ref(`gameSessions/${code}/players/${player}/targetWord`)
             .set(targetWord);
+          db.ref(`gameSessions/${code}/turnTimeStarted`).set(Date.now());
         });
       }
       //updating that session status to playing
@@ -107,7 +108,11 @@ const WaitingRoom = props => {
             <h3>Rules: {game.rules}</h3>
           </Row>
           <Row className="justify-content-center m-3">
-            {host && players.length > 0 ? (
+            {gameId === "2" && host ? (
+              <Button className="btn btn-info btn-lg" onClick={handleClick}>
+                Start Game
+              </Button>
+            ) : host && players.length > 1 ? (
               <Button className="btn btn-info btn-lg" onClick={handleClick}>
                 Start Game
               </Button>

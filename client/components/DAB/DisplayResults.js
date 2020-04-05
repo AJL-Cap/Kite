@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import fire from "../../fire";
-import { useList, useObjectVal } from "react-firebase-hooks/database";
+import { useObjectVal } from "react-firebase-hooks/database";
 import Guess from "./Guess";
 
 const db = fire.database();
 
 const DisplayResults = props => {
-  const { code, drawerId, targetWord } = props;
+  const { code, drawerId, targetWord, uid } = props;
   const [playersSnap, loading, error] = useObjectVal(
     db.ref(`gameSessions/${code}/players`)
   );
@@ -15,26 +15,35 @@ const DisplayResults = props => {
   if (error) return "error";
 
   const players = Object.entries(playersSnap);
-  console.log(players);
   const guessors = players.filter(guessor => guessor[0] !== drawerId);
-  console.log(guessors);
-  return (
-    <div>
-      <h4>The answer is {targetWord}</h4>
+  let guessorIds = [];
+  if (playersSnap[drawerId].guessors) {
+    guessorIds = Object.keys(playersSnap[drawerId].guessors);
+  }
+
+  if (guessorIds.length === guessors.length) {
+    return (
       <div>
-        {guessors.map(guessor => (
-          <Guess
-            key={guessor[0]}
-            guessorNick={guessor[1].nickname}
-            correct={guessor[1].guess}
-            guesses={Object.values(guessor[1].responses)}
-            drawerId={drawerId}
-            code={code}
-          />
-        ))}
+        <h4>The answer is {targetWord}</h4>
+        <div>
+          {guessors.map(guessor => (
+            <Guess
+              key={guessor[0]}
+              guessorNick={guessor[1].nickname}
+              correct={guessor[1].correct}
+              guesses={Object.values(guessor[1].responses)}
+              drawerId={drawerId}
+              code={code}
+            />
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+  if (drawerId === uid) {
+    return <div>Wait while other players guess your drawing!</div>;
+  }
+  return <></>;
 };
 
 export default DisplayResults;

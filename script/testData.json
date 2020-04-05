@@ -64,7 +64,11 @@
           "host": true,
           "points": 10,
           "targetWord": "CHEESE",
-          "drawing": "data:image/png;base64,..."
+          "drawing": "data:image/png;base64,...",
+          "guessors": {
+            "UID2": true,
+            "UID3": true
+          }
         },
         "UID2": {
           "nickname": "Ji",
@@ -75,7 +79,7 @@
             "2": "meatball",
             "3": "moon"
           },
-          "guess": false
+          "correct": false
         },
         "UID3": {
           "nickname": "Anna",
@@ -86,7 +90,7 @@
             "2": "cake",
             "3": "pie"
           },
-          "guess": true
+          "correct": true
         }
       },
       "gameId": "3",

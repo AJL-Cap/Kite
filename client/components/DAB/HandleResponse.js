@@ -7,7 +7,7 @@ const db = fire.database();
 const HandleResponse = props => {
   const { session, code, uid, drawerId } = props;
   const playersRef = db.ref(`gameSessions/${code}/players`);
-  const drawerRef = playersRef.child(drawerId);
+  const drawersGuessorRef = playersRef.child(drawerId).child("guessors");
 
   //guessor's info
   const { nickname, points, responses } = session.players[uid];
@@ -22,7 +22,7 @@ const HandleResponse = props => {
       //update guessor's points & document correct
       playersRef.child(uid).update({
         points: parseInt(points) + 10,
-        guess: true
+        correct: true
       });
       //update drawer's points
       playersRef
@@ -31,9 +31,11 @@ const HandleResponse = props => {
     } else {
       //document incorrectly guessed
       playersRef.child(uid).update({
-        guess: false
+        correct: false
       });
     }
+    //record guessors
+    drawersGuessorRef.child(uid).set(true);
   }, []);
 
   return (

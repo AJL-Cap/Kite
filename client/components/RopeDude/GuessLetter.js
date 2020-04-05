@@ -27,7 +27,6 @@ const GuessLetter = props => {
   );
 
   const onSubmit = data => {
-    console.log(data);
     const letter = data.guessLetter.toUpperCase();
     //updating letterbank in db
     db.ref(`gameSessions/${code}/letterBank/${letter}`).set(userId);

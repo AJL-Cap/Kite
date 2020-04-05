@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 const Timer = props => {
   const { roundTime, time } = props;
   const [timeLeft, setTimeLeft] = useState(time);
-
   useEffect(() => {
     const interval = setInterval(() => {
       const currentTime = Date.now();

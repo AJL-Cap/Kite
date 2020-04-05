@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Timer from "../Game/Timer";
 import SignatureCanvas from "react-signature-canvas";
 import Container from "react-bootstrap/Container";
@@ -15,8 +15,25 @@ const SigCanvas = props => {
   const [submitted, setSubmitted] = useState(false);
   const sigCanvas = useRef({});
   let timeout;
+  useEffect(() => {
+    timeout = setTimeout(function() {
+      const imageURL = sigCanvas.current
+        .getTrimmedCanvas()
+        .toDataURL("image/png");
 
-  const saveCanvas = () => {
+      //saving that in db
+      db.ref(`gameSessions/${code}/players/${uid}`).update({
+        drawing: imageURL
+      });
+    }, 45000);
+    return function cleanup() {
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  const handleClick = () => {
+    clearTimeout(timeout);
+    //converting the drawing to url
     const imageURL = sigCanvas.current
       .getTrimmedCanvas()
       .toDataURL("image/png");
@@ -25,31 +42,7 @@ const SigCanvas = props => {
       drawing: imageURL
     });
     setSubmitted(true);
-
-    //for front end testing purpose (eventually backend will handle this):
-    db.ref(`gameSessions/${code}`).update({
-      status: "guessing",
-      turn: uid,
-      turnTimeStarted: Date.now()
-    });
   };
-
-  useEffect(() => {
-    timeout = setTimeout(function() {
-      saveCanvas();
-    }, 45000);
-    //unsubscribing:
-    return () => {
-      console.log("unsubscribe");
-      clearTimeout(timeout);
-    };
-  }, []);
-
-  const handleClick = () => {
-    clearTimeout(timeout);
-    saveCanvas();
-  };
-
   if (submitted) {
     return <h4>Your response has been submitted</h4>;
   }
