@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import fire from "../../fire";
 import DisplayResults from "./DisplayResults";
-import { useList, useObjectVal } from "react-firebase-hooks/database";
 
 const db = fire.database();
 
@@ -13,39 +12,33 @@ const HandleResponse = props => {
   //guessor's info
   const { nickname, points, responses } = session.players[uid];
   //drawer's info
-  const { drawing, targetWord } = session.players[drawerId];
-  const drawerNick = session.players[drawerId].nickname;
+  const { targetWord } = session.players[drawerId];
   const drawerPoints = session.players[drawerId].points;
 
   const correct = responses.find(guess => guess === targetWord);
 
   useEffect(() => {
     if (correct) {
-      //update guessor's points
+      //update guessor's points & document correct
       playersRef.child(uid).update({
-        points: parseInt(points) + 10
+        points: parseInt(points) + 10,
+        guess: true
       });
       //update drawer's points
       playersRef
         .child(drawerId)
         .update({ points: parseInt(drawerPoints) + 10 });
-      //update guessor info
-      drawerRef
-        .child("guessors")
-        .child(nickname)
-        .set(true);
     } else {
-      //update guessor info
-      drawerRef
-        .child("guessors")
-        .child(nickname)
-        .set(false);
+      //document incorrectly guessed
+      playersRef.child(uid).update({
+        guess: false
+      });
     }
   }, []);
 
   return (
     <div>
-      <DisplayResults code={code} drawerId={drawerId} />
+      <DisplayResults code={code} drawerId={drawerId} targetWord={targetWord} />
     </div>
   );
 };

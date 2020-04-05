@@ -62,13 +62,9 @@
         "UID1": {
           "nickname": "Lizzy",
           "host": true,
-          "points": 20,
+          "points": 10,
           "targetWord": "CHEESE",
-          "drawing": "",
-          "guessors": {
-            "UID2": false,
-            "UID3": true
-          }
+          "drawing": "data:image/png;base64,..."
         },
         "UID2": {
           "nickname": "Ji",
@@ -78,17 +74,19 @@
             "1": "potato",
             "2": "meatball",
             "3": "moon"
-          }
+          },
+          "guess": false
         },
         "UID3": {
           "nickname": "Anna",
-          "points": 20,
+          "points": 10,
           "targetWord": "POPCORN",
           "responses": {
             "1": "cheese",
             "2": "cake",
             "3": "pie"
-          }
+          },
+          "guess": true
         }
       },
       "gameId": "3",

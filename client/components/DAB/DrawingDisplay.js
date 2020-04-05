@@ -18,14 +18,16 @@ const DrawingDisplay = props => {
   return (
     <div>
       <h2 className="text-center">{drawerNick}'s masterpiece</h2>
-      <img
-        src={display}
-        style={{
-          display: "block",
-          margin: "0 auto",
-          border: "1px solid black"
-        }}
-      />
+      <div style={{ margin: "2%" }}>
+        <img
+          src={display}
+          style={{
+            display: "block",
+            margin: "0 auto",
+            border: "2px solid black"
+          }}
+        />
+      </div>
       <GuessForm session={session} uid={uid} code={code} drawerId={turn} />
     </div>
   );

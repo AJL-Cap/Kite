@@ -1,11 +1,23 @@
 import React from "react";
+import fire from "../../fire";
+import { useList, useObjectVal } from "react-firebase-hooks/database";
+
+const db = fire.database();
 
 const Guess = props => {
-  const { guessor, correct } = props;
+  const { drawerId, guessorNick, correct, guesses, code } = props;
+  console.log(guessorNick);
+
+  const displayGuesses = guesses.map((guess, index) => (
+    <li key={index}>{guess}</li>
+  ));
 
   return (
     <div>
-      {guessor} {correct ? "guessed it right ✅ " : "guessed it wrong ❌"}
+      <div>
+        {guessorNick} {correct ? "guessed it right ✅ " : "guessed it wrong ❌"}
+      </div>
+      <div>Their guesses were: {displayGuesses}</div>
     </div>
   );
 };

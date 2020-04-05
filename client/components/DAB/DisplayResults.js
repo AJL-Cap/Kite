@@ -6,22 +6,31 @@ import Guess from "./Guess";
 const db = fire.database();
 
 const DisplayResults = props => {
-  const { code, drawerId } = props;
-  const [guessorsSnap, loading, error] = useObjectVal(
-    db.ref(`gameSessions/${code}/players/${drawerId}/guessors`)
+  const { code, drawerId, targetWord } = props;
+  const [playersSnap, loading, error] = useObjectVal(
+    db.ref(`gameSessions/${code}/players`)
   );
-  let guessors = [];
+
   if (loading) return "";
   if (error) return "error";
-  if (guessorsSnap) {
-    guessors = Object.entries(guessorsSnap);
-  }
 
+  const players = Object.entries(playersSnap);
+  console.log(players);
+  const guessors = players.filter(guessor => guessor[0] !== drawerId);
+  console.log(guessors);
   return (
     <div>
+      <h4>The answer is {targetWord}</h4>
       <div>
-        {guessors.map((guessor, idx) => (
-          <Guess key={idx} guessor={guessor[0]} correct={guessor[1]} />
+        {guessors.map(guessor => (
+          <Guess
+            key={guessor[0]}
+            guessorNick={guessor[1].nickname}
+            correct={guessor[1].guess}
+            guesses={Object.values(guessor[1].responses)}
+            drawerId={drawerId}
+            code={code}
+          />
         ))}
       </div>
     </div>

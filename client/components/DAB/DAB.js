@@ -34,7 +34,7 @@ const DAB = props => {
   if (!session) return <NotFound />;
   const { targetWord } = session.players[userId];
   let players = Object.keys(session.players);
-  console.log(players);
+
   return (
     <div>
       {session.status === "playing" && (
@@ -59,7 +59,12 @@ const DAB = props => {
           {players.map(key => (
             <PlayerInfo key={key} session={session} uid={userId} code={code} />
           ))}
-          <DrawingDisplay session={session} uid={userId} code={code} />
+          <DrawingDisplay
+            session={session}
+            uid={userId}
+            code={code}
+            targetWord={targetWord}
+          />
         </div>
       )}
     </div>
