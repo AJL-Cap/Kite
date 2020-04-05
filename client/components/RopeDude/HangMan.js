@@ -7,8 +7,8 @@ const HangMan = props => {
   const points = session.points;
 
   return (
-    <Card style={{ width: "100px", padding: "10px" }}>
-      <Card.Img border="dark" src={images[points / 20]} alt="Card image" />
+    <Card style={{ width: "100px", padding: "10px" }} border="dark">
+      <Card.Img src={images[points / 20]} alt="Card image" />
     </Card>
   );
 };
