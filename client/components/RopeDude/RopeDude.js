@@ -10,6 +10,9 @@ import HangMan from "./HangMan";
 import { Button } from "react-bootstrap";
 import FinalGuess from "./FinalGuess";
 import EndGame from "./EndGame";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 const db = fire.database();
 
@@ -36,10 +39,10 @@ const RopeDude = props => {
   };
 
   return (
-    <div className="container-xl mx-5">
+    <Container fluid>
       {session.status === "playing" && (
-        <div className="row">
-          <div className="col" id="playerDisplayPoints">
+        <Row>
+          <Col id="playerDisplayPoints">
             <div
               className="jumbotron text-center justify-content-center"
               id="jumboPlayers"
@@ -59,15 +62,22 @@ const RopeDude = props => {
                 );
               })}
             </div>
-          </div>
-          <div className="col-8">
+          </Col>
+          <Col className="col-8">
             <div className="jumbotron text-center">
-              <DisplayWord code={code} session={session} />
+              <Row>
+                <Col md="auto">
+                  <HangMan code={code} session={session} />
+                </Col>
+                <Col md="auto">
+                  <DisplayWord code={code} session={session} />
+                </Col>
+              </Row>
+              <hr />
+              <LetterBank code={code} session={session} />
             </div>
-            <LetterBank code={code} session={session} />
-            <HangMan code={code} session={session} />
             <br />
-            <div className="row">
+            <Row>
               {session.turn === userId && (
                 <div className="card" style={{ width: "100rem" }}>
                   <div className="card-body">
@@ -78,7 +88,7 @@ const RopeDude = props => {
                       code={code}
                       session={session}
                     />
-                    <Button className="alert-danger" onClick={handleClick}>
+                    <Button className="btn btn-danger" onClick={handleClick}>
                       Final Guess
                     </Button>
                     {finalGuess && (
@@ -92,9 +102,9 @@ const RopeDude = props => {
                   </div>
                 </div>
               )}
-            </div>
-          </div>
-        </div>
+            </Row>
+          </Col>
+        </Row>
       )}
       {session.status === "finished" && (
         <EndGame
@@ -104,7 +114,7 @@ const RopeDude = props => {
           code={code}
         />
       )}
-    </div>
+    </Container>
   );
 };
 
