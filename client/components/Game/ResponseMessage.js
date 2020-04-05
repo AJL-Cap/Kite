@@ -16,8 +16,9 @@ const ResponseMessage = props => {
       </div> */}
       <div className="col-md col-xs">
         <div className="messages msg_receive">
-          <p className="chat-time float-left">{player.nickname}</p>
-          <p className="float-right">{props.message.content}</p>
+          <p>
+            <strong>{player.nickname}:</strong> {props.message.content}
+          </p>
         </div>
       </div>
     </div>
