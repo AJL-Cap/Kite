@@ -14,7 +14,10 @@ const SingleRecent = props => {
   if (loading || userLoading) {
     return "";
   }
-  if (err || error) {
+
+  console.log(player);
+  if (err || error || !user) {
+    console.log("problem finding user: ", uid);
     return <div>error!</div>;
   }
   console.log("recentPlayer", user.nickname);

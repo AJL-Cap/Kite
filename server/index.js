@@ -165,7 +165,7 @@ function confessingNHIE(sessionSnap) {
   //checking gameover when confessing time is up
   let players;
   sessionSnap.ref.child("players").on("value", playersSnap => {
-    if (playersSnap.val() !== null) {
+    if (playersSnap.val() != null) {
       players = Object.values(playersSnap.val());
       players.forEach(player => {
         if (parseInt(player.points) <= 0) {
@@ -174,7 +174,12 @@ function confessingNHIE(sessionSnap) {
       });
     }
   });
-  const timeForRound = players.length * 10000;
+  let timeForRound;
+  if (players.length >= 6) {
+    timeForRound = players.length * 10000;
+  } else {
+    timeForRound = 60000;
+  }
   const roundTimeout = setTimeout(function() {
     if (isGameOver) {
       //changing status to finished if game is over
@@ -225,13 +230,10 @@ function playingRD(snapshot) {
   let turnTimeout;
   let turnCounter = 0;
   sessionRef.child("turn").on("value", turnSnap => {
-    console.log("PLAYERLENGTH", players);
-    console.log("inside turn value, what's going on??? ", turnSnap.val());
     if (turnSnap.val() === null) sessionRef.child("turn").off();
     turnTimeout = setTimeout(function() {
       console.log("inside timeout");
       missedTurns += 1;
-      console.log("MISSED TURNS", missedTurns);
       if (missedTurns <= players.length - 1) {
         turnCounter += 1;
         //this modulo ensures we loop the player array repeatedly:
@@ -261,7 +263,6 @@ function playingRD(snapshot) {
     let targetWord;
     if (bankSnapshot.val()) {
       letterBank = Object.keys(bankSnapshot.val());
-      console.log("bank snapshot:", bankSnapshot.val());
       clearTimeout(turnTimeout);
       missedTurns = 0;
       turnCounter += 1;
@@ -320,7 +321,6 @@ function playingDAB(snapshot) {
             drawings.push(player);
           }
         });
-        console.log("drawings", drawings);
         // console.log(drawings.length);
         if (drawings.length === players.length) {
           clearTimeout(drawingTimeout);
@@ -352,11 +352,9 @@ function guessingDAB(snapshot) {
   const timeForRound = players.length * 10000 + 10000;
   sessionRef.child("turn").on("value", turnSnap => {
     if (turnSnap.val() === null) sessionRef.child("turn").off();
-    console.log("playerlength", players.length);
     let turnTimeout = setTimeout(function() {
       console.log("inside timeout");
       if (turnCounter < players.length - 1) {
-        console.log(turnCounter);
         turnCounter += 1;
         //this modulo ensures we loop the player array repeatedly:
         let currentPlayerIdx = turnCounter % players.length;

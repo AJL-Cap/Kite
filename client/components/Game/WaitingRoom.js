@@ -9,6 +9,9 @@ import { useHistory } from "react-router";
 import Chat from "./Chat";
 import { generateTargetWord } from "../RopeDude/util";
 import ViewRP from "./ViewRP";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 const db = fire.database();
 
@@ -31,9 +34,6 @@ const WaitingRoom = props => {
     return (
       <div>
         <NotFound />
-        <button type="button" onClick={() => props.history.push("/games")}>
-          Back to lobby
-        </button>
       </div>
     );
 
@@ -73,72 +73,76 @@ const WaitingRoom = props => {
   return (
     <>
       {players.includes(`${userId}`) ? (
-        <div className="container">
-          <div>
-            <div className="row justify-content-center mt-3">
-              <h1>Waiting for more players!</h1>
-              {host && (
-                <Button
-                  className="btn alert-danger border border-danger"
-                  onClick={cancelGame}
-                >
-                  Cancel Game
-                </Button>
-              )}
-            </div>
-            <div className="row justify-content-center mt-3 mb-3">
-              <h2>
-                <strong>
-                  Give your friends this code to invite them to your game:
-                </strong>
-              </h2>
-            </div>
-            <div className="row justify-content-center mt-3 mb-3">
-              <h2 className="alert alert-secondary" role="alert">
-                <strong>{code}</strong>
-              </h2>
-            </div>
-          </div>
-          <div className="row">
-            <h3>Rules: {game.rules}</h3>
-          </div>
-          <div>
-            <div className="row">
-              <h3 className="mx-auto">
-                <u>Players</u>
-              </h3>
-            </div>
-            <div className="row">
-              {players.map(player => (
-                <SessionPlayer player={player} key={player} />
-              ))}
-            </div>
-            {host && players.length > 0 ? (
-              <div className="row justify-content-center mb-4">
-                <Button
-                  className="btn alert-light border border-dark"
-                  onClick={handleClick}
-                >
-                  Start Game
-                </Button>
-              </div>
-            ) : (
-              <div />
+        <Container>
+          <Row className="justify-content-between align-items-center mt-3">
+            <button
+              type="button"
+              className="btn btn-outline-info"
+              onClick={() => setToggle(!toggle)}
+            >
+              View Recent Players
+            </button>
+            {toggle && <ViewRP uid={userId} code={code} gameId={gameId} />}
+            {host && (
+              <Button
+                className="btn alert-danger border border-danger btn-outline-danger"
+                onClick={cancelGame}
+              >
+                Cancel Game
+              </Button>
             )}
-          </div>
-          <button type="button" onClick={() => setToggle(!toggle)}>
-            View Recent Players
-          </button>
-          {toggle && <ViewRP uid={userId} code={code} gameId={gameId} />}
-          <div className="row ">
-            <Chat
-              code={code}
-              userId={userId}
-              players={players}
-              messages={messages}
-            />
-          </div>
-        </div>
+          </Row>
+          <Row className="justify-content-center mt-3 mb-3">
+            <h2>
+              <strong>
+                Give your friends this code to invite them to your game:
+              </strong>
+            </h2>
+          </Row>
+          <Row className="justify-content-center mt-3 mb-3">
+            <h2 className="alert alert-info" role="alert">
+              <strong>{code}</strong>
+            </h2>
+          </Row>
+          <Row>
+            <h3>Rules: {game.rules}</h3>
+          </Row>
+          <Row className="justify-content-center m-3">
+            {gameId === "2" && host ? (
+              <Button className="btn btn-info btn-lg" onClick={handleClick}>
+                Start Game
+              </Button>
+            ) : host && players.length > 1 ? (
+              <Button className="btn btn-info btn-lg" onClick={handleClick}>
+                Start Game
+              </Button>
+            ) : (
+              <h1>Waiting for more players!</h1>
+            )}
+          </Row>
+          <Row>
+            <Col>
+              <Row className="justify-content-center">
+                <h3>
+                  <u>Players</u>
+                </h3>
+              </Row>
+              <Row className="justify-content-center mb-3">
+                {players.map(player => (
+                  <SessionPlayer key={player} player={player} />
+                ))}
+              </Row>
+            </Col>
+            <Col>
+              <Chat
+                code={code}
+                userId={userId}
+                players={players}
+                messages={messages}
+              />
+            </Col>
+          </Row>
+        </Container>
       ) : (
         <NotFound />
       )}

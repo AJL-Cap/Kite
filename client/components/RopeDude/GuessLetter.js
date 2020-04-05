@@ -60,7 +60,8 @@ const GuessLetter = props => {
         {errors.guessLetter && (
           <p>You must guess 1 character from the remaining letters!</p>
         )}
-        <input type="submit" />
+        <br />
+        <input type="submit" className="btn btn-info" />
       </form>
     </div>
   );

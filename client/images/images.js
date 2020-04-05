@@ -1,9 +1,9 @@
-import zero from "./4.jpg";
-import one from "./5.jpg";
-import two from "./6.jpg";
-import three from "./7.jpg";
-import four from "./8.jpg";
-import five from "./9.jpg";
-import six from "./10.jpg";
+import zero from "./0.png";
+import one from "./1.png";
+import two from "./2.png";
+import three from "./3.png";
+import four from "./4.png";
+import five from "./5.png";
+import six from "./6.png";
 
 export default [six, five, four, three, two, one, zero];
