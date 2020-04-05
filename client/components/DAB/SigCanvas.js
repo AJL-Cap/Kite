@@ -37,7 +37,7 @@ const SigCanvas = props => {
   useEffect(() => {
     timeout = setTimeout(function() {
       saveCanvas();
-    }, 5000);
+    }, 45000);
     //unsubscribing:
     return () => {
       console.log("unsubscribe");
@@ -57,7 +57,7 @@ const SigCanvas = props => {
     <Container>
       <Row>
         <Col xs={6} md={4} /* how can we move the timer further left.. */>
-          <Timer roundTime={session.turnTimeStarted} time={5} />
+          <Timer roundTime={session.turnTimeStarted} time={45} />
         </Col>
         <Col xs={12} md={8}>
           <Container>

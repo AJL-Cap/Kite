@@ -17,7 +17,7 @@ const DrawingDisplay = props => {
   //add timer
   return (
     <div>
-      <h2>Look at the masterpiece by {drawerNick}!</h2>
+      <h2 className="text-center">{drawerNick}'s masterpiece</h2>
       <img
         src={display}
         style={{

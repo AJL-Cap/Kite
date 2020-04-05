@@ -28,7 +28,9 @@ const GuessForm = props => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="card text-center">
           <div className="card-header">
-            <strong>Time to Guess..</strong>
+            <strong>
+              Hot off the easel! It's time for you to guess what it is.
+            </strong>
           </div>
           <div className="card-body">
             <h5 className="card-title">Submit up to 3 guesses</h5>

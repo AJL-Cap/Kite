@@ -4,7 +4,7 @@ import NotFound from "../NotFound";
 import SigCanvas from "./SigCanvas";
 import DrawingDisplay from "./DrawingDisplay";
 import { useObjectVal } from "react-firebase-hooks/database";
-import PointsTally from "./PointsTally";
+import PlayerInfo from "./PlayerInfo";
 
 const db = fire.database();
 
@@ -33,24 +33,32 @@ const DAB = props => {
   if (error) return "Error";
   if (!session) return <NotFound />;
   const { targetWord } = session.players[userId];
-
+  let players = Object.keys(session.players);
+  console.log(players);
   return (
     <div>
-      <PointsTally session={session} uid={userId} code={code} />
       {session.status === "playing" && (
-        <div className="m-5 text-center">
-          <h1>
-            Here's your word:
-            <div className="alert alert-info col border border-dark">
-              {targetWord}
-            </div>
-          </h1>
-          <br />
-          <SigCanvas session={session} uid={userId} code={code} />
+        <div>
+          {players.map(key => (
+            <PlayerInfo key={key} session={session} uid={userId} code={code} />
+          ))}
+          <div className="m-5 text-center">
+            <h1>
+              Here's your word:
+              <div className="alert alert-info col border border-dark">
+                {targetWord}
+              </div>
+            </h1>
+            <br />
+            <SigCanvas session={session} uid={userId} code={code} />
+          </div>
         </div>
       )}
       {session.status === "guessing" && (
         <div>
+          {players.map(key => (
+            <PlayerInfo key={key} session={session} uid={userId} code={code} />
+          ))}
           <DrawingDisplay session={session} uid={userId} code={code} />
         </div>
       )}

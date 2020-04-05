@@ -165,7 +165,7 @@ function confessingNHIE(sessionSnap) {
   //checking gameover when confessing time is up
   let players;
   sessionSnap.ref.child("players").on("value", playersSnap => {
-    if (playersSnap.val() !== null) {
+    if (playersSnap.val() != null) {
       players = Object.values(playersSnap.val());
       players.forEach(player => {
         if (parseInt(player.points) <= 0) {
@@ -174,7 +174,12 @@ function confessingNHIE(sessionSnap) {
       });
     }
   });
-  const timeForRound = players.length * 10000;
+  let timeForRound;
+  if (players.length >= 6) {
+    timeForRound = players.length * 10000;
+  } else {
+    timeForRound = 60000;
+  }
   const roundTimeout = setTimeout(function() {
     if (isGameOver) {
       //changing status to finished if game is over

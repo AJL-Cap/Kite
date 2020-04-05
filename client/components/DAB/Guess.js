@@ -5,8 +5,7 @@ const Guess = props => {
 
   return (
     <div>
-      {guessor}{" "}
-      {correct ? "guessed it right ✅ Points: " : "guessed it wrong ❌"}
+      {guessor} {correct ? "guessed it right ✅ " : "guessed it wrong ❌"}
     </div>
   );
 };

@@ -10,10 +10,12 @@ const DisplayResults = props => {
   const [guessorsSnap, loading, error] = useObjectVal(
     db.ref(`gameSessions/${code}/players/${drawerId}/guessors`)
   );
-
+  let guessors = [];
   if (loading) return "";
   if (error) return "error";
-  const guessors = Object.entries(guessorsSnap);
+  if (guessorsSnap) {
+    guessors = Object.entries(guessorsSnap);
+  }
 
   return (
     <div>

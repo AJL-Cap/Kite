@@ -25,10 +25,16 @@ const ResponseDisplay = props => {
   const numPlayers = Object.keys(session.players).length;
   // finding the most recent round, filtering the responses to exclude the one you sent in yourself
   // console.log("recentRound", recentRound);
+  let timeForRound;
+  if (numPlayers >= 6) {
+    timeForRound = numPlayers * 10;
+  } else {
+    timeForRound = 60;
+  }
   return (
     <div>
       <div className="row justify-content-center">
-        <Timer roundTime={curRound.val().timeStarted} time={numPlayers * 10} />
+        <Timer roundTime={curRound.val().timeStarted} time={timeForRound} />
       </div>
       {responses.map(response => (
         <SingleResponseDisplay

@@ -1,14 +1,16 @@
 import React from "react";
-import images from "../../assets/images";
-import ASCIIART from "./ASCIIART";
+import images from "../../images/images";
+import Card from "react-bootstrap/Card";
 
 const HangMan = props => {
-  const { code, session } = props;
+  const { session } = props;
   const points = session.points;
 
-  //rendering hangman based on current points
-  // return <div>{ASCIIART[points /20]}</div>
-  return <img src={images[points / 20]} />;
+  return (
+    <Card style={{ width: "100px", padding: "10px" }}>
+      <Card.Img border="dark" src={images[points / 20]} alt="Card image" />
+    </Card>
+  );
 };
 
 export default HangMan;
