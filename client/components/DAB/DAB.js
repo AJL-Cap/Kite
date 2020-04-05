@@ -46,6 +46,7 @@ const DAB = props => {
           <DrawingDisplay session={session} uid={userId} code={code} />
         </div>
       )}
+      {session.status === "finished" && <div>Finished</div>}
     </div>
   );
 };

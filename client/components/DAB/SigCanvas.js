@@ -14,7 +14,6 @@ const SigCanvas = props => {
   const [color, setColor] = useState("#2D1E2F");
   const [submitted, setSubmitted] = useState(false);
   const sigCanvas = useRef({});
-
   let timeout;
   useEffect(() => {
     timeout = setTimeout(function() {
@@ -26,12 +25,10 @@ const SigCanvas = props => {
       db.ref(`gameSessions/${code}/players/${uid}`).update({
         drawing: imageURL
       });
-      db.ref(`gameSessions/${code}`).update({
-        status: "guessing",
-        turn: uid,
-        turnTimeStarted: Date.now()
-      });
     }, 45000);
+    return function cleanup() {
+      clearTimeout(timeout);
+    };
   }, []);
 
   const handleClick = () => {
