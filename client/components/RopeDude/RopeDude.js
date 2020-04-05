@@ -63,7 +63,7 @@ const RopeDude = props => {
               })}
             </div>
           </Col>
-          <Col className="col-8">
+          <Col className="col-9">
             <div className="jumbotron text-center">
               <Row>
                 <Col md="auto">
@@ -81,8 +81,6 @@ const RopeDude = props => {
               {session.turn === userId && (
                 <div className="card" style={{ width: "100rem" }}>
                   <div className="card-body">
-                    <h5 className="card-title">Submit a guess!</h5>
-                    <div className="card-subtitle mb-2 text-muted" />
                     <GuessLetter
                       userId={userId}
                       code={code}
