@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React, { useEffect, useState } from "react";
 import fire from "../../fire";
 import NotFound from "../NotFound";
@@ -28,6 +29,7 @@ const DAB = props => {
       db.ref(`gameSessions/${code}/turnTimeStarted`).set(Date.now());
     }
   }, []);
+
   if (loading) return "";
   if (error) return "Error";
   if (!session) return <NotFound />;
