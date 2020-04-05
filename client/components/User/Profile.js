@@ -4,12 +4,12 @@ import fire from "../../fire";
 import Stats from "./Stats";
 import RecentPlayers from "./RecentPlayers";
 import UIfx from "uifx";
-import beepSound from "../../assets/success-low.wav";
+// import beepSound from "../../assets/success-low.wav";
 
 export default function Profile(props) {
   const { userId } = props;
   const playerRef = fire.database().ref(`players/${userId}`);
-  const beep = new UIFx({ asset: beepSound });
+  // const beep = new UIFx({ asset: beepSound });
 
   const [player, loading, err] = useObjectVal(playerRef);
 
@@ -26,9 +26,9 @@ export default function Profile(props) {
           <h1>
             <strong>Welcome to your Profile {player.nickname} </strong>
           </h1>
-          <button type="button" onClick={beep.play}>
+          {/* <button type="button" onClick={beep.play}>
             Play
-          </button>
+          </button> */}
         </div>
         <div className="column m-5">
           <Stats player={player} />
