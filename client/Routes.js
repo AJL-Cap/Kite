@@ -68,7 +68,7 @@ export default function Routes() {
         <Switch>
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SignUp} />
-          <Route path="/viewGames" component={ViewGames} />
+          <Route path="/games" component={ViewGames} />
           <Route path="/:anythingElse" component={NotFound} />
           <Route exact path="/" component={Home} />
         </Switch>
