@@ -25,10 +25,10 @@ const ResponseDisplay = props => {
   const numPlayers = Object.keys(session.players).length;
   // finding the most recent round, filtering the responses to exclude the one you sent in yourself
   let timeForRound;
-  if (numPlayers >= 6) {
+  if (numPlayers >= 3) {
     timeForRound = numPlayers * 10;
   } else {
-    timeForRound = 60;
+    timeForRound = 30;
   }
   return (
     <div>
