@@ -13,6 +13,7 @@ const DrawingDisplay = props => {
   const numPlayers = Object.keys(session.players).length;
   let timeForRound = 10 + numPlayers * 10;
 
+  console.log("turn", turn);
   //add timer
   return (
     <div>

@@ -15,12 +15,10 @@ const SingleRecent = props => {
     return "";
   }
 
-  console.log(player);
   if (err || error || !user) {
     console.log("problem finding user: ", uid);
     return <div>error!</div>;
   }
-  console.log("recentPlayer", user.nickname);
   const gameClick = () => {
     console.log("invite to a game");
     fire
@@ -37,14 +35,18 @@ const SingleRecent = props => {
     <div className="border border-dark m-2 bg-light">
       <h4 className="card-subtitle m-2">{recentPlayer.nickname}</h4>
       {invite ? (
-        <button type="button" onClick={gameClick} className="alert-danger m-2">
+        <button
+          type="button"
+          onClick={gameClick}
+          className="alert-danger m-2 rounded"
+        >
           Invite to this Game
         </button>
       ) : (
         <button
           type="button"
           onClick={() => profileClick(player)}
-          className="alert-danger m-2"
+          className="alert-danger m-2 rounded"
         >
           Player Profile
         </button>

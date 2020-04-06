@@ -16,6 +16,10 @@ export default function Profile(props) {
   if (err) {
     return <div>error!</div>;
   }
+
+  const handleClick = () => {
+    props.history.push(`/profile/edit`);
+  };
   if (player) {
     return (
       <div>
@@ -23,6 +27,15 @@ export default function Profile(props) {
           <h1>
             <strong>Welcome to your profile, {player.nickname}!</strong>
           </h1>
+        </div>
+        <div className="row justify-content-start">
+          <button
+            className="alert-info text-dark m-3 border border-dark rounded"
+            type="button"
+            onClick={handleClick}
+          >
+            Edit Profile
+          </button>
         </div>
         <div className="row d-flex justify-content-around">
           <Stats player={player} />
