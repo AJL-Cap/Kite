@@ -9,9 +9,16 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import FinalArt from "./FinalArt";
+import UIfx from "uifx";
+import sound from "../../audio/exit.wav";
+
 const db = fire.database();
 
 const EndGame = props => {
+  const exit = new UIfx(sound, {
+    volume: 0.4, // number between 0.0 ~ 1.0
+    throttleMs: 50
+  });
   const { uid, players, session, code } = props;
   const [updatePointsObj, setUpdatePointsObj] = useState({});
   const [playerSnap, loading, error] = useObject(db.ref(`players/${uid}`));
@@ -67,7 +74,7 @@ const EndGame = props => {
           </Row>
         </Col>
         <Col xs={6} md={4}>
-          <Link to="/games">
+          <Link to="/games" onClick={()=>exit.play()}>
             <button className="btn btn-outline-info mt-5 mb-5">
               Back to Games
             </button>

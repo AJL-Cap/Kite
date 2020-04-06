@@ -12,6 +12,7 @@ import Col from "react-bootstrap/Col";
 import UIfx from "uifx";
 import sound from "../../audio/cheer.wav";
 import sound2 from "../../audio/sad.wav";
+import sound3 from "../../audio/exit.wav";
 
 const db = fire.database();
 
@@ -22,6 +23,10 @@ const EndGame = props => {
   });
   const wrong = new UIfx(sound2, {
     volume: 0.3, // number between 0.0 ~ 1.0
+    throttleMs: 50
+  });
+  const exit = new UIfx(sound3, {
+    volume: 0.4, // number between 0.0 ~ 1.0
     throttleMs: 50
   });
   const { uid, players, session, code } = props;
@@ -86,7 +91,7 @@ const EndGame = props => {
               {Object.keys(session.finalGuess)[0]}
             </div>
           )}
-          <Link to="/games">
+          <Link to="/games" onClick={()=>exit.play()}>
             <button className="btn btn-outline-info">Back to Games</button>
           </Link>
           <Chat

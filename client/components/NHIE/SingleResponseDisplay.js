@@ -2,13 +2,18 @@ import React, { useState, useEffect } from "react";
 import Confession from "./Confession";
 import fire from "../../fire";
 import UIfx from "uifx";
-import sound from "../../audio/wrong_mild.wav";
+import sound from "../../audio/bom.wav";
+import sound2 from "../../audio/dadada.wav";
 
 const db = fire.database();
 
 const SingleResponseDisplay = props => {
   const ding = new UIfx(sound, {
     volume: 0.5, // number between 0.0 ~ 1.0
+    throttleMs: 50
+  });
+  const ding2 = new UIfx(sound2, {
+    volume: 0.4, // number between 0.0 ~ 1.0
     throttleMs: 50
   });
   const { response, uid, code, currentPoints, roundID, responseID } = props;
@@ -25,7 +30,7 @@ const SingleResponseDisplay = props => {
     if (iHave) {
       ding.play();
       subtract20();
-    }
+    } else ding2.play()
     db
       .ref(
         `gameSessions/${code}/rounds/${roundID}/responses/${responseID}/confessors/${uid}`

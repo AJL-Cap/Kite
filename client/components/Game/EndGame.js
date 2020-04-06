@@ -5,10 +5,16 @@ import UpdateFinalPoints from "../NHIE/UpdateFinalPoints";
 import fire from "../../fire";
 import Chat from "./Chat";
 import { Link } from "react-router-dom";
+import UIfx from "uifx";
+import sound from "../../audio/exit.wav";
 
 const db = fire.database();
 
 const EndGame = props => {
+  const exit = new UIfx(sound, {
+    volume: 0.4, // number between 0.0 ~ 1.0
+    throttleMs: 50
+  });
   const { players } = props.session;
   const { uid } = props;
   const [playerSnap, loading, error] = useObject(db.ref(`players/${uid}`));
@@ -89,7 +95,7 @@ const EndGame = props => {
           userId={uid}
         />
       )}
-      <Link to="/games">
+      <Link to="/games" onClick={()=>exit.play()}>
         <button className="btn btn-outline-info">Back to Games</button>
       </Link>
       <Chat

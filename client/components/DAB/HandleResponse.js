@@ -8,7 +8,7 @@ const db = fire.database();
 
 const HandleResponse = props => {
   const right = new UIfx(sound, {
-    volume: 0.5, // number between 0.0 ~ 1.0
+    volume: 0.3, // number between 0.0 ~ 1.0
     throttleMs: 50
   });
   const wrong = new UIfx(sound2, {
@@ -32,13 +32,13 @@ const HandleResponse = props => {
       right.play();
       //update guessor's points & document correct
       playersRef.child(uid).update({
-        points: parseInt(points) + 10,
+        points: parseInt(points) + 20,
         correct: true
       });
       //update drawer's points
       playersRef
         .child(drawerId)
-        .update({ points: parseInt(drawerPoints) + 10 });
+        .update({ points: parseInt(drawerPoints) + 20 });
     } else {
       wrong.play();
       //document incorrectly guessed

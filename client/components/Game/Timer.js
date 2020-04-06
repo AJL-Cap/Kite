@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import UIfx from "uifx";
-import tick from "../../audio/tick.wav";
+import sound from "../../audio/tick.wav";
+import sound2 from "../../audio/chirp.wav";
 
 const Timer = props => {
   const { roundTime, time } = props;
   const [timeLeft, setTimeLeft] = useState(time);
-  const ticking = new UIfx(tick, {
-    volume: 0.5, // number between 0.0 ~ 1.0
+  const tick = new UIfx(sound, {
+    volume: 0.2, // number between 0.0 ~ 1.0
+    throttleMs: 50
+  });
+  const chirp = new UIfx(sound2, {
+    volume: 0.2, // number between 0.0 ~ 1.0
     throttleMs: 50
   });
 
@@ -25,8 +30,11 @@ const Timer = props => {
     },
     [roundTime]
   );
-
-  return timeLeft <= 10 && ticking.play() ? (
+if (timeLeft === 10 || timeLeft === 9 || timeLeft === 8) {
+  tick.play()
+  // chirp.play()
+}
+  return timeLeft <= 10 ? (
     <h1 className="text-danger">Remaining time: {timeLeft} </h1>
   ) : (
     <h1>Remaining time: {timeLeft} </h1>

@@ -14,15 +14,21 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import UIfx from "uifx";
 import sound from "../../audio/pop.ogg";
+import sound2 from "../../audio/cancel.ogg";
 
 const db = fire.database();
 
 // eslint-disable-next-line complexity
 const WaitingRoom = props => {
   const enter = new UIfx(sound, {
-    volume: 0.5, // value must be between 0.0 ⇔ 1.0
+    volume: 0.3, // value must be between 0.0 ⇔ 1.0
     throttleMs: 50
   });
+  const cancel = new UIfx(sound2, {
+    volume: 0.3, // value must be between 0.0 ⇔ 1.0
+    throttleMs: 50
+  });
+
   let history = useHistory();
   //getting that session info
   const { code, userId, host, gameId } = props;
@@ -77,6 +83,7 @@ const WaitingRoom = props => {
     }
   };
   const cancelGame = () => {
+    cancel.play()
     history.push("/games");
     gameSession.remove();
   };

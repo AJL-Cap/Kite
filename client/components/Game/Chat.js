@@ -3,13 +3,30 @@ import fire from "../../fire";
 import ResponseMessage from "./responseMessage";
 import SentMessage from "./SentMessage";
 import ChatForm from "./ChatForm";
+import UIfx from "uifx";
+import sound from "../../audio/cheerful.wav";
 
-const Chat = props => {
-  let { messages, userId } = props;
+const db = fire.database();
+
+const Chat = (props) => {
+  const chat = new UIfx(sound, {
+    volume: 0.03, // value must be between 0.0 ⇔ 1.0
+    throttleMs: 50,
+  });
+
+  let { messages, userId, code } = props;
   const myRef = useRef(null);
+
   const scrollToBottom = () => {
     myRef.current.scrollIntoView({ behavior: "smooth" });
   };
+
+  useEffect(() => {
+    db.ref(`lobbyMessages/${code}`).on("child_added", (newMessage) =>
+      chat.play()
+    );
+  }, []);
+
   useEffect(scrollToBottom, [messages]);
 
   return (

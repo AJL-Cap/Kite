@@ -16,7 +16,7 @@ const GuessLetter = props => {
     throttleMs: 50
   });
   const right = new UIfx(sound2, {
-    volume: 0.5, // number between 0.0 ~ 1.0
+    volume: 0.3, // number between 0.0 ~ 1.0
     throttleMs: 50
   });
   const wrong = new UIfx(sound3, {
