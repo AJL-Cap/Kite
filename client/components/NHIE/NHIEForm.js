@@ -12,7 +12,7 @@ const db = fire.database();
 export default function NHIEForm(props) {
   const alert = new UIfx(sound, {
     volume: 0.2, // number between 0.0 ~ 1.0
-    throttleMs: 50,
+    throttleMs: 50
   });
   const { userId, code } = props;
   const [submitted, setSubmitted] = useState(false);
@@ -34,14 +34,14 @@ export default function NHIEForm(props) {
   const curRound = rounds[rounds.length - 1];
   if (!curRound) return <NotFound />;
 
-  const onSubmit = (data) => {
+  const onSubmit = data => {
     //updating responses in the current round for each user
-    db.ref(
-      `gameSessions/${code}/rounds/${curRound.key}/responses/${userId}`
-    ).update({
-      nickname: nick,
-      text: data.response,
-    });
+    db
+      .ref(`gameSessions/${code}/rounds/${curRound.key}/responses/${userId}`)
+      .update({
+        nickname: nick,
+        text: data.response
+      });
     setSubmitted(true);
   };
 

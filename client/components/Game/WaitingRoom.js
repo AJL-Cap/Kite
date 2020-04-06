@@ -18,10 +18,10 @@ import sound from "../../audio/pop.ogg";
 const db = fire.database();
 
 // eslint-disable-next-line complexity
-const WaitingRoom = (props) => {
+const WaitingRoom = props => {
   const enter = new UIfx(sound, {
     volume: 0.5, // value must be between 0.0 ⇔ 1.0
-    throttleMs: 50,
+    throttleMs: 50
   });
   let history = useHistory();
   //getting that session info
@@ -38,7 +38,7 @@ const WaitingRoom = (props) => {
   useEffect(() => {
     db.ref(`gameSessions/${code}/players`).on("child_added", playerSnap => {
       enter.play();
-    })
+    });
   }, []);
 
   if (loading || gameLoading || messageLoading) return "";
@@ -62,11 +62,11 @@ const WaitingRoom = (props) => {
       }
       //for drawing a blank, generate a random word per player
       if (gameId === "3") {
-        players.forEach((player) => {
+        players.forEach(player => {
           const targetWord = generateTargetWord();
-          db.ref(`gameSessions/${code}/players/${player}/targetWord`).set(
-            targetWord
-          );
+          db
+            .ref(`gameSessions/${code}/players/${player}/targetWord`)
+            .set(targetWord);
           db.ref(`gameSessions/${code}/turnTimeStarted`).set(Date.now());
         });
       }
@@ -139,7 +139,7 @@ const WaitingRoom = (props) => {
                 </h3>
               </Row>
               <Row className="justify-content-center mb-3">
-                {players.map((player) => (
+                {players.map(player => (
                   <SessionPlayer key={player} player={player} />
                 ))}
               </Row>

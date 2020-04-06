@@ -9,7 +9,7 @@ const db = fire.database();
 const SingleResponseDisplay = props => {
   const Ooh = new UIfx(sound, {
     volume: 0.5, // number between 0.0 ~ 1.0
-    throttleMs: 50,
+    throttleMs: 50
   });
   const { response, uid, code, currentPoints, roundID, responseID } = props;
   const [answered, setAnswered] = useState(false);
@@ -23,7 +23,7 @@ const SingleResponseDisplay = props => {
 
   const handleClick = iHave => {
     if (iHave) {
-      Ooh.play()
+      Ooh.play();
       subtract20();
     }
     db

@@ -10,7 +10,7 @@ const FinalGuess = props => {
   const { register, handleSubmit, errors } = useForm();
 
   const onSubmit = data => {
-    console.log("onSubmit Finalguess")
+    console.log("onSubmit Finalguess");
     const guess = data.wordGuess.toUpperCase();
     if (guess !== session.targetWord) {
       db.ref(`gameSessions/${code}/points`).set(0);

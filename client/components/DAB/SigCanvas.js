@@ -8,18 +8,18 @@ import fire from "../../fire";
 import Buttons from "./Buttons";
 import UIfx from "uifx";
 import sound from "../../audio/turn.wav";
-import sound2 from '../../audio/transition.wav'
+import sound2 from "../../audio/transition.wav";
 
 const db = fire.database();
 
-const SigCanvas = (props) => {
+const SigCanvas = props => {
   const timeToDraw = new UIfx(sound, {
     volume: 0.5, // number between 0.0 ~ 1.0
-    throttleMs: 50,
+    throttleMs: 50
   });
   const sent = new UIfx(sound2, {
     volume: 0.4, // number between 0.0 ~ 1.0
-    throttleMs: 50,
+    throttleMs: 50
   });
   const { session, uid, code } = props;
   const [color, setColor] = useState("#2D1E2F");
@@ -27,15 +27,15 @@ const SigCanvas = (props) => {
   const sigCanvas = useRef({});
   let timeout;
   useEffect(() => {
-    timeToDraw.play()
-    timeout = setTimeout(function () {
-      sent.play()
+    timeToDraw.play();
+    timeout = setTimeout(function() {
+      sent.play();
       const imageURL = sigCanvas.current
         .getTrimmedCanvas()
         .toDataURL("image/png");
       //saving that in db
       db.ref(`gameSessions/${code}/players/${uid}`).update({
-        drawing: imageURL,
+        drawing: imageURL
       });
     }, 45000);
     return function cleanup() {
@@ -44,7 +44,7 @@ const SigCanvas = (props) => {
   }, []);
 
   const handleClick = () => {
-    sent.play()
+    sent.play();
     clearTimeout(timeout);
     //converting the drawing to url
     const imageURL = sigCanvas.current
@@ -52,7 +52,7 @@ const SigCanvas = (props) => {
       .toDataURL("image/png");
     //saving that in db
     db.ref(`gameSessions/${code}/players/${uid}`).update({
-      drawing: imageURL,
+      drawing: imageURL
     });
     setSubmitted(true);
   };
@@ -76,7 +76,7 @@ const SigCanvas = (props) => {
                 canvasProps={{
                   width: 600,
                   height: 400,
-                  className: "sigCanvas",
+                  className: "sigCanvas"
                 }}
                 backgroundColor="#FCFAE3"
                 ref={sigCanvas}

@@ -14,12 +14,12 @@ const db = fire.database();
 const EndGame = props => {
   const win = new UIfx(sound, {
     volume: 0.5, // number between 0.0 ~ 1.0
-    throttleMs: 50,
-  })
+    throttleMs: 50
+  });
   const lose = new UIfx(sound2, {
     volume: 0.5, // number between 0.0 ~ 1.0
-    throttleMs: 50,
-  })
+    throttleMs: 50
+  });
   const { players } = props.session;
   const { uid } = props;
   const [playerSnap, loading, error] = useObject(db.ref(`players/${uid}`));
@@ -46,10 +46,10 @@ const EndGame = props => {
   let losers = [];
   props.players.forEach(playerKey => {
     if (players[playerKey].points <= 0) {
-      win.play()
+      win.play();
       losers.push(playerKey);
     } else {
-      lose.play()
+      lose.play();
       winners.push(playerKey);
     }
   });

@@ -18,12 +18,12 @@ const db = fire.database();
 const EndGame = props => {
   const yay = new UIfx(sound, {
     volume: 0.5, // number between 0.0 ~ 1.0
-    throttleMs: 50,
-  })
+    throttleMs: 50
+  });
   const wrong = new UIfx(sound2, {
     volume: 0.5, // number between 0.0 ~ 1.0
-    throttleMs: 50,
-  })
+    throttleMs: 50
+  });
   const { uid, players, session, code } = props;
   const { points, targetWord } = session;
   const [playerSnap, loading, error] = useObject(db.ref(`players/${uid}`));
@@ -38,9 +38,9 @@ const EndGame = props => {
 
   let newWins = wins;
   if (points > 0) {
-    yay.play()
+    yay.play();
     newWins += 1;
-  } else wrong.play()
+  } else wrong.play();
 
   const updatePointsObj = {
     totalPoints: newTP,
