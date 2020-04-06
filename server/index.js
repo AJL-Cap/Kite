@@ -127,7 +127,7 @@ function respondingNHIE(snapshot) {
           endGame(refToDelete);
           endGame(chatToDelete);
         }
-      }, 60000);
+      }, 30000);
       //getting responses
       responsesRef.on("value", roundResponsesSnapshot => {
         responses = roundResponsesSnapshot.val();
@@ -172,10 +172,10 @@ function confessingNHIE(sessionSnap) {
     }
   });
   let timeForRound;
-  if (players.length >= 6) {
+  if (players.length >= 3) {
     timeForRound = players.length * 10000;
   } else {
-    timeForRound = 60000;
+    timeForRound = 30000;
   }
   const roundTimeout = setTimeout(function() {
     if (isGameOver) {
@@ -302,7 +302,7 @@ function playingDAB(snapshot) {
   let players;
   const drawingTimeout = setTimeout(function() {
     sessionRef.child("status").set("guessing");
-  }, 46000);
+  }, 61000);
 
   //getting all players in an array for turn
   sessionRef

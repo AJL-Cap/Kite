@@ -51,6 +51,7 @@ const EndGame = props => {
     <Container fluid>
       <Row>
         <h1>The word was: {targetWord}</h1>
+        <br />
         <h2>
           You got it{" "}
           {points

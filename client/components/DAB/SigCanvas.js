@@ -37,7 +37,7 @@ const SigCanvas = props => {
       db.ref(`gameSessions/${code}/players/${uid}`).update({
         drawing: imageURL
       });
-    }, 45000);
+    }, 60000);
     return function cleanup() {
       clearTimeout(timeout);
     };
@@ -63,7 +63,7 @@ const SigCanvas = props => {
     <Container>
       <Row>
         <Col xs={6} md={4}>
-          <Timer roundTime={session.turnTimeStarted} time={45} />
+          <Timer roundTime={session.turnTimeStarted} time={60} />
         </Col>
         <Col xs={12} md={8}>
           <Container>

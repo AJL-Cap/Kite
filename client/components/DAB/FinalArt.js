@@ -7,7 +7,7 @@ import { Card } from "react-bootstrap";
 const db = fire.database();
 
 const FinalArt = props => {
-  const { code, id } = props;
+  const { code, id, points } = props;
 
   const [player, loading, error] = useObjectVal(
     db.ref(`gameSessions/${code}/players/${id}`)
@@ -34,6 +34,7 @@ const FinalArt = props => {
             <Card.Title>
               {player.nickname}'s {player.targetWord}
             </Card.Title>
+            <Card.Text>points: {points}</Card.Text>
           </Card.Body>
         </Card>
       )}
