@@ -3,7 +3,7 @@ import { useObjectVal } from "react-firebase-hooks/database";
 import fire from "../../fire";
 import { Card } from "react-bootstrap";
 import UIfx from "uifx";
-import sound from "../../audio/cheer.wav";
+import sound from "../../audio/celebrate.wav";
 import sound2 from "../../audio/sad.wav";
 
 const db = fire.database();
