@@ -127,7 +127,7 @@ function respondingNHIE(snapshot) {
           endGame(refToDelete);
           endGame(chatToDelete);
         }
-      }, 30000);
+      }, 60000);
       //getting responses
       responsesRef.on("value", roundResponsesSnapshot => {
         responses = roundResponsesSnapshot.val();
@@ -172,10 +172,10 @@ function confessingNHIE(sessionSnap) {
     }
   });
   let timeForRound;
-  if (players.length >= 3) {
+  if (players.length >= 6) {
     timeForRound = players.length * 10000;
   } else {
-    timeForRound = 30000;
+    timeForRound = 60000;
   }
   const roundTimeout = setTimeout(function() {
     if (isGameOver) {

@@ -5,7 +5,7 @@ import SentMessage from "./SentMessage";
 import ChatForm from "./ChatForm";
 
 const Chat = props => {
-  let { messages } = props;
+  let { messages, userId } = props;
   const myRef = useRef(null);
   const scrollToBottom = () => {
     myRef.current.scrollIntoView({ behavior: "smooth" });

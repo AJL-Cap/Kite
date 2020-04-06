@@ -48,7 +48,7 @@ export default function NHIEForm(props) {
   return (
     <div>
       <div className="row justify-content-center">
-        <Timer roundTime={curRound.val().timeStarted} time={30} />
+        <Timer roundTime={curRound.val().timeStarted} time={60} />
       </div>
       {submitted ? (
         <h4>Your response has been submitted</h4>
