@@ -54,8 +54,15 @@ const EndGame = props => {
         <Col xs={12} md={8}>
           <h1>Gallery</h1>
           <Row>
-            {playerArr.map(key => {
-              return <FinalArt key={key} id={key} code={code} />;
+            {playerArr.map(id => {
+              return (
+                <FinalArt
+                  key={id}
+                  id={id}
+                  code={code}
+                  points={players[id].points}
+                />
+              );
             })}
           </Row>
         </Col>
