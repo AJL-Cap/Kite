@@ -15,14 +15,11 @@ const SingleRecent = props => {
     return "";
   }
 
-  console.log(player);
   if (err || error || !user) {
-    console.log("problem finding user: ", uid);
     return <div>error!</div>;
   }
-  console.log("recentPlayer", user.nickname);
+
   const gameClick = () => {
-    console.log("invite to a game");
     fire
       .database()
       .ref(`notifications/${player}`)

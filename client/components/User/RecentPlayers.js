@@ -11,7 +11,6 @@ const RecentPlayers = props => {
   let recentPlayers = Object.values(recents);
 
   const profileClick = player => {
-    console.log("take to player profile");
     history.push(`profile/${player}`);
   };
 

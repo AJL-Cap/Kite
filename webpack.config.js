@@ -32,6 +32,15 @@ module.exports = {
           publicPath: "/",
           name: "[contenthash].[ext]"
         }
+      },
+      {
+        test: /\.(ogg|mp3|wav|mpe?g)$/i,
+        loader: "file-loader",
+        options: {
+          outputPath: "public",
+          publicPath: "/",
+          name: "[contenthash].[ext]"
+        }
       }
     ]
   }

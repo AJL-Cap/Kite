@@ -40,7 +40,6 @@ const RopeDude = props => {
   let players = Object.keys(session.players);
 
   const handleClick = () => {
-    console.log("clicked");
     setFinalGuess(!finalGuess);
   };
 

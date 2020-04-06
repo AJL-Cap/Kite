@@ -38,11 +38,7 @@ const HandleResponse = props => {
     drawersGuessorRef.child(uid).set(true);
   }, []);
 
-  return (
-    <div>
-      <DisplayResults code={code} drawerId={drawerId} targetWord={targetWord} />
-    </div>
-  );
+  return <div />;
 };
 
 export default HandleResponse;

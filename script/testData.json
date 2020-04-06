@@ -14,6 +14,16 @@
       "title": "Drawing a Blank",
       "rules":
         "It's (kinda) like pictionary. In each round, one person draws a picture of the prompt, your teammates each have three tries to guess what you drew. Both the guesser and the drawer earn points if they guess correctly."
+    },
+    "4": {
+      "title": "Truthy? Falsy?",
+      "rules":
+        "In each round, one person writes two truths and one lie about themselvese. Everyone else tries to guess which statement is the false one. If they guess correctly, they earn points."
+    },
+    "5": {
+      "title": "Maddest Libs",
+      "rules":
+        "Everyone receives the same prompt per round and fills in the blank with the most creative answer possible. Once all responses are submitted, players vote which they think is the best, aka the maddest."
     }
   },
   "players": {
