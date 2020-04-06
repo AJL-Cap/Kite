@@ -50,11 +50,6 @@ const GuessForm = props => {
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="card text-center">
-          <div className="card-header">
-            <strong>
-              Hot off the easel! It's time for you to guess what it is.
-            </strong>
-          </div>
           <div className="card-body">
             <h5 className="card-title">Submit up to 3 guesses</h5>
             <div className="card-text">
@@ -63,8 +58,11 @@ const GuessForm = props => {
                 name="guess1"
                 ref={register({ required: true })}
               />
+              <br />
               <input type="text" name="guess2" ref={register()} />
+              <br />
               <input type="text" name="guess3" ref={register()} />
+              <br />
               {errors.guess1 && <p>You must enter at least 1 guess!</p>}
               <input type="submit" />
             </div>

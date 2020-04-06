@@ -7,6 +7,9 @@ import DrawingDisplay from "./DrawingDisplay";
 import { useObjectVal } from "react-firebase-hooks/database";
 import PlayerInfo from "./PlayerInfo";
 import EndGame from "./EndGame";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 const db = fire.database();
 const DAB = props => {
@@ -56,17 +59,30 @@ const DAB = props => {
         </div>
       )}
       {session.status === "guessing" && (
-        <div>
-          {players.map(key => (
-            <PlayerInfo key={key} session={session} uid={key} code={code} />
-          ))}
-          <DrawingDisplay
-            session={session}
-            uid={userId}
-            code={code}
-            targetWord={targetWord}
-          />
-        </div>
+        <Container fluid>
+          <Row>
+            <Col xs={4} md={2}>
+              <Row>
+                {players.map(key => (
+                  <PlayerInfo
+                    key={key}
+                    session={session}
+                    uid={key}
+                    code={code}
+                  />
+                ))}
+              </Row>
+            </Col>
+            <Col>
+              <DrawingDisplay
+                session={session}
+                uid={userId}
+                code={code}
+                targetWord={targetWord}
+              />
+            </Col>
+          </Row>
+        </Container>
       )}
       {session.status === "finished" && (
         <EndGame uid={userId} code={code} players={session.players} />

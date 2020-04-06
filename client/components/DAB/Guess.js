@@ -10,9 +10,9 @@ const Guess = props => {
   // console.log("guesses:", guesses);
   // console.log("drawerId:", drawerId);
 
-  const displayGuesses = guesses.map((guess, index) => (
-    <li key={index}>{guess}</li>
-  ));
+  const displayGuesses = guesses.map(
+    (guess, index) => guess && <li key={index}>{guess}</li>
+  );
 
   return (
     <div>
