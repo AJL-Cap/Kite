@@ -14,7 +14,8 @@ import {
   Loading,
   Form,
   FriendProfile,
-  ViewGames
+  ViewGames,
+  WIPGames,
 } from "./components";
 import EditProfile from "./components/User/EditProfile";
 
@@ -42,32 +43,33 @@ export default function Routes() {
         <Switch>
           <Route
             path="/games/:code"
-            render={props => <ActiveGame userId={user.uid} {...props} />}
+            render={(props) => <ActiveGame userId={user.uid} {...props} />}
           />
           <Route
             path="/profile/edit"
-            render={props => <EditProfile userId={user.uid} {...props} />}
+            render={(props) => <EditProfile userId={user.uid} {...props} />}
           />
           <Route exact path="/profile/:uid" component={FriendProfile} />
           <Route path="/players" component={Players} />
           <Route
             exact
             path="/profile"
-            render={props => <Profile userId={user.uid} {...props} />}
+            render={(props) => <Profile userId={user.uid} {...props} />}
           />
           <Route
             path="/games"
-            render={props => <GamePage userId={user.uid} {...props} />}
+            render={(props) => <GamePage userId={user.uid} {...props} />}
           />
           <Route
             path="/form"
-            render={props => <Form userId={user.uid} {...props} />}
+            render={(props) => <Form userId={user.uid} {...props} />}
           />
+          <Route path="/wip" component={WIPGames} />
           <Route path="/:anythingElse" component={NotFound} />
           <Route
             exact
             path="/"
-            render={props => <Home userId={user.uid} {...props} />}
+            render={(props) => <Home userId={user.uid} {...props} />}
           />
         </Switch>
       ) : (

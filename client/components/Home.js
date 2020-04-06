@@ -17,16 +17,20 @@ export default function Home({ userId }) {
     <Main className="d-flex align-items-start justify-content-center">
       <Alert variant="info" className="mt-5 p-5">
         <Alert.Heading>
+          <h2>
           Welcome to Kite Games{player && `, ${player.nickname}`}.
+          </h2>
         </Alert.Heading>
-        <p>near, far, wherever we are...</p>
+        <div className="d-flex justify-content-end">near, far, wherever we are...</div>
         <hr />
         {player ? (
-          <Link to="/games" className="auth alert-link">
-            Host or join a game with your friends!
-          </Link>
+          <Links>
+            <Link to="/games" className="auth alert-link">
+              Host or join a game with your friends!
+            </Link>
+          </Links>
         ) : (
-          <p>
+          <Links>
             Please{" "}
             <Link to="/login" className="auth alert-link">
               log in
@@ -36,7 +40,7 @@ export default function Home({ userId }) {
               sign up
             </Link>{" "}
             to continue.
-          </p>
+          </Links>
         )}
       </Alert>
     </Main>
@@ -55,4 +59,8 @@ const Main = styled.div`
   position: fixed;
   top: 50;
   left: 0;
+`;
+
+const Links = styled.div`
+  font-size: 22px;
 `;
