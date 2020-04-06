@@ -8,6 +8,7 @@ import { useObjectVal } from "react-firebase-hooks/database";
 import PlayerInfo from "./PlayerInfo";
 
 const db = fire.database();
+
 const DAB = props => {
   const { code, host, userId } = props;
   const [session, loading, error] = useObjectVal(

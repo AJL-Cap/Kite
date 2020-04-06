@@ -27,6 +27,7 @@ module.exports = {
       {
         test: /\.(png|jpe?g|gif)$/i,
         loader: "file-loader",
+        exclude: /node_modules/,
         options: {
           outputPath: "public",
           publicPath: "/",
@@ -36,6 +37,7 @@ module.exports = {
       {
         test: /\.(ogg|mp3|wav|mpe?g)$/i,
         loader: "file-loader",
+        exclude: /node_modules/,
         options: {
           outputPath: "public",
           publicPath: "/",
