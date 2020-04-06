@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import React from "react";
+import React, { useEffect } from "react";
 import { useObject, useListVals } from "react-firebase-hooks/database";
 import fire from "../../fire";
 import Chat from "../Game/Chat";
@@ -30,6 +30,13 @@ const EndGame = props => {
   const [messages, messageLoading, messageError] = useListVals(
     db.ref(`lobbyMessages/${props.code}/messages`)
   );
+
+  useEffect(() => {
+    if (points > 0) {
+      yay.play();
+    } else wrong.play();
+  }, []);
+
   if (loading || messageLoading) return "";
   if (error || messageError) return "Error";
   const { totalPoints, totalGamesPlayed, wins } = playerSnap.val();
@@ -37,10 +44,7 @@ const EndGame = props => {
   const newTG = totalGamesPlayed + 1;
 
   let newWins = wins;
-  if (points > 0) {
-    yay.play();
-    newWins += 1;
-  } else wrong.play();
+  if (points > 0) newWins += 1;
 
   const updatePointsObj = {
     totalPoints: newTP,
