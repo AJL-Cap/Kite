@@ -17,11 +17,11 @@ export default function Home({ userId }) {
     <Main className="d-flex align-items-start justify-content-center">
       <Alert variant="info" className="mt-5 p-5">
         <Alert.Heading>
-          <h2>
-          Welcome to Kite Games{player && `, ${player.nickname}`}.
-          </h2>
+          <h2>Welcome to Kite Games{player && `, ${player.nickname}`}.</h2>
         </Alert.Heading>
-        <div className="d-flex justify-content-end">near, far, wherever we are...</div>
+        <div className="d-flex justify-content-end">
+          near, far, wherever we are...
+        </div>
         <hr />
         {player ? (
           <Links>

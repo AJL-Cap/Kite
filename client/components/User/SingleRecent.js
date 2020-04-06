@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useObjectVal, useObject } from "react-firebase-hooks/database";
 import fire from "../../fire";
 
@@ -10,6 +10,7 @@ const SingleRecent = props => {
   const [user, userLoading, error] = useObjectVal(
     fire.database().ref(`players/${uid}`)
   );
+  const [invited, setInvited] = useState(false);
 
   if (loading || userLoading) {
     return "";
@@ -19,6 +20,7 @@ const SingleRecent = props => {
     return <div>error!</div>;
   }
   const gameClick = () => {
+    setInvited(true);
     fire
       .database()
       .ref(`notifications/${player}`)
@@ -33,13 +35,17 @@ const SingleRecent = props => {
     <div className="border border-dark m-2 bg-light">
       <h4 className="card-subtitle m-2">{recentPlayer.nickname}</h4>
       {invite ? (
-        <button
-          type="button"
-          onClick={gameClick}
-          className="alert-danger m-2 rounded"
-        >
-          Invite to this Game
-        </button>
+        !invited ? (
+          <button
+            type="button"
+            onClick={gameClick}
+            className="alert-danger m-2 rounded"
+          >
+            Invite to this Game
+          </button>
+        ) : (
+          <p>Invite Sent!</p>
+        )
       ) : (
         <button
           type="button"

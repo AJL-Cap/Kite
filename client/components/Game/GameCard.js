@@ -5,7 +5,7 @@ import makeRoomCode from "../../roomCodes";
 
 const db = fire.database();
 
-const GameCard = (props) => {
+const GameCard = props => {
   const { gameRef, gameId, uid, history, nick } = props;
   const [game, loading, error] = useObject(gameRef);
   const code = makeRoomCode();
@@ -15,16 +15,16 @@ const GameCard = (props) => {
 
   const handleClick = () => {
     if (gameId > 3) {
-      history.push('/wip');
+      history.push("/wip");
     } else {
       db.ref("gameSessions/" + code).set({
         gameId: gameId,
         status: "waiting",
-        players: { [uid]: { host: true, nickname: nick } },
+        players: { [uid]: { host: true, nickname: nick } }
       });
       history.push({
         pathname: `/games/${code}`,
-        state: { host: true },
+        state: { host: true }
       });
     }
   };
