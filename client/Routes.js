@@ -16,6 +16,7 @@ import {
   FriendProfile,
   ViewGames
 } from "./components";
+import EditProfile from "./components/User/EditProfile";
 
 export default function Routes() {
   const [user, initialising, error] = useAuthState(fire.auth());
@@ -43,9 +44,14 @@ export default function Routes() {
             path="/games/:code"
             render={props => <ActiveGame userId={user.uid} {...props} />}
           />
-          <Route path="/profile/:uid" component={FriendProfile} />
+          <Route
+            path="/profile/edit"
+            render={props => <EditProfile userId={user.uid} {...props} />}
+          />
+          <Route exact path="/profile/:uid" component={FriendProfile} />
           <Route path="/players" component={Players} />
           <Route
+            exact
             path="/profile"
             render={props => <Profile userId={user.uid} {...props} />}
           />
@@ -68,7 +74,7 @@ export default function Routes() {
         <Switch>
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SignUp} />
-          <Route path="/games" component={ViewGames} />
+          <Route path="/viewGames" component={ViewGames} />
           <Route path="/:anythingElse" component={NotFound} />
           <Route exact path="/" component={Home} />
         </Switch>

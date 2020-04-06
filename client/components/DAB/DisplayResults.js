@@ -43,9 +43,9 @@ const DisplayResults = props => {
 
   if (drawerGuessors.length > 0) {
     return (
-      <div>
-        <h4>The answer is {targetWord}</h4>
-        <div>
+      <div className="card">
+        <div className="card-body">
+          <h4 className="card-title">The answer is {targetWord}</h4>
           {filteredGuessors.map(guessor => (
             <Guess
               key={guessor[0]}
@@ -60,7 +60,11 @@ const DisplayResults = props => {
       </div>
     );
   } else {
-    return <div>Wait while other players guess your drawing!</div>;
+    return (
+      <div className="card text-center">
+        Wait while other players guess your drawing!
+      </div>
+    );
   }
 };
 

@@ -7,9 +7,9 @@ const db = fire.database();
 const Guess = props => {
   const { drawerId, guessorNick, correct, guesses, code } = props;
 
-  const displayGuesses = guesses.map((guess, index) => (
-    <li key={index}>{guess}</li>
-  ));
+  const displayGuesses = guesses.map(
+    (guess, index) => guess && <li key={index}>{guess}</li>
+  );
 
   return (
     <div>
