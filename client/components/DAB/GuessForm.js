@@ -42,7 +42,7 @@ const GuessForm = props => {
           code={code}
           drawerId={drawerId}
           targetWord={targetWord}
-        />}
+        />
       </div>
     );
   }
