@@ -109,7 +109,6 @@ function respondingNHIE(snapshot) {
       //timeout function
       const roundTimeout = setTimeout(function() {
         //if at the end of the round there are responses
-        console.log("RESPONSES", responses);
         if (responses) {
           snapshot.ref.child("rounds").off();
           //updating timeStarted for the front end timer
@@ -157,9 +156,7 @@ function respondingNHIE(snapshot) {
 }
 function confessingNHIE(sessionSnap) {
   console.log("in confessing");
-  // console.log("HELLOOOOO", snapshot.val().players);
   let refToChange = "gameSessions/" + sessionSnap.key + "/status";
-  // console.log("refToChange:", refToChange);
   let isGameOver = false;
   let ref = sessionSnap.ref.child("players");
   //checking gameover when confessing time is up
@@ -206,7 +203,6 @@ function finished(sessionSnap) {
 function playingRD(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
   sessionRef.child("points").on("value", pointSnapshot => {
-    console.log("inside pointSnapshot");
     if (pointSnapshot.val() === 0) {
       sessionRef.child("turn").off();
       sessionRef.child("points").off();
@@ -232,7 +228,6 @@ function playingRD(snapshot) {
   sessionRef.child("turn").on("value", turnSnap => {
     if (turnSnap.val() === null) sessionRef.child("turn").off();
     turnTimeout = setTimeout(function() {
-      console.log("inside timeout");
       missedTurns += 1;
       if (missedTurns <= players.length - 1) {
         turnCounter += 1;
@@ -301,10 +296,9 @@ function gameOverRD(letterBankArr, target) {
 }
 
 function playingDAB(snapshot) {
-  console.log("in playing/drawing");
+  console.log("playingDAB");
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
   // sessionRef.update({turnTimeStarted: Date.now()});
-  console.log("playingDAB");
   let players;
   const drawingTimeout = setTimeout(function() {
     sessionRef.child("status").set("guessing");
@@ -323,7 +317,6 @@ function playingDAB(snapshot) {
             drawings.push(player);
           }
         });
-        // console.log(drawings.length);
         if (drawings.length === players.length) {
           clearTimeout(drawingTimeout);
           sessionRef.child("players").off();
@@ -354,13 +347,12 @@ function guessingDAB(snapshot) {
   sessionRef.child("turn").on("value", turnSnap => {
     if (turnSnap.val() === null) sessionRef.child("turn").off();
     let turnTimeout = setTimeout(function() {
-      console.log("inside timeout");
       if (turnCounter < players.length - 1) {
         turnCounter += 1;
         //this modulo ensures we loop the player array repeatedly:
-        let currentPlayerIdx = turnCounter % players.length;
+        // let currentPlayerIdx = turnCounter % players.length; // don't need this for this game
         sessionRef.update({
-          turn: players[currentPlayerIdx],
+          turn: players[turnCounter],
           turnTimeStarted: Date.now()
         });
       } else {

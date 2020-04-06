@@ -24,7 +24,6 @@ const ResponseDisplay = props => {
 
   const numPlayers = Object.keys(session.players).length;
   // finding the most recent round, filtering the responses to exclude the one you sent in yourself
-  // console.log("recentRound", recentRound);
   let timeForRound;
   if (numPlayers >= 6) {
     timeForRound = numPlayers * 10;

@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React, { useEffect, useState } from "react";
 import fire from "../../fire";
 import NotFound from "../NotFound";

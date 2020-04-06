@@ -45,14 +45,12 @@ const WaitingRoom = props => {
       //for rope dude, generate a random word for the session
       if (gameId === "2") {
         const targetWord = generateTargetWord();
-        console.log("targetWord", targetWord);
         db.ref(`gameSessions/${code}/targetWord`).set(targetWord);
       }
       //for drawing a blank, generate a random word per player
       if (gameId === "3") {
         players.forEach(player => {
           const targetWord = generateTargetWord();
-          console.log("targetWord", targetWord);
           db
             .ref(`gameSessions/${code}/players/${player}/targetWord`)
             .set(targetWord);

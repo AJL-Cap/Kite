@@ -16,11 +16,9 @@ const SingleRecent = props => {
   }
 
   if (err || error || !user) {
-    console.log("problem finding user: ", uid);
     return <div>error!</div>;
   }
   const gameClick = () => {
-    console.log("invite to a game");
     fire
       .database()
       .ref(`notifications/${player}`)

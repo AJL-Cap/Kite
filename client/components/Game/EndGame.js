@@ -11,7 +11,6 @@ const db = fire.database();
 const EndGame = props => {
   const { players } = props.session;
   const { uid } = props;
-  console.log("endgame players", players);
   const [playerSnap, loading, error] = useObject(db.ref(`players/${uid}`));
   const [messages, messageLoading, messageError] = useListVals(
     db.ref(`lobbyMessages/${props.code}/messages`)
@@ -34,7 +33,6 @@ const EndGame = props => {
   //need a new reference to players in that session for accurate points
   let winners = [];
   let losers = [];
-  //   console.log("players", props.players);
   props.players.forEach(playerKey => {
     if (players[playerKey].points <= 0) {
       losers.push(playerKey);
@@ -43,7 +41,6 @@ const EndGame = props => {
     }
   });
   let playerKeys = Object.keys(players);
-  //console.log("winners", winners, "losers", losers);
   return (
     <div className="container mt-3">
       <div className="row justify-content-between">
