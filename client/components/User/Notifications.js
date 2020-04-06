@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import fire from "../../fire";
 import { useObjectVal, useListVals } from "react-firebase-hooks/database";
 import { Dropdown, Badge, Nav } from "react-bootstrap";
@@ -16,8 +16,8 @@ const Notifications = props => {
   const [notifs, loading, error] = useObjectVal(db.ref(`notifications/${uid}`));
 
   useEffect(() => {
-    db.ref(`notifications/${uid}`).on("child_added", newNotfi => ding.play())
-  },[])
+    db.ref(`notifications/${uid}`).on("child_added", newNotfi => ding.play());
+  }, []);
 
   if (loading)
     return (

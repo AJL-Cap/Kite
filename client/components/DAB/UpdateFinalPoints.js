@@ -10,19 +10,16 @@ const UpdateFinalPoints = props => {
 
   const { playerSnapRef, updatePointsObj, players, userId } = props;
 
-  useEffect(
-    () => {
-      tada.play()
-      playerSnapRef.update(updatePointsObj);
-      playerSnapRef.child("recentPlayers").remove();
-      players.forEach(player => {
-        if (player !== userId) {
-          playerSnapRef.child("recentPlayers").push(player);
-        }
-      });
-    },
-    []
-  );
+  useEffect(() => {
+    tada.play();
+    playerSnapRef.update(updatePointsObj);
+    playerSnapRef.child("recentPlayers").remove();
+    players.forEach(player => {
+      if (player !== userId) {
+        playerSnapRef.child("recentPlayers").push(player);
+      }
+    });
+  }, []);
 
   return <div />;
 };

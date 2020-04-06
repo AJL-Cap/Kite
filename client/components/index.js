@@ -12,6 +12,7 @@ import ActiveGame from "./Game/ActiveGame";
 import Form from "./User/Form";
 import FriendProfile from "./User/FriendProfile";
 import ViewGames from "./Game/ViewGames";
+import WIPGames from './Game/WIPGames'
 
 export {
   Home,
@@ -27,5 +28,6 @@ export {
   ActiveGame,
   Form,
   FriendProfile,
-  ViewGames
+  ViewGames,
+  WIPGames
 };
