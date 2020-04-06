@@ -296,7 +296,6 @@ function gameOverRD(letterBankArr, target) {
 }
 
 function playingDAB(snapshot) {
-  console.log("playingDAB");
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
   // sessionRef.update({turnTimeStarted: Date.now()});
   let players;

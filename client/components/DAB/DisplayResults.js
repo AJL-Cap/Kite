@@ -29,8 +29,6 @@ const DisplayResults = props => {
   }
   const players = Object.entries(playersSnap);
   const guessors = players.filter(guessor => guessor[0] !== artist);
-  // console.log("drawerGuessors", drawerGuessors);
-  // console.log("guessors", guessors);
 
   let filteredGuessors = [];
   for (let i = 0; i < guessors.length; i++) {
