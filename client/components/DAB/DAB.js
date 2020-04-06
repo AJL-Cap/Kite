@@ -6,6 +6,7 @@ import SigCanvas from "./SigCanvas";
 import DrawingDisplay from "./DrawingDisplay";
 import { useObjectVal } from "react-firebase-hooks/database";
 import PlayerInfo from "./PlayerInfo";
+import EndGame from "./EndGame";
 
 const db = fire.database();
 const DAB = props => {
@@ -67,7 +68,9 @@ const DAB = props => {
           />
         </div>
       )}
-      {session.status === "finished" && <div>Finished</div>}
+      {session.status === "finished" && (
+        <EndGame uid={userId} code={code} players={session.players} />
+      )}
     </div>
   );
 };
