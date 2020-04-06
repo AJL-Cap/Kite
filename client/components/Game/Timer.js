@@ -31,8 +31,8 @@ const Timer = props => {
     [roundTime]
   );
   if (timeLeft === 10 || timeLeft === 9 || timeLeft === 8) {
-    tick.play();
-    // chirp.play()
+    //tick.play();
+    chirp.play();
   }
   return timeLeft <= 10 ? (
     <h1 className="text-danger">Remaining time: {timeLeft} </h1>
