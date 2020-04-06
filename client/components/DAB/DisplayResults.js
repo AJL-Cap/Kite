@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import React from "react";
+import React, { useState, useEffect } from "react";
 import fire from "../../fire";
 import { useObjectVal } from "react-firebase-hooks/database";
 import Guess from "./Guess";
@@ -7,24 +7,30 @@ import Guess from "./Guess";
 const db = fire.database();
 
 const DisplayResults = props => {
-  const { code, targetWord, uid } = props;
-  const [turnSnap, turnLoading, turnErr] = useObjectVal(
-    db.ref(`gameSessions/${code}/turn`)
-  );
+  const { code, targetWord, uid, drawerId } = props;
+  const [artist, setArtist] = useState(drawerId);
+
   const [playersSnap, loading, error] = useObjectVal(
     db.ref(`gameSessions/${code}/players`)
   );
 
-  if (loading || turnLoading) return "";
-  if (error || turnErr) return "error";
+  useEffect(
+    () => {
+      setArtist(drawerId);
+    },
+    [drawerId]
+  );
+
+  if (loading) return "";
+  if (error) return "error";
   let drawerGuessors = [];
-  if (playersSnap[turnSnap].guessors) {
-    drawerGuessors = Object.keys(playersSnap[turnSnap].guessors);
+  if (playersSnap[artist].guessors) {
+    drawerGuessors = Object.keys(playersSnap[artist].guessors);
   }
   const players = Object.entries(playersSnap);
-  const guessors = players.filter(guessor => guessor[0] !== turnSnap);
-  console.log("drawerGuessors", drawerGuessors);
-  console.log("guessors", guessors);
+  const guessors = players.filter(guessor => guessor[0] !== artist);
+  // console.log("drawerGuessors", drawerGuessors);
+  // console.log("guessors", guessors);
 
   let filteredGuessors = [];
   for (let i = 0; i < guessors.length; i++) {
@@ -34,36 +40,8 @@ const DisplayResults = props => {
       }
     }
   }
-  console.log("filtered", filteredGuessors);
-  if (turnSnap === uid) {
-    // if there is at least one player who guessed
-    if (drawerGuessors.length > 0) {
-      console.log("drew & drawerGuessor", drawerGuessors);
-      console.log("filtered", filteredGuessors);
-      return (
-        <div>
-          <h4>The answer is {targetWord}</h4>
-          <div>
-            {filteredGuessors.map(guessor => (
-              <Guess
-                key={guessor[0]}
-                guessorNick={guessor[1].nickname}
-                correct={guessor[1].correct}
-                guesses={Object.values(guessor[1].responses)}
-                drawerId={turnSnap}
-                code={code}
-              />
-            ))}
-          </div>
-        </div>
-      );
-    } else {
-      console.log("drew but no drawerGuessor");
-      return <div>Wait while other players guess your drawing!</div>;
-    }
-  } else {
-    console.log("did not draw and guessed", drawerGuessors);
-    console.log("filtered", filteredGuessors);
+
+  if (drawerGuessors.length > 0) {
     return (
       <div>
         <h4>The answer is {targetWord}</h4>
@@ -74,13 +52,15 @@ const DisplayResults = props => {
               guessorNick={guessor[1].nickname}
               correct={guessor[1].correct}
               guesses={Object.values(guessor[1].responses)}
-              drawerId={turnSnap}
+              drawerId={artist}
               code={code}
             />
           ))}
         </div>
       </div>
     );
+  } else {
+    return <div>Wait while other players guess your drawing!</div>;
   }
 };
 

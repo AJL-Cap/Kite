@@ -10,7 +10,6 @@ export default function Gmail(props) {
       .auth()
       .signInWithPopup(provider)
       .then(result => {
-        console.log(result);
         props.history.push("/form");
       })
       .catch(err => {

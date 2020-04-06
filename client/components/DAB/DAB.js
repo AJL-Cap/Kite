@@ -29,7 +29,6 @@ const DAB = props => {
       db.ref(`gameSessions/${code}/turnTimeStarted`).set(Date.now());
     }
   }, []);
-
   if (loading) return "";
   if (error) return "Error";
   if (!session) return <NotFound />;

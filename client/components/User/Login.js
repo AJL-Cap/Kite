@@ -13,7 +13,6 @@ export default function Login(props) {
       .auth()
       .signInWithPopup(provider)
       .then(result => {
-        console.log(result);
         fire
           .database()
           .ref(`players/${result.user.uid}`)

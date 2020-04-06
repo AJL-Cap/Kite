@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import fire from "../../fire";
 import HandleResponse from "./HandleResponse";
+import DisplayResults from "./DisplayResults";
 
 const db = fire.database();
 
@@ -9,9 +10,21 @@ const GuessForm = props => {
   const { drawerId, code, uid, session } = props;
   const { register, handleSubmit, errors } = useForm();
   const [submitted, setSubmitted] = useState(false);
+  const [viewAnswers, setViewAnswers] = useState(false);
+  const { targetWord } = session.players[drawerId];
+
+  useEffect(
+    () => {
+      if (drawerId && drawerId == uid) {
+        setViewAnswers(true);
+      } else {
+        setViewAnswers(false);
+      }
+    },
+    [drawerId]
+  );
 
   const onSubmit = data => {
-    console.log("guesses submitted:", data);
     const { guess1, guess2, guess3 } = data;
     db.ref(`gameSessions/${code}/players/${uid}/responses`).update({
       1: guess1.toUpperCase(),
@@ -19,9 +32,19 @@ const GuessForm = props => {
       3: guess3.toUpperCase()
     });
     setSubmitted(true);
+    setViewAnswers(true);
   };
-  if (submitted) {
-    return <HandleResponse {...props} />;
+  if (viewAnswers && drawerId) {
+    return (
+      <div>
+        {submitted && <HandleResponse {...props} />}
+        <DisplayResults
+          code={code}
+          drawerId={drawerId}
+          targetWord={targetWord}
+        />}
+      </div>
+    );
   }
   return (
     <div>

@@ -6,9 +6,9 @@ const db = fire.database();
 
 const Guess = props => {
   const { drawerId, guessorNick, correct, guesses, code } = props;
-  console.log("guessorNick:", guessorNick);
-  console.log("guesses:", guesses);
-  console.log("drawerId:", drawerId);
+  // console.log("guessorNick:", guessorNick);
+  // console.log("guesses:", guesses);
+  // console.log("drawerId:", drawerId);
 
   const displayGuesses = guesses.map((guess, index) => (
     <li key={index}>{guess}</li>
