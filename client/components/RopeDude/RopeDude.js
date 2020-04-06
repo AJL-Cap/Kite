@@ -14,10 +14,11 @@ import Container from "react-bootstrap/Container";
 import { useObjectVal } from "react-firebase-hooks/database";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import WaitForTurn from "./WaitForTurn";
 
 const db = fire.database();
 
-const RopeDude = props => {
+const RopeDude = (props) => {
   const { code, host, userId } = props;
   const [finalGuess, setFinalGuess] = useState(false);
   const [session, loading, error] = useObjectVal(
@@ -28,7 +29,7 @@ const RopeDude = props => {
     if (host) {
       //host setting session total points to 120
       db.ref(`gameSessions/${code}`).update({
-        points: 120
+        points: 120,
       });
     }
   }, []);
@@ -56,7 +57,7 @@ const RopeDude = props => {
               <h2>
                 <strong>Players: </strong>
               </h2>
-              {players.map(key => {
+              {players.map((key) => {
                 return (
                   <PlayerInfo
                     key={key}
@@ -83,7 +84,7 @@ const RopeDude = props => {
             </div>
             <br />
             <Row>
-              {session.turn === userId && (
+              {session.turn === userId ? (
                 <div className="card" style={{ width: "100rem" }}>
                   <div className="card-body">
                     <GuessLetter
@@ -105,6 +106,8 @@ const RopeDude = props => {
                     )}
                   </div>
                 </div>
+              ) : (
+                <WaitForTurn code={code} turn={session.turn} />
               )}
             </Row>
           </Col>

@@ -74,7 +74,7 @@ const EndGame = props => {
           </Row>
         </Col>
         <Col xs={6} md={4}>
-          <Link to="/games" onClick={()=>exit.play()}>
+          <Link to="/games" onClick={() => exit.play()}>
             <button className="btn btn-outline-info mt-5 mb-5">
               Back to Games
             </button>

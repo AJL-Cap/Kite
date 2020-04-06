@@ -95,7 +95,7 @@ const EndGame = props => {
           userId={uid}
         />
       )}
-      <Link to="/games" onClick={()=>exit.play()}>
+      <Link to="/games" onClick={() => exit.play()}>
         <button className="btn btn-outline-info">Back to Games</button>
       </Link>
       <Chat

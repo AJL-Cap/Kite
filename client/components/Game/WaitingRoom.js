@@ -83,7 +83,7 @@ const WaitingRoom = props => {
     }
   };
   const cancelGame = () => {
-    cancel.play()
+    cancel.play();
     history.push("/games");
     gameSession.remove();
   };

@@ -91,7 +91,7 @@ const EndGame = props => {
               {Object.keys(session.finalGuess)[0]}
             </div>
           )}
-          <Link to="/games" onClick={()=>exit.play()}>
+          <Link to="/games" onClick={() => exit.play()}>
             <button className="btn btn-outline-info">Back to Games</button>
           </Link>
           <Chat

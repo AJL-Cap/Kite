@@ -30,7 +30,7 @@ const SingleResponseDisplay = props => {
     if (iHave) {
       ding.play();
       subtract20();
-    } else ding2.play()
+    } else ding2.play();
     db
       .ref(
         `gameSessions/${code}/rounds/${roundID}/responses/${responseID}/confessors/${uid}`

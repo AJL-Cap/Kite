@@ -8,10 +8,10 @@ import sound from "../../audio/cheerful.wav";
 
 const db = fire.database();
 
-const Chat = (props) => {
+const Chat = props => {
   const chat = new UIfx(sound, {
     volume: 0.03, // value must be between 0.0 ⇔ 1.0
-    throttleMs: 50,
+    throttleMs: 50
   });
 
   let { messages, userId, code } = props;
@@ -22,9 +22,9 @@ const Chat = (props) => {
   };
 
   useEffect(() => {
-    db.ref(`lobbyMessages/${code}`).on("child_added", (newMessage) =>
-      chat.play()
-    );
+    db
+      .ref(`lobbyMessages/${code}`)
+      .on("child_added", newMessage => chat.play());
   }, []);
 
   useEffect(scrollToBottom, [messages]);
