@@ -12,6 +12,7 @@ import FinalArt from "./FinalArt";
 const db = fire.database();
 
 const EndGame = props => {
+
   const { uid, players, session, code } = props;
   const [updatePointsObj, setUpdatePointsObj] = useState({});
   const [playerSnap, loading, error] = useObject(db.ref(`players/${uid}`));

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import Confession from "./Confession";
 import fire from "../../fire";
 import UIfx from "uifx";
-import sound from "../../audio/ooh.ogg";
+import sound from "../../audio/wrong_mild.wav";
 
 const db = fire.database();
 
 const SingleResponseDisplay = props => {
-  const Ooh = new UIfx(sound, {
+  const ding = new UIfx(sound, {
     volume: 0.5, // number between 0.0 ~ 1.0
     throttleMs: 50
   });
@@ -23,7 +23,7 @@ const SingleResponseDisplay = props => {
 
   const handleClick = iHave => {
     if (iHave) {
-      Ooh.play();
+      ding.play();
       subtract20();
     }
     db

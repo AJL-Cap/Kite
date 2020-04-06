@@ -1,13 +1,24 @@
-import React from "react";
+import React, {useEffect} from "react";
 import fire from "../../fire";
 import { useObjectVal, useListVals } from "react-firebase-hooks/database";
 import { Dropdown, Badge, Nav } from "react-bootstrap";
 import SingleNotif from "./SingleNotif";
+import UIfx from "uifx";
+import sound from "../../audio/ding_high.wav";
 
 const db = fire.database();
 const Notifications = props => {
+  const ding = new UIfx(sound, {
+    volume: 0.1, // number between 0.0 ~ 1.0
+    throttleMs: 50
+  });
   const { uid } = props;
   const [notifs, loading, error] = useObjectVal(db.ref(`notifications/${uid}`));
+
+  useEffect(() => {
+    db.ref(`notifications/${uid}`).on("child_added", newNotfi => ding.play())
+  },[])
+
   if (loading)
     return (
       <Dropdown.Toggle as={Nav.Link}>
