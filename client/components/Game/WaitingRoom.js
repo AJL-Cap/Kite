@@ -63,7 +63,7 @@ const WaitingRoom = props => {
     try {
       //for rope dude, generate a random word for the session
       if (gameId === "2") {
-        const targetWord = 'FULLSTACK';
+        const targetWord = "FULLSTACK";
         db.ref(`gameSessions/${code}/targetWord`).set(targetWord);
       }
       //for drawing a blank, generate a random word per player

@@ -17,12 +17,14 @@ const Chat = props => {
   const myRef = useRef(null);
   const scrollToBottom = () => {
     myRef.current.scrollIntoView({ behavior: "smooth" });
-  }
-  let chatRef = db.ref(`lobbyMessages/${code}`)
-  useEffect(() => {
-    chatRef
-      .on("child_added", newMessage => chat.play());
-  }, [chatRef]);
+  };
+  let chatRef = db.ref(`lobbyMessages/${code}`);
+  useEffect(
+    () => {
+      chatRef.on("child_added", newMessage => chat.play());
+    },
+    [chatRef]
+  );
   useEffect(scrollToBottom, [messages]);
   return (
     <div className="chat">

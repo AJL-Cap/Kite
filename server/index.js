@@ -250,7 +250,7 @@ function playingRD(snapshot) {
     if (finalGuessSnap.val()) {
       if (turnTimeout) clearTimeout(turnTimeout);
       sessionRef.child("turn").off();
-      sessionRef.update({status: 'finished'})
+      sessionRef.update({ status: "finished" });
     }
   });
   //when a new letter is submitted, change turn to next player:
