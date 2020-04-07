@@ -13,22 +13,17 @@ const Chat = props => {
     volume: 0.03, // value must be between 0.0 ⇔ 1.0
     throttleMs: 50
   });
-
   let { messages, userId, code } = props;
   const myRef = useRef(null);
-
   const scrollToBottom = () => {
     myRef.current.scrollIntoView({ behavior: "smooth" });
-  };
-
+  }
+  let chatRef = db.ref(`lobbyMessages/${code}`)
   useEffect(() => {
-    db
-      .ref(`lobbyMessages/${code}`)
+    chatRef
       .on("child_added", newMessage => chat.play());
-  }, []);
-
+  }, [chatRef]);
   useEffect(scrollToBottom, [messages]);
-
   return (
     <div className="chat">
       <div className="chat-area">
