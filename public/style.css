@@ -51,16 +51,17 @@ input {
 .chat-area {
   padding: 20px;
   height: 300px;
-  width: 65vw;
+  max-width: 65vw;
+  min-width: 300px;
   background-color: #e6f0fa;
   overflow-y: scroll;
-  font-size: 30px;
+  font-size: 16px;
   /* display: flex;
   flex-direction: column; */
 }
 
 .chat-bubble .chat-time {
-  font-size: 20px;
+  font-size: 16px;
   color: #757575;
 }
 /* .form-control {
@@ -68,7 +69,7 @@ input {
 } */
 
 .chat-area .chat-bubble {
-  padding: 10px;
+  padding: 4px;
   background-color: #a5d6a7;
   margin: 3px;
   max-width: 100%;
@@ -77,7 +78,7 @@ input {
 }
 .chat-area .chat-bubble.user {
   background-color: #bbdefb;
-  padding: 10px;
+  padding: 4px;
   border-radius: 4px;
   max-width: 100%;
   word-wrap: break-word;

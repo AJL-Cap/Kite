@@ -61,7 +61,10 @@
     "react-scripts": "3.4.0",
     "react-scroll": "^1.7.16",
     "react-scroll-to-bottom": "^1.3.2",
-    "styled-components": "^5.0.1"
+    "react-signature-canvas": "^1.0.3",
+    "react-sound": "^1.2.0",
+    "styled-components": "^5.0.1",
+    "uifx": "^2.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",

@@ -16,17 +16,35 @@ export default function Profile(props) {
   if (err) {
     return <div>error!</div>;
   }
+
+  const handleClick = () => {
+    props.history.push(`/profile/edit`);
+  };
   if (player) {
     return (
       <div>
-        <div className="column m-5">
-          <Stats player={player} />
+        <div className="jumbotron text-center alert-dark">
+          <h1>
+            <strong>Welcome to your profile, {player.nickname}!</strong>
+          </h1>
         </div>
-        <div className="col mb-4 align-self-center">
+        <div className="row justify-content-start">
+          <button
+            className="alert-info text-dark m-3 border border-dark rounded"
+            type="button"
+            onClick={handleClick}
+          >
+            Edit Profile
+          </button>
+        </div>
+        <div className="row d-flex justify-content-around">
+          <Stats player={player} />
           {player.recentPlayers && (
-            <div className="column m-5">
-              <RecentPlayers recents={player.recentPlayers} />
-            </div>
+            <RecentPlayers
+              recents={player.recentPlayers}
+              invite={false}
+              uid={userId}
+            />
           )}
         </div>
       </div>

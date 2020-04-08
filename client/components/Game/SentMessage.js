@@ -13,8 +13,9 @@ const SentMessage = props => {
     <div className="row msg_container base_sent">
       <div className="col-md-10 col-xs-10">
         <div className="messages msg_sent">
-          <p className="chat-time float-right">{player.nickname}</p>
-          <p>{props.message.content}</p>
+          <p>
+            <strong>{player.nickname}:</strong> {props.message.content}
+          </p>
         </div>
       </div>
       {/* <div className="avatar float-right">

@@ -1,8 +1,9 @@
 import React from "react";
 import { useObjectVal } from "react-firebase-hooks/database";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import fire from "../fire";
 import styled from "styled-components";
+import Alert from "react-bootstrap/Alert";
 
 export default function Home({ userId }) {
   const [player, loading, error] = useObjectVal(
@@ -12,43 +13,36 @@ export default function Home({ userId }) {
   if (loading) return "";
   if (error) return <p>Error!</p>;
 
-  return player ? (
-    <Main>
-      <Text>
-        <Title>Kite</Title>
-        <Paragraph>near, far, wherever we are... 🪁</Paragraph>
-        <br />
-        <h3>Welcome {player.nickname}!</h3>
-        <br />
-        <Intro>
-          <NavLink className="auth" to="/games">
-            {" "}
-            Host or join a game! 🎮
-          </NavLink>
-        </Intro>
-      </Text>
-    </Main>
-  ) : (
-    <Main>
-      <Text>
-        <Title>Kite</Title>
-        <Paragraph>near, far, wherever we are... 🪁 </Paragraph>
-        <br />
-        <h3>Welcome!</h3>
-        <br />
-        <Intro>
-          {" "}
-          Please{" "}
-          <NavLink className="auth" to="/login">
-            log in{" "}
-          </NavLink>{" "}
-          or{" "}
-          <NavLink className="auth" to="/signup">
-            sign up{" "}
-          </NavLink>{" "}
-          to continue.
-        </Intro>
-      </Text>
+  return (
+    <Main className="d-flex align-items-start justify-content-center">
+      <Alert variant="info" className="mt-5 p-5">
+        <Alert.Heading>
+          <h2>Welcome to Kite Games{player && `, ${player.nickname}`}.</h2>
+        </Alert.Heading>
+        <div className="d-flex justify-content-end">
+          near, far, wherever we are...
+        </div>
+        <hr />
+        {player ? (
+          <Links>
+            <Link to="/games" className="auth alert-link">
+              Host or join a game with your friends!
+            </Link>
+          </Links>
+        ) : (
+          <Links>
+            Please{" "}
+            <Link to="/login" className="auth alert-link">
+              log in
+            </Link>{" "}
+            or{" "}
+            <Link to="/signup" className="auth alert-link">
+              sign up
+            </Link>{" "}
+            to continue.
+          </Links>
+        )}
+      </Alert>
     </Main>
   );
 }
@@ -59,30 +53,14 @@ const Main = styled.div`
   background-repeat: "no-repeat";
   background-size: "cover"
   background-attachment: "fixed";
+  min-height: 100%;
   width: 100%;
-  height: 1000px;
+  height: auto;
+  position: fixed;
+  top: 50;
+  left: 0;
 `;
 
-const Text = styled.div`
-  text-align: center;
-  margin: 10px;
-  color: #9d8189;
-`;
-
-const Title = styled.div`
-  font-family: Arnoldboecklin;
-  font-size: 70px;
-  color: #ffa4a4;
-`;
-
-const Paragraph = styled.div`
-  font-family: Brushstroke;
-  font-size: 40px;
-  background: rgba(200, 200, 200, 0.15);
-`;
-
-const Intro = styled.div`
-  font-family: Brushstroke;
-  font-size: 30px;
-  color: #9d8189;
+const Links = styled.div`
+  font-size: 22px;
 `;

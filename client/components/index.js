@@ -11,6 +11,8 @@ import NHIE from "./NHIE/NHIE";
 import ActiveGame from "./Game/ActiveGame";
 import Form from "./User/Form";
 import FriendProfile from "./User/FriendProfile";
+import ViewGames from "./Game/ViewGames";
+import WIPGames from "./Game/WIPGames";
 
 export {
   Home,
@@ -25,5 +27,7 @@ export {
   NHIE,
   ActiveGame,
   Form,
-  FriendProfile
+  FriendProfile,
+  ViewGames,
+  WIPGames
 };

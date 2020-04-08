@@ -1,8 +1,6 @@
 /* eslint-disable complexity */
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import fire from "../../fire";
-import { useObjectVal, useList } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import PlayerInfo from "./PlayerInfo";
 import DisplayWord from "./DisplayWord";
@@ -12,6 +10,11 @@ import HangMan from "./HangMan";
 import { Button } from "react-bootstrap";
 import FinalGuess from "./FinalGuess";
 import EndGame from "./EndGame";
+import Container from "react-bootstrap/Container";
+import { useObjectVal } from "react-firebase-hooks/database";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import WaitForTurn from "./WaitForTurn";
 
 const db = fire.database();
 
@@ -38,15 +41,14 @@ const RopeDude = props => {
   let players = Object.keys(session.players);
 
   const handleClick = () => {
-    console.log("clicked");
     setFinalGuess(!finalGuess);
   };
 
   return (
-    <div className="container-xl mx-5">
+    <Container fluid>
       {session.status === "playing" && (
-        <div className="row">
-          <div className="col" id="playerDisplayPoints">
+        <Row>
+          <Col id="playerDisplayPoints">
             <div
               className="jumbotron text-center justify-content-center"
               id="jumboPlayers"
@@ -66,26 +68,32 @@ const RopeDude = props => {
                 );
               })}
             </div>
-          </div>
-          <div className="col-8">
+          </Col>
+          <Col className="col-9">
             <div className="jumbotron text-center">
-              <DisplayWord code={code} session={session} />
+              <Row>
+                <Col md="auto">
+                  <HangMan code={code} session={session} />
+                </Col>
+                <Col md="auto">
+                  <DisplayWord code={code} session={session} />
+                </Col>
+              </Row>
+              <hr />
+              <LetterBank code={code} session={session} />
             </div>
-            <LetterBank code={code} session={session} />
-            <HangMan code={code} session={session} />
             <br />
-            <div className="row">
-              {session.turn === userId && (
+            <Row>
+              {session.turn === userId ? (
                 <div className="card" style={{ width: "100rem" }}>
                   <div className="card-body">
-                    <h5 className="card-title">Submit a guess!</h5>
-                    <div className="card-subtitle mb-2 text-muted" />
                     <GuessLetter
                       userId={userId}
                       code={code}
                       session={session}
+                      players={players}
                     />
-                    <Button className="alert-danger" onClick={handleClick}>
+                    <Button className="btn btn-danger" onClick={handleClick}>
                       Final Guess
                     </Button>
                     {finalGuess && (
@@ -98,10 +106,12 @@ const RopeDude = props => {
                     )}
                   </div>
                 </div>
+              ) : (
+                <WaitForTurn code={code} turn={session.turn} />
               )}
-            </div>
-          </div>
-        </div>
+            </Row>
+          </Col>
+        </Row>
       )}
       {session.status === "finished" && (
         <EndGame
@@ -111,7 +121,7 @@ const RopeDude = props => {
           code={code}
         />
       )}
-    </div>
+    </Container>
   );
 };
 

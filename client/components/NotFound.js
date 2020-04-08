@@ -9,9 +9,13 @@ const NotFound = () => {
       <br />
       <h1>Error 404: Page Not Found.</h1>
       <br />
-      <h5>What you are looking for does not exist.</h5>
-      <button type="button" onClick={() => history.push("/games")}>
-        Back to lobby
+      <h5>Try starting a new game.</h5>
+      <button
+        type="button"
+        className="btn btn-info"
+        onClick={() => history.push("/games")}
+      >
+        back to games
       </button>
     </div>
   );

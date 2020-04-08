@@ -23,15 +23,19 @@ export default function FriendProfile(props) {
       <div>
         <div className="jumbotron text-center alert-dark">
           <h1>
-            <strong>Welcome to {player.nickname}'s Profile</strong>
+            <strong>Welcome to {player.nickname}'s profile.</strong>
           </h1>
         </div>
-        <div className="col mb-4 align-self-center">
-          <Stats player={player} />
-        </div>
-        <button type="button" onClick={() => props.history.goBack()}>
+        <button
+          className="btn btn-outline-dark"
+          type="button"
+          onClick={() => props.history.goBack()}
+        >
           Back to My Profile
         </button>
+        <div className="d-flex justify-content-center">
+          <Stats player={player} />
+        </div>
       </div>
     );
   }

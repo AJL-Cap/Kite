@@ -13,8 +13,11 @@ import {
   NotFound,
   Loading,
   Form,
-  FriendProfile
+  FriendProfile,
+  ViewGames,
+  WIPGames
 } from "./components";
+import EditProfile from "./components/User/EditProfile";
 
 export default function Routes() {
   const [user, initialising, error] = useAuthState(fire.auth());
@@ -42,22 +45,27 @@ export default function Routes() {
             path="/games/:code"
             render={props => <ActiveGame userId={user.uid} {...props} />}
           />
-          <Route path="/players" component={Players} />
-          <Route path="/profile/:uid" component={FriendProfile} />
           <Route
+            path="/profile/edit"
+            render={props => <EditProfile userId={user.uid} {...props} />}
+          />
+          <Route exact path="/profile/:uid" component={FriendProfile} />
+          <Route path="/players" component={Players} />
+          <Route
+            exact
             path="/profile"
             render={props => <Profile userId={user.uid} {...props} />}
           />
           <Route
-            exact
             path="/games"
             render={props => <GamePage userId={user.uid} {...props} />}
           />
           <Route
-            exact
             path="/form"
             render={props => <Form userId={user.uid} {...props} />}
           />
+          <Route path="/wip" component={WIPGames} />
+          <Route path="/:anythingElse" component={NotFound} />
           <Route
             exact
             path="/"
@@ -66,12 +74,13 @@ export default function Routes() {
         </Switch>
       ) : (
         <Switch>
-          <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SignUp} />
+          <Route path="/games" component={ViewGames} />
+          <Route path="/:anythingElse" component={NotFound} />
+          <Route exact path="/" component={Home} />
         </Switch>
       )}
-      <Route component={NotFound} />
     </Switch>
   );
 }

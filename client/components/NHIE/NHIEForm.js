@@ -4,16 +4,17 @@ import fire from "../../fire";
 import { useList, useObjectVal } from "react-firebase-hooks/database";
 import Timer from "../Game/Timer";
 import NotFound from "../NotFound";
+import UIfx from "uifx";
+import sound from "../../audio/success.wav";
 
 const db = fire.database();
 
 export default function NHIEForm(props) {
-  const { userId, code, host } = props;
-  // useEffect(() => {
-  //   if (host) {
-  //     db.ref(`gameSessions/${code}/rounds`).push({ timeStarted: Date.now() });
-  //   }
-  // }, []);
+  const alert = new UIfx(sound, {
+    volume: 0.2, // number between 0.0 ~ 1.0
+    throttleMs: 50
+  });
+  const { userId, code } = props;
   const [submitted, setSubmitted] = useState(false);
   const [rounds, loading, error] = useList(
     db.ref(`gameSessions/${code}/rounds`)
@@ -22,6 +23,10 @@ export default function NHIEForm(props) {
     db.ref("players/" + userId + "/nickname")
   );
   const { register, handleSubmit, errors } = useForm();
+
+  useEffect(() => {
+    alert.play();
+  }, []);
 
   if (loading || loadNick) return "";
   if (error || errNick) return <div>err</div>;
@@ -43,7 +48,7 @@ export default function NHIEForm(props) {
   return (
     <div>
       <div className="row justify-content-center">
-        <Timer roundTime={curRound.val().timeStarted} time={30} />
+        <Timer roundTime={curRound.val().timeStarted} time={60} />
       </div>
       {submitted ? (
         <h4>Your response has been submitted</h4>

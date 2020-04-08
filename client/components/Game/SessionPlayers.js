@@ -14,8 +14,8 @@ const SessionPlayer = props => {
   if (playerError) return "Error";
 
   return (
-    <div className="m-3">
-      <Card style={{ width: "18rem" }} bg="dark" text="light">
+    <div className="m-1">
+      <Card style={{ width: "16rem" }} bg="dark" text="light">
         {playerSnapshot.profilePic ? (
           <Card.Img variant="top" src={playerSnapshot.profilePic.secure_url} />
         ) : (

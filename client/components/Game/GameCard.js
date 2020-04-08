@@ -14,25 +14,35 @@ const GameCard = props => {
   if (error) return <p>Error</p>;
 
   const handleClick = () => {
-    db.ref("gameSessions/" + code).set({
-      gameId: gameId,
-      status: "waiting",
-      players: { [uid]: { host: true, nickname: nick } }
-    });
-    history.push({
-      pathname: `/games/${code}`,
-      state: { host: true }
-    });
+    if (gameId > 3) {
+      history.push("/wip");
+    } else {
+      db.ref("gameSessions/" + code).set({
+        gameId: gameId,
+        status: "waiting",
+        players: { [uid]: { host: true, nickname: nick } }
+      });
+      history.push({
+        pathname: `/games/${code}`,
+        state: { host: true }
+      });
+    }
   };
 
   return (
     <div className="card" style={{ margin: "5%" }}>
       <div className="card-body">
-        <h2 className="card-title">Title: {game.val().title}</h2>
+        <h2 className="card-title">{game.val().title}</h2>
         <p className="card-text">Rules: {game.val().rules}</p>
-        <button type="button" className="btn alert-info" onClick={handleClick}>
-          Start New Game
-        </button>
+        {uid && (
+          <button
+            type="button"
+            className="btn alert-info"
+            onClick={handleClick}
+          >
+            Start New Game
+          </button>
+        )}
       </div>
     </div>
   );

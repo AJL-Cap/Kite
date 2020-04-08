@@ -7,17 +7,15 @@ const db = fire.database();
 
 const FinalGuess = props => {
   const { session, code, uid, nick } = props;
-  console.log("nick:", nick);
   const { register, handleSubmit, errors } = useForm();
 
   const onSubmit = data => {
+    console.log("final Guess Submitted");
     const guess = data.wordGuess.toUpperCase();
-    console.log("final guess submitted: ", guess);
     if (guess !== session.targetWord) {
       db.ref(`gameSessions/${code}/points`).set(0);
     }
     db.ref(`gameSessions/${code}`).update({
-      status: "finished",
       finalGuess: { [nick]: guess }
     });
   };

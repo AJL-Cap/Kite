@@ -2,18 +2,22 @@ import React, { useEffect } from "react";
 import PlayerInfo from "./PlayerInfo";
 import NHIEForm from "./NHIEForm";
 import fire from "../../fire";
-import { useObjectVal } from "react-firebase-hooks/database";
 import NotFound from "../NotFound";
 import ResponseDisplay from "./ResponseDisplay";
 import axios from "axios";
+import { useObjectVal, useListVals } from "react-firebase-hooks/database";
 import EndGame from "../Game/EndGame";
+import Chat from "../Game/Chat";
 
 const db = fire.database();
 
 const NHIE = props => {
-  const { code, host } = props;
+  const { code, host, userId } = props;
   const [session, loading, error] = useObjectVal(
     db.ref("gameSessions/" + code)
+  );
+  const [messages, messageLoading, messageError] = useListVals(
+    db.ref(`lobbyMessages/${props.code}/messages`)
   );
 
   useEffect(() => {
@@ -22,8 +26,7 @@ const NHIE = props => {
       axios.post(`/api/games/${code}`, { status: "responding" });
 
       //host setting everyone's game points to 100
-      db
-        .ref(`gameSessions/${code}/players`)
+      db.ref(`gameSessions/${code}/players`)
         .once("value")
         .then(snapshot => {
           snapshot.forEach(childSnap => {
@@ -33,8 +36,8 @@ const NHIE = props => {
     }
   }, []);
 
-  if (loading) return "";
-  if (error) return "Error";
+  if (loading || messageLoading) return "";
+  if (error || messageError) return "Error";
   if (!session) return <NotFound />;
 
   let players = Object.keys(session.players);
@@ -79,6 +82,14 @@ const NHIE = props => {
                 />
               );
             })}
+          </div>
+          <div className="col">
+            <Chat
+              code={code}
+              userId={userId}
+              players={players}
+              messages={messages}
+            />
           </div>
         </div>
       )}

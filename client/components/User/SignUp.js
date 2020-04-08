@@ -19,7 +19,6 @@ export default function SignUp(props) {
       .auth()
       .signInWithPopup(provider)
       .then(result => {
-        console.log(result);
         props.history.push("/form");
       })
       .catch(err => {
