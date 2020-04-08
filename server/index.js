@@ -9,13 +9,13 @@ let serviceAccount;
 if (process.env.NODE_ENV !== "production") {
   serviceAccount = require("../admin.json");
 } else {
-  serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN)
+  serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN);
 }
 let databaseURL;
 if (process.env.NODE_ENV !== "production") {
-  databaseURL = require("../secrets").databaseURL
+  databaseURL = require("../secrets").databaseURL;
 } else {
-  databaseURL = require("../fire-production").databaseURL
+  databaseURL = require("../fire-production").databaseURL;
 }
 
 module.exports = app;
@@ -62,7 +62,7 @@ const createApp = () => {
 };
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: databaseURL,
+  databaseURL: databaseURL
 });
 const startListening = () => {
   // start listening (and create a 'server' object representing our server)
@@ -73,7 +73,7 @@ const startListening = () => {
 //start of game controller
 const db = admin.database();
 
-const shuffle = (inputArr) => {
+const shuffle = inputArr => {
   const arr = [...inputArr];
   for (let i = arr.length - 1; i > 0; i--) {
     const swapIndex = Math.floor(Math.random() * (i + 1));
@@ -96,7 +96,7 @@ function endGame(deleteRef) {
 }
 function respondingNHIE(snapshot) {
   db.ref(`gameSessions/${snapshot.key}/rounds`).push({
-    timeStarted: Date.now(),
+    timeStarted: Date.now()
   });
   console.log("in responding");
   //getting total # of players
@@ -104,11 +104,11 @@ function respondingNHIE(snapshot) {
   snapshot.ref
     .child("players")
     .once("value")
-    .then((playerSnapshot) => {
+    .then(playerSnapshot => {
       totalPlayers = playerSnapshot.numChildren();
     });
   //getting the rounds object limited to the last round
-  snapshot.ref.child("rounds").on("child_added", (roundSnapshot) => {
+  snapshot.ref.child("rounds").on("child_added", roundSnapshot => {
     const rounds = roundSnapshot.val();
     //getting list of rounds values
     if (rounds) {
@@ -118,13 +118,13 @@ function respondingNHIE(snapshot) {
       let responses;
       let refToChange = "gameSessions/" + snapshot.key + "/status";
       //timeout function
-      const roundTimeout = setTimeout(function () {
+      const roundTimeout = setTimeout(function() {
         //if at the end of the round there are responses
         if (responses) {
           snapshot.ref.child("rounds").off();
           //updating timeStarted for the front end timer
           roundSnapshot.ref.update({
-            timeStarted: Date.now(),
+            timeStarted: Date.now()
           });
           //updating to confessing
           endRound(responsesRef, refToChange, "confessing");
@@ -140,12 +140,12 @@ function respondingNHIE(snapshot) {
         }
       }, 60000);
       //getting responses
-      responsesRef.on("value", (roundResponsesSnapshot) => {
+      responsesRef.on("value", roundResponsesSnapshot => {
         responses = roundResponsesSnapshot.val();
         //checking for submitted responses
         if (responses) {
           let resArr = [];
-          Object.values(responses).forEach((resObj) => {
+          Object.values(responses).forEach(resObj => {
             if (resObj.text.length > 1) {
               resArr.push(resObj.text);
             }
@@ -156,7 +156,7 @@ function respondingNHIE(snapshot) {
             clearTimeout(roundTimeout);
             //updating timeStarted for the front end timer
             roundSnapshot.ref.update({
-              timeStarted: Date.now(),
+              timeStarted: Date.now()
             });
             endRound(responsesRef, refToChange, "confessing");
           }
@@ -172,10 +172,10 @@ function confessingNHIE(sessionSnap) {
   let ref = sessionSnap.ref.child("players");
   //checking gameover when confessing time is up
   let players;
-  sessionSnap.ref.child("players").on("value", (playersSnap) => {
+  sessionSnap.ref.child("players").on("value", playersSnap => {
     if (playersSnap.val() != null) {
       players = Object.values(playersSnap.val());
-      players.forEach((player) => {
+      players.forEach(player => {
         if (parseInt(player.points) <= 0) {
           isGameOver = true;
         }
@@ -188,7 +188,7 @@ function confessingNHIE(sessionSnap) {
   } else {
     timeForRound = 60000;
   }
-  const roundTimeout = setTimeout(function () {
+  const roundTimeout = setTimeout(function() {
     if (isGameOver) {
       //changing status to finished if game is over
       endRound(ref, refToChange, "finished");
@@ -206,14 +206,14 @@ function finished(sessionSnap) {
   let refToDelete = "gameSessions/" + sessionSnap.key;
   let chatToDelete = "lobbyMessages/" + sessionSnap.key;
   //ending finished in specified time and deleted the game session
-  setTimeout(function () {
+  setTimeout(function() {
     endGame(refToDelete);
     endGame(chatToDelete);
   }, 60000);
 }
 function playingRD(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
-  sessionRef.child("points").on("value", (pointSnapshot) => {
+  sessionRef.child("points").on("value", pointSnapshot => {
     if (pointSnapshot.val() === 0) {
       sessionRef.child("turn").off();
       sessionRef.child("points").off();
@@ -224,21 +224,21 @@ function playingRD(snapshot) {
   sessionRef
     .child("players")
     .orderByKey()
-    .once("value", (playerSnapshot) => {
+    .once("value", playerSnapshot => {
       const playersSorted = Object.keys(playerSnapshot.val());
       players = shuffle(playersSorted);
       //setting turn to first player in array
       sessionRef.update({
         turn: players[0],
-        turnTimeStarted: Date.now(),
+        turnTimeStarted: Date.now()
       });
     });
   let missedTurns = 0;
   let turnTimeout;
   let turnCounter = 0;
-  sessionRef.child("turn").on("value", (turnSnap) => {
+  sessionRef.child("turn").on("value", turnSnap => {
     if (turnSnap.val() === null) sessionRef.child("turn").off();
-    turnTimeout = setTimeout(function () {
+    turnTimeout = setTimeout(function() {
       missedTurns += 1;
       if (missedTurns <= players.length - 1) {
         turnCounter += 1;
@@ -246,7 +246,7 @@ function playingRD(snapshot) {
         let currentPlayerIdx = turnCounter % players.length;
         sessionRef.update({
           turn: players[currentPlayerIdx],
-          turnTimeStarted: Date.now(),
+          turnTimeStarted: Date.now()
         });
       } else {
         const chatToDelete = "lobbyMessages/" + snapshot.key;
@@ -257,7 +257,7 @@ function playingRD(snapshot) {
       }
     }, 20000);
   });
-  sessionRef.child("finalGuess").on("child_added", (finalGuessSnap) => {
+  sessionRef.child("finalGuess").on("child_added", finalGuessSnap => {
     if (finalGuessSnap.val()) {
       if (turnTimeout) clearTimeout(turnTimeout);
       sessionRef.child("turn").off();
@@ -265,7 +265,7 @@ function playingRD(snapshot) {
     }
   });
   //when a new letter is submitted, change turn to next player:
-  sessionRef.child("letterBank").on("value", (bankSnapshot) => {
+  sessionRef.child("letterBank").on("value", bankSnapshot => {
     let letterBank;
     let targetWord;
     if (bankSnapshot.val()) {
@@ -277,11 +277,11 @@ function playingRD(snapshot) {
       let currentPlayerIdx = turnCounter % players.length;
       sessionRef.update({
         turn: players[currentPlayerIdx],
-        turnTimeStarted: Date.now(),
+        turnTimeStarted: Date.now()
       });
       //ADD: timeout
       //if letter bank has all the letters for target word, change game status to finished
-      sessionRef.child("targetWord").once("value", (wordSnapshot) => {
+      sessionRef.child("targetWord").once("value", wordSnapshot => {
         if (wordSnapshot.val() !== null) {
           targetWord = wordSnapshot.val();
         }
@@ -311,7 +311,7 @@ function playingDAB(snapshot) {
   const sessionRef = db.ref(`gameSessions/${snapshot.key}`);
   // sessionRef.update({turnTimeStarted: Date.now()});
   let players;
-  const drawingTimeout = setTimeout(function () {
+  const drawingTimeout = setTimeout(function() {
     sessionRef.child("status").set("guessing");
   }, 61000);
 
@@ -319,11 +319,11 @@ function playingDAB(snapshot) {
   sessionRef
     .child("players")
     .orderByKey()
-    .on("value", (playersSnap) => {
+    .on("value", playersSnap => {
       if (playersSnap.val()) {
         players = Object.keys(playersSnap.val());
         let drawings = [];
-        players.forEach((player) => {
+        players.forEach(player => {
           if (playersSnap.val()[player].drawing) {
             drawings.push(player);
           }
@@ -332,7 +332,7 @@ function playingDAB(snapshot) {
           clearTimeout(drawingTimeout);
           sessionRef.child("players").off();
           sessionRef.update({
-            status: "guessing",
+            status: "guessing"
           });
         }
       }
@@ -344,27 +344,27 @@ function guessingDAB(snapshot) {
   sessionRef
     .child("players")
     .orderByKey()
-    .once("value", (playerSnapshot) => {
+    .once("value", playerSnapshot => {
       const playersSorted = Object.keys(playerSnapshot.val());
       players = shuffle(playersSorted);
       //setting turn to first player in array
       sessionRef.update({
         turn: players[0],
-        turnTimeStarted: Date.now(),
+        turnTimeStarted: Date.now()
       });
     });
   let turnCounter = 0;
   const timeForRound = players.length * 10000 + 10000;
-  sessionRef.child("turn").on("value", (turnSnap) => {
+  sessionRef.child("turn").on("value", turnSnap => {
     if (turnSnap.val() === null) sessionRef.child("turn").off();
-    let turnTimeout = setTimeout(function () {
+    let turnTimeout = setTimeout(function() {
       if (turnCounter < players.length - 1) {
         turnCounter += 1;
         //this modulo ensures we loop the player array repeatedly:
         // let currentPlayerIdx = turnCounter % players.length; // don't need this for this game
         sessionRef.update({
           turn: players[turnCounter],
-          turnTimeStarted: Date.now(),
+          turnTimeStarted: Date.now()
         });
       } else {
         sessionRef.child("turn").off();
@@ -414,15 +414,15 @@ function newGameSession(sessionSnap) {
   //getting the status for each session
   // swtich on snapshot.val().gameID
   if (sessionSnap.val().gameId === "1") {
-    sessionSnap.ref.child("status").on("value", (statusSnap) => {
+    sessionSnap.ref.child("status").on("value", statusSnap => {
       switchStatusNHIE(statusSnap, sessionSnap);
     });
   } else if (sessionSnap.val().gameId === "2") {
-    sessionSnap.ref.child("status").on("value", (statusSnap) => {
+    sessionSnap.ref.child("status").on("value", statusSnap => {
       switchStatusRD(statusSnap, sessionSnap);
     });
   } else if (sessionSnap.val().gameId === "3") {
-    sessionSnap.ref.child("status").on("value", (statusSnap) => {
+    sessionSnap.ref.child("status").on("value", statusSnap => {
       switchStatusDAB(statusSnap, sessionSnap);
     });
   }

@@ -1,12 +1,12 @@
-import firebase from 'firebase'
+import firebase from "firebase";
 
-let fbConfig
+let fbConfig;
 if (process.env.NODE_ENV !== "production") {
-  fbConfig = require('../secrets')
+  fbConfig = require("../secrets");
 } else {
-  fbConfig = require("../fire-production")
+  fbConfig = require("../fire-production");
 }
 
-const fire = firebase.initializeApp(fbConfig)
+const fire = firebase.initializeApp(fbConfig);
 
-export default fire
+export default fire;
