@@ -1,5 +1,11 @@
 import firebase from 'firebase'
-import fbConfig from '../secrets'
+
+let fbConfig
+if (process.env.NODE_ENV !== "production") {
+  fbConfig = require('../secrets')
+} else {
+  fbConfig = require("../fire-production")
+}
 
 const fire = firebase.initializeApp(fbConfig)
 
