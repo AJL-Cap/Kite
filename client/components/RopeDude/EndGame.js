@@ -66,9 +66,7 @@ const EndGame = props => {
           You got it{" "}
           {points
             ? "right! good job."
-            : `WRONG. You had ${
-                players.length
-              } brains and you still couldn't figure it out.`}
+            : `WRONG. You had ${players.length} brains and you still couldn't figure it out.`}
         </h2>
       </Row>
       {playerSnap.ref && (
