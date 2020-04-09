@@ -10,7 +10,6 @@ const wordBank = [
   "monstrous",
   "football",
   "birthday",
-  "handicap",
   "basketball",
   "appetite",
   "colorful",
@@ -30,7 +29,6 @@ const wordBank = [
   "mountain",
   "parachute",
   "disappear",
-  "qualified",
   "chemistry",
   "chocolate",
   "executive",
@@ -48,11 +46,33 @@ const wordBank = [
   "motorcycle",
   "waterfall",
   "restaurant",
-  "challenge"
+  "challenge",
+  "umbrella",
+  "computer",
+  "wednesday",
+  "hydrogen",
+  "exchange",
+  "stranger",
+  "vacation",
+  "macaroni",
+  "dumpster",
+  "blizzard",
+  "elevator",
+  "xylophone",
+  "hamburger",
+  "dandelion",
+  "sunflower",
+  "rainbow",
+  "moustache",
+  "butterfly",
+  "saxophone",
+  "furniture",
+  "parachute",
+  "gladiator"
 ];
 
 export const generateTargetWord = () => {
-  const targetWord = wordBank[Math.floor(Math.random() * wordBank.length - 1)];
+  const targetWord = wordBank[Math.floor(Math.random() * wordBank.length)];
   return targetWord.toUpperCase();
 };
 
