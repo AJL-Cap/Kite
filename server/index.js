@@ -5,8 +5,21 @@ const compression = require("compression");
 const PORT = process.env.PORT || 8080;
 const app = express();
 const admin = require("firebase-admin");
-const serviceAccount = require("../admin.json");
-const { databaseURL } = require("../secrets");
+
+let serviceAccount;
+if (process.env.NODE_ENV !== "production") {
+  serviceAccount = require("../admin.json");
+} else {
+  serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN);
+}
+
+let databaseURL;
+if (process.env.NODE_ENV !== "production") {
+  databaseURL = require("../secrets").databaseURL;
+} else {
+  databaseURL = require("../production-secrets").databaseURL;
+}
+
 module.exports = app;
 /**
  * In your development environment, you can keep all of your

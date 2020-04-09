@@ -6,4 +6,5 @@ secrets.js
 npm-debug.log
 yarn-error.log
 admin.json
-cloudinary.js
+production-secrets.js
+fire-production.js
