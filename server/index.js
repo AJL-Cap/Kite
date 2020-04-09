@@ -15,7 +15,7 @@ let databaseURL;
 if (process.env.NODE_ENV !== "production") {
   databaseURL = require("../secrets").databaseURL;
 } else {
-  databaseURL = require("../fire-production").databaseURL;
+  databaseURL = require("../production-secrets").databaseURL;
 }
 
 module.exports = app;

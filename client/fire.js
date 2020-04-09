@@ -4,7 +4,7 @@ let fbConfig;
 if (process.env.NODE_ENV !== "production") {
   fbConfig = require("../secrets");
 } else {
-  fbConfig = require("../fire-production");
+  fbConfig = require("../production-secrets");
 }
 
 const fire = firebase.initializeApp(fbConfig);
