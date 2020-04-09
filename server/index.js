@@ -5,12 +5,14 @@ const compression = require("compression");
 const PORT = process.env.PORT || 8080;
 const app = express();
 const admin = require("firebase-admin");
+
 let serviceAccount;
 if (process.env.NODE_ENV !== "production") {
   serviceAccount = require("../admin.json");
 } else {
   serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN);
 }
+
 let databaseURL;
 if (process.env.NODE_ENV !== "production") {
   databaseURL = require("../secrets").databaseURL;
