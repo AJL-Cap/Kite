@@ -20,7 +20,8 @@ const GameCard = props => {
       db.ref("gameSessions/" + code).set({
         gameId: gameId,
         status: "waiting",
-        players: { [uid]: { host: true, nickname: nick } }
+        players: { [uid]: { host: true, nickname: nick } },
+        sessionCreated: Date(Date.now()).toString()
       });
       history.push({
         pathname: `/games/${code}`,

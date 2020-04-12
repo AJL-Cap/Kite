@@ -64,7 +64,7 @@ export default function NavigationBar() {
               <Nav.Link href="/signup">Sign up</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link href="/viewGames">Games</Nav.Link>
+              <Nav.Link href="/games">Games</Nav.Link>
             </Nav.Item>
           </Nav>
         )}
